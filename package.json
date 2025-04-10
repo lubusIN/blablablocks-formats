@@ -2,7 +2,7 @@
 	"name": "blablablocks-formats",
 	"version": "0.1.0",
 	"description": "Rich Text formatting blocks from BlaBla Blocks",
-	"author": "Lubus",
+	"author": "Lubus, nagpai",
 	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
