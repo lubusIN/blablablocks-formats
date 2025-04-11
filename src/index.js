@@ -1,0 +1,191 @@
+/**
+ * WordPress dependencies
+ */
+import { useState } from '@wordpress/element';
+import { Icon } from '@wordpress/icons';
+import { Popover, MenuItem, MenuItemsChoice } from '@wordpress/components';
+import {
+	slice,
+	toggleFormat,
+	applyFormat,
+	removeFormat,
+	useAnchorRef,
+	getTextContent,
+	getActiveFormat,
+	registerFormatType,
+} from '@wordpress/rich-text';
+import {
+	RichTextToolbarButton,
+	__unstableRichTextInputEvent,
+} from '@wordpress/block-editor';
+
+/**
+ * Internal dependencies
+ */
+import './editor.scss';
+import './style.scss';
+
+/**
+ * Format constants
+ */
+const name = 'lubus/highlighted';
+const title = 'Highlighted';
+const presets = [
+	'circle',
+	'curly',
+	'underline',
+	'double',
+	'double-underline',
+	'underline-zigzag',
+	'strikethrough',
+	'cross',
+	'strike'
+];
+
+/**
+ * Icon
+ */
+function formatIcon() {
+	return (
+		<Icon
+			icon={
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+					<path fill="none" d="M0 0h24v24H0z" />
+					<path d="M6 14l3 3v5h6v-5l3-3V9H6v5zm2-3h8v2.17l-3 3V20h-2v-3.83l-3-3V11zm3-9h2v3h-2zM3.502 5.874L4.916 4.46l2.122 2.12-1.414 1.415zm13.458.708l2.123-2.12 1.413 1.416-2.123 2.12z" />
+				</svg>
+			}
+		/>
+	);
+};
+
+/**
+ * InlineUI
+ */
+function InlineUI({ value, onChange, onClose, activeAttributes, contentRef }) {
+
+	const anchorRef = useAnchorRef({
+		ref: contentRef,
+		value,
+		settings: {
+			title,
+		},
+	});
+
+	const text = getTextContent(slice(value));
+
+	const presetChoices = presets.map(
+		(preset) => {
+
+			const choice = {
+				value: preset,
+				label: (
+					<tattva-highlighted type={preset}>
+						{text || preset}
+					</tattva-highlighted>)
+
+			};
+
+
+			return choice;
+		}
+	);
+
+	function onSetPreset(preset) {
+		if ('none' === preset) {
+			onChange(
+				removeFormat(value, name)
+			);
+		} else {
+			onChange(
+				applyFormat(value, {
+					type: name,
+					attributes: {
+						type: preset
+					}
+				})
+			);
+		}
+
+		onClose(); // Close InlineUI
+	}
+
+	return (
+		<Popover
+			position="bottom center"
+			anchorRef={anchorRef}
+			className="block-editor-format-toolbar__lubus-highlighted-popover"
+			onClose={onClose}
+		>
+			<MenuItem onClick={() => onSetPreset('none')}>
+				<span className="has-highlighted-text">none</span>
+			</MenuItem>
+			<MenuItemsChoice
+				choices={presetChoices}
+				value={activeAttributes.type}
+				onSelect={(preset) => onSetPreset(preset)}
+			/>
+		</Popover>
+	);
+}
+
+/**
+ *  Format edit
+ */
+function EditButton(props) {
+	const {
+		value,
+		onChange,
+		onFocus,
+		isActive,
+		contentRef,
+		activeAttributes
+	} = props;
+
+	const [isSettingOpen, setIsSettingOpen] = useState(false);
+
+	function openSettings() {
+		setIsSettingOpen(true);
+	}
+
+	function closeSettings() {
+		setIsSettingOpen(false);
+	}
+
+	return (
+		<>
+			<RichTextToolbarButton
+				icon={formatIcon}
+				title={title}
+				onClick={openSettings}
+				isActive={isActive}
+			/>
+
+			<__unstableRichTextInputEvent
+				inputType="formatHighlighted"
+			/>
+
+			{isSettingOpen && (
+				<InlineUI
+					value={value}
+					onChange={onChange}
+					onClose={closeSettings}
+					activeAttributes={activeAttributes}
+					contentRef={contentRef}
+				/>
+			)}
+		</>
+	);
+};
+
+/**
+* Register Richtext Color Format.
+*/
+registerFormatType(name, {
+	title,
+	tagName: 'tattva-highlighted',
+	className: 'has-highlighted-text',
+	edit: EditButton,
+	attributes: {
+		type: 'type',
+	},
+});
