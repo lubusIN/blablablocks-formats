@@ -6,18 +6,13 @@ import { Icon } from '@wordpress/icons';
 import { Popover, MenuItem, MenuItemsChoice } from '@wordpress/components';
 import {
 	slice,
-	toggleFormat,
 	applyFormat,
 	removeFormat,
 	useAnchorRef,
 	getTextContent,
-	getActiveFormat,
 	registerFormatType,
 } from '@wordpress/rich-text';
-import {
-	RichTextToolbarButton,
-	__unstableRichTextInputEvent,
-} from '@wordpress/block-editor';
+import { RichTextToolbarButton } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -39,7 +34,7 @@ const presets = [
 	'underline-zigzag',
 	'strikethrough',
 	'cross',
-	'strike'
+	'strike',
 ];
 
 /**
@@ -56,53 +51,59 @@ function formatIcon() {
 			}
 		/>
 	);
-};
-
+}
 /**
- * InlineUI
+ * InlineUI component for handling highlighted text formatting options.
+ *
+ * @param {Object}   root0                  - The component properties.
+ * @param {Object}   root0.value            - The current rich text value.
+ * @param {Function} root0.onChange         - Callback to update the rich text value.
+ * @param {Function} root0.onClose          - Callback to close the UI.
+ * @param {Object}   root0.activeAttributes - The currently active format attributes.
+ * @param {Object}   root0.contentRef       - Reference to the content element.
+ * @return {JSX.Element} The rendered component.
  */
-function InlineUI({ value, onChange, onClose, activeAttributes, contentRef }) {
-
-	const anchorRef = useAnchorRef({
+function InlineUI( {
+	value,
+	onChange,
+	onClose,
+	activeAttributes,
+	contentRef,
+} ) {
+	const anchorRef = useAnchorRef( {
 		ref: contentRef,
 		value,
 		settings: {
 			title,
 		},
-	});
+	} );
 
-	const text = getTextContent(slice(value));
+	const text = getTextContent( slice( value ) );
 
-	const presetChoices = presets.map(
-		(preset) => {
+	const presetChoices = presets.map( ( preset ) => {
+		const choice = {
+			value: preset,
+			label: (
+				<tattva-highlighted type={ preset }>
+					{ text || preset }
+				</tattva-highlighted>
+			),
+		};
 
-			const choice = {
-				value: preset,
-				label: (
-					<tattva-highlighted type={preset}>
-						{text || preset}
-					</tattva-highlighted>)
+		return choice;
+	} );
 
-			};
-
-
-			return choice;
-		}
-	);
-
-	function onSetPreset(preset) {
-		if ('none' === preset) {
-			onChange(
-				removeFormat(value, name)
-			);
+	function onSetPreset( preset ) {
+		if ( 'none' === preset ) {
+			onChange( removeFormat( value, name ) );
 		} else {
 			onChange(
-				applyFormat(value, {
+				applyFormat( value, {
 					type: name,
 					attributes: {
-						type: preset
-					}
-				})
+						type: preset,
+					},
+				} )
 			);
 		}
 
@@ -112,75 +113,66 @@ function InlineUI({ value, onChange, onClose, activeAttributes, contentRef }) {
 	return (
 		<Popover
 			position="bottom center"
-			anchorRef={anchorRef}
+			anchorRef={ anchorRef }
 			className="block-editor-format-toolbar__lubus-highlighted-popover"
-			onClose={onClose}
+			onClose={ onClose }
 		>
-			<MenuItem onClick={() => onSetPreset('none')}>
+			<MenuItem onClick={ () => onSetPreset( 'none' ) }>
 				<span className="has-highlighted-text">none</span>
 			</MenuItem>
 			<MenuItemsChoice
-				choices={presetChoices}
-				value={activeAttributes.type}
-				onSelect={(preset) => onSetPreset(preset)}
+				choices={ presetChoices }
+				value={ activeAttributes.type }
+				onSelect={ ( preset ) => onSetPreset( preset ) }
 			/>
 		</Popover>
 	);
 }
-
 /**
- *  Format edit
+ * Button for editing the highlighted text format.
+ *
+ * @param {Object} props - The component properties.
+ * @return {JSX.Element} The rendered component.
  */
-function EditButton(props) {
-	const {
-		value,
-		onChange,
-		onFocus,
-		isActive,
-		contentRef,
-		activeAttributes
-	} = props;
+function EditButton( props ) {
+	const { value, onChange, isActive, contentRef, activeAttributes } = props;
 
-	const [isSettingOpen, setIsSettingOpen] = useState(false);
+	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
 	function openSettings() {
-		setIsSettingOpen(true);
+		setIsSettingOpen( true );
 	}
 
 	function closeSettings() {
-		setIsSettingOpen(false);
+		setIsSettingOpen( false );
 	}
 
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={formatIcon}
-				title={title}
-				onClick={openSettings}
-				isActive={isActive}
+				icon={ formatIcon }
+				title={ title }
+				onClick={ openSettings }
+				isActive={ isActive }
 			/>
 
-			<__unstableRichTextInputEvent
-				inputType="formatHighlighted"
-			/>
-
-			{isSettingOpen && (
+			{ isSettingOpen && (
 				<InlineUI
-					value={value}
-					onChange={onChange}
-					onClose={closeSettings}
-					activeAttributes={activeAttributes}
-					contentRef={contentRef}
+					value={ value }
+					onChange={ onChange }
+					onClose={ closeSettings }
+					activeAttributes={ activeAttributes }
+					contentRef={ contentRef }
 				/>
-			)}
+			) }
 		</>
 	);
-};
+}
 
 /**
-* Register Richtext Color Format.
-*/
-registerFormatType(name, {
+ * Register Richtext Color Format.
+ */
+registerFormatType( name, {
 	title,
 	tagName: 'tattva-highlighted',
 	className: 'has-highlighted-text',
@@ -188,4 +180,4 @@ registerFormatType(name, {
 	attributes: {
 		type: 'type',
 	},
-});
+} );
