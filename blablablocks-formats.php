@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name:       Blablablocks Formats
- * Description:       Example block scaffolded with Create Block tool.
+ * Plugin Name:       BlablaBlocks Formats
+ * Description:       Rich text formats from BlaBlaBlocks.
  * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Author:            The WordPress Contributors
+ * Author:            Lubus
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-formats
@@ -26,7 +26,7 @@ function lubus_highlighted_format_init() {
 
 	wp_register_script(
         'lubus-highlighted-tattva',
-        plugins_url( 'assets/highlighted-format/tattva-highlighted.js', __FILE__ ),
+        plugins_url( 'assets/highlighted-text/tattva-highlighted.js', __FILE__ ),
 		[],
         $asset_file['version']
     );
