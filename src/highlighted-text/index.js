@@ -23,7 +23,7 @@ import './style.scss';
 /**
  * Format constants
  */
-const name = 'lubus/highlighted';
+const name = 'blablablocks/highlighted';
 const title = __( 'Highlighted', 'blablablocks-formats' );
 const presets = [
 	'circle',
@@ -55,12 +55,12 @@ function formatIcon() {
 /**
  * InlineUI component for handling highlighted text formatting options.
  *
- * @param {Object}   root0                  - The component properties.
- * @param {Object}   root0.value            - The current rich text value.
- * @param {Function} root0.onChange         - Callback to update the rich text value.
- * @param {Function} root0.onClose          - Callback to close the UI.
- * @param {Object}   root0.activeAttributes - The currently active format attributes.
- * @param {Object}   root0.contentRef       - Reference to the content element.
+ * @param {Object}   value            - The current highlighted format preset name.
+ * @param {Function} onChange         - Callback to update the highlighted format preset.
+ * @param {Function} onClose          - Callback to close the UI.
+ * @param {Object}   activeAttributes - The currently active format attributes.
+ * @param {Object}   contentRef       - Reference to the content element.
+ * 
  * @return {JSX.Element} The rendered component.
  */
 function InlineUI( {
@@ -114,7 +114,7 @@ function InlineUI( {
 		<Popover
 			position="bottom center"
 			anchorRef={ anchorRef }
-			className="block-editor-format-toolbar__lubus-highlighted-popover"
+			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			onClose={ onClose }
 		>
 			<MenuItem onClick={ () => onSetPreset( 'none' ) }>

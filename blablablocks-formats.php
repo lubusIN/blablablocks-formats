@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       BlablaBlocks Formats
+ * Plugin Name:       BlaBlaBlocks Formats
  * Description:       Rich text formats from BlaBlaBlocks.
  * Version:           0.1.0
  * Requires at least: 6.7
@@ -10,7 +10,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-formats
  *
- * @package CreateBlock
+ * @package BlaBlaBlocks Formats
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,55 +18,55 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register custom richtext format
+ * Register BlaBlaBlocks Highlighted format
  */
-function lubus_highlighted_format_init() {
+function blablablocks_highlighted_formats_init() {
 	// automatically load dependencies and version
     $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
 
 	wp_register_script(
-        'lubus-highlighted-tattva',
+        'blablablocks-highlighted-tattva',
         plugins_url( 'assets/highlighted-text/tattva-highlighted.js', __FILE__ ),
 		[],
         $asset_file['version']
     );
 
-	$asset_file['dependencies'][] = "lubus-highlighted-tattva";
+	$asset_file['dependencies'][] = "blablablocks-highlighted-tattva";
 
 	wp_register_script(
-        'lubus-highlighted-format',
+        'blablablocks-highlighted-format',
         plugins_url( 'build/index.js', __FILE__ ),
 		$asset_file['dependencies'],
         $asset_file['version']
     );
 
 	wp_register_style(
-		'lubus-highlighted-format-editor',
+		'blablablocks-highlighted-format-editor',
 		plugins_url( 'build/index.css', __FILE__ ),
-		['lubus-highlighted-format'],
+		['blablablocks-highlighted-format'],
 		$asset_file['version']
 	);
 
 	wp_register_style(
-		'lubus-highlighted-format',
+		'blablablocks-highlighted-format',
 		plugins_url( 'build/style-index.css', __FILE__ ),
 		[],
 		$asset_file['version']
 	);
 
 }
-add_action( 'init', 'lubus_highlighted_format_init' );
+add_action( 'init', 'blablocks_highlighted_formats_init' );
 
 // Editor assets
-function lubus_highlighted_format_enqueue_assets_editor() {
-	wp_enqueue_script('lubus-highlighted-format');
-	wp_enqueue_style( 'lubus-highlighted-format-editor' );
+function blablablocks_highlighted_formats_enqueue_assets_editor() {
+	wp_enqueue_script('blablablocks-highlighted-format');
+	wp_enqueue_style( 'blablablocks-highlighted-format-editor' );
 }
-add_action( 'enqueue_block_editor_assets', 'lubus_highlighted_format_enqueue_assets_editor' );
+add_action( 'enqueue_block_editor_assets', 'blablablocks_highlighted_formats_enqueue_assets_editor' );
 
 // Frontend assets
-function lubus_highlighted_format_enqueue_assets() {
-	wp_enqueue_script('lubus-highlighted-tattva');
-	wp_enqueue_style( 'lubus-highlighted-format' );
+function blablablocks_highlighted_formats_enqueue_assets() {
+	wp_enqueue_script('blablablocks-highlighted-tattva');
+	wp_enqueue_style( 'blablablocks-highlighted-format' );
 }
-add_action('wp_enqueue_scripts', 'lubus_highlighted_format_enqueue_assets');
+add_action('wp_enqueue_scripts', 'blablablocks_highlighted_formats_enqueue_assets');
