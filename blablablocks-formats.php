@@ -18,24 +18,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register BlaBlaBlocks Highlighted format
+ * Register BlaBlaBlocks formats
  */
-function blablablocks_highlighted_formats_init() {
+function blablablocks_formats_init() {
 	// automatically load dependencies and version.
 	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 	wp_register_script(
-		'blablablocks-highlighted-text-assets',
-		plugins_url( 'assets/highlighted-text/highlighted-formats.js', __FILE__ ),
+		'blablablocks-highlighted-formats-assets',
+		plugins_url( 'assets/highlighted-formats/highlighted-formats.js', __FILE__ ),
 		array(),
 		$asset_file['version'],
 		array( 'in_footer' => true )
 	);
 
-	$asset_file['dependencies'][] = 'blablablocks-highlighted-text-assets';
+	$asset_file['dependencies'][] = 'blablablocks-highlighted-formats-assets';
 
 	wp_register_script(
-		'blablablocks-highlighted-format',
+		'blablablocks-highlighted-formats',
 		plugins_url( 'build/index.js', __FILE__ ),
 		$asset_file['dependencies'],
 		$asset_file['version'],
@@ -43,14 +43,14 @@ function blablablocks_highlighted_formats_init() {
 	);
 
 	wp_register_style(
-		'blablablocks-highlighted-format-editor',
+		'blablablocks-highlighted-formats-editor',
 		plugins_url( 'build/index.css', __FILE__ ),
-		array( 'blablablocks-highlighted-format' ),
+		array( 'blablablocks-highlighted-formats' ),
 		$asset_file['version']
 	);
 
 	wp_register_style(
-		'blablablocks-highlighted-format',
+		'blablablocks-highlighted-formats',
 		plugins_url( 'build/style-index.css', __FILE__ ),
 		array(),
 		$asset_file['version']
@@ -62,8 +62,8 @@ add_action( 'init', 'blablablocks_formats_init' );
  * Enqueue editor assets for BlaBlaBlocks Highlighted format.
  */
 function blablablocks_highlighted_formats_enqueue_assets_editor() {
-	wp_enqueue_script( 'blablablocks-highlighted-format' );
-	wp_enqueue_style( 'blablablocks-highlighted-format-editor' );
+	wp_enqueue_script( 'blablablocks-highlighted-formats' );
+	wp_enqueue_style( 'blablablocks-highlighted-formats-editor' );
 }
 add_action( 'enqueue_block_editor_assets', 'blablablocks_highlighted_formats_enqueue_assets_editor' );
 
@@ -71,7 +71,7 @@ add_action( 'enqueue_block_editor_assets', 'blablablocks_highlighted_formats_enq
  * Frontend assets.
  */
 function blablablocks_highlighted_formats_enqueue_assets() {
-	wp_enqueue_script( 'blablablocks-highlighted-text-assets' );
-	wp_enqueue_style( 'blablablocks-highlighted-format' );
+	wp_enqueue_script( 'blablablocks-highlighted-formats-assets' );
+	wp_enqueue_style( 'blablablocks-highlighted-formats' );
 }
 add_action( 'wp_enqueue_scripts', 'blablablocks_highlighted_formats_enqueue_assets' );

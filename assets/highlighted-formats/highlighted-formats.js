@@ -1,8 +1,8 @@
 /**
- * Tattva: Highlighted
+ * BlaBlaBlocks: Highlighted Formats
  */
 /* global HTMLElement */
-class TattvaHighlighted extends HTMLElement {
+class BlaBlaBlocksHighlighted extends HTMLElement {
 	static get observedAttributes() {
 		return [ 'type' ];
 	}
@@ -169,9 +169,9 @@ class TattvaHighlighted extends HTMLElement {
 	}
 }
 
-window.TattvaHighlighted = TattvaHighlighted;
+window.BlaBlaBlocksHighlighted = BlaBlaBlocksHighlighted;
 
 // Register Element
-if ( ! window.customElements.get( 'tattva-highlighted' ) ) {
-	window.customElements.define( 'tattva-highlighted', TattvaHighlighted );
+if ( ! window.customElements.get( 'blablablocks-highlighted' ) ) {
+	window.customElements.define( 'blablablocks-highlighted', BlaBlaBlocksHighlighted );
 }
