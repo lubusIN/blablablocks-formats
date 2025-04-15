@@ -84,9 +84,9 @@ function InlineUI( {
 		const choice = {
 			value: preset,
 			label: (
-				<tattva-highlighted type={ preset }>
+				<blablablocks-highlighted type={ preset }>
 					{ text || preset }
-				</tattva-highlighted>
+				</blablablocks-highlighted>
 			),
 		};
 
@@ -172,7 +172,7 @@ function EditButton( props ) {
 export const highlightedText = {
 	name,
 	title,
-	tagName: 'tattva-highlighted',
+	tagName: 'blablablocks-highlighted',
 	className: 'has-highlighted-text',
 	edit: EditButton,
 	attributes: {
