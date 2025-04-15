@@ -56,7 +56,7 @@ function blablablocks_highlighted_formats_init() {
 		$asset_file['version']
 	);
 }
-add_action( 'init', 'blablocks_highlighted_formats_init' );
+add_action( 'init', 'blablablocks_formats_init' );
 
 /**
  * Enqueue editor assets for BlaBlaBlocks Highlighted format.
