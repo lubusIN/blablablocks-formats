@@ -1,2 +1,2 @@
 # blablablocks-formats
-Block Editor Richtext format
+Rich Text formats from BlaBlaBlocks.
