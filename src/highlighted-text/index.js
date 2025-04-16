@@ -55,14 +55,13 @@ function formatIcon() {
 /**
  * InlineUI component for handling highlighted text formatting options.
  *
- * @param {Object}    props                - The component properties.
- * @param {string}    props.value          - The current highlighted format preset name.
- * @param {Function}  props.onChange       - Callback to update the highlighted format preset.
- * @param {Function}  props.onClose        - Callback to close the UI.
- * @param {Object}    props.activeAttributes - The currently active format attributes.
- * @param {Object}    props.contentRef     - Reference to the content element.
- *
- * @return {JSX.Element}                   - The rendered component.
+ * @param {Object}   props                  - The component properties.
+ * @param {string}   props.value            - The current highlighted format preset name.
+ * @param {Function} props.onChange         - Callback to update the highlighted format preset.
+ * @param {Function} props.onClose          - Callback to close the UI.
+ * @param {Object}   props.activeAttributes - The currently active format attributes.
+ * @param {Object}   props.contentRef       - Reference to the content element.
+ * @return {JSX.Element}                     - The rendered component.
  */
 function InlineUI( {
 	value,
