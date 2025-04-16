@@ -55,13 +55,14 @@ function formatIcon() {
 /**
  * InlineUI component for handling highlighted text formatting options.
  *
- * @param {Object}   value            - The current highlighted format preset name.
- * @param {Function} onChange         - Callback to update the highlighted format preset.
- * @param {Function} onClose          - Callback to close the UI.
- * @param {Object}   activeAttributes - The currently active format attributes.
- * @param {Object}   contentRef       - Reference to the content element.
+ * @param {Object}    props                - The component properties.
+ * @param {string}    props.value          - The current highlighted format preset name.
+ * @param {Function}  props.onChange       - Callback to update the highlighted format preset.
+ * @param {Function}  props.onClose        - Callback to close the UI.
+ * @param {Object}    props.activeAttributes - The currently active format attributes.
+ * @param {Object}    props.contentRef     - Reference to the content element.
  *
- * @return {JSX.Element} The rendered component.
+ * @return {JSX.Element}                   - The rendered component.
  */
 function InlineUI( {
 	value,
@@ -113,7 +114,7 @@ function InlineUI( {
 	return (
 		<Popover
 			position="bottom center"
-			anchor={ anchorRef }
+			anchorRef={ anchorRef }
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			onClose={ onClose }
 		>
