@@ -58,7 +58,9 @@ add_action( 'init', 'blablablocks_formats_init' );
 function blablablocks_highlighted_formats_enqueue_assets() {
 	wp_enqueue_script( 'blablablocks-highlighted-formats-script' );
 
-
-	wp_enqueue_style( 'blablablocks-highlighted-formats-editor-styles' );
+	if( is_admin() ) {
+		// Enqueue the style only for the editor.
+		wp_enqueue_style( 'blablablocks-highlighted-formats-editor-styles' );
+	}
 }
 add_action( 'enqueue_block_assets', 'blablablocks_highlighted_formats_enqueue_assets' );
