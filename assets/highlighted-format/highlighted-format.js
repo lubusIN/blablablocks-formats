@@ -1,5 +1,5 @@
 /**
- * BlaBlaBlocks: Highlighted Formats
+ * BlaBlaBlocks: Highlighted text formats
  */
 /* global HTMLElement */
 class BlaBlaBlocksHighlighted extends HTMLElement {
