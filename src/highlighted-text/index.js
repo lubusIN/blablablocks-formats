@@ -60,7 +60,7 @@ function formatIcon() {
  * @param {Function} onClose          - Callback to close the UI.
  * @param {Object}   activeAttributes - The currently active format attributes.
  * @param {Object}   contentRef       - Reference to the content element.
- * 
+ *
  * @return {JSX.Element} The rendered component.
  */
 function InlineUI( {
@@ -113,7 +113,7 @@ function InlineUI( {
 	return (
 		<Popover
 			position="bottom center"
-			anchorRef={ anchorRef }
+			anchor={ anchorRef }
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			onClose={ onClose }
 		>
