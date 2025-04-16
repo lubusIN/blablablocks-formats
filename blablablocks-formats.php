@@ -48,13 +48,6 @@ function blablablocks_formats_init() {
 		array(),
 		$asset_file['version']
 	);
-
-	wp_register_style(
-		'blablablocks-highlighted-formats-frontend-styles',
-		plugins_url( 'build/style-index.css', __FILE__ ),
-		array(),
-		$asset_file['version']
-	);
 }
 add_action( 'init', 'blablablocks_formats_init' );
 
@@ -64,7 +57,8 @@ add_action( 'init', 'blablablocks_formats_init' );
  */
 function blablablocks_highlighted_formats_enqueue_assets() {
 	wp_enqueue_script( 'blablablocks-highlighted-formats-script' );
+
+
 	wp_enqueue_style( 'blablablocks-highlighted-formats-editor-styles' );
-	wp_enqueue_style( 'blablablocks-highlighted-formats-frontend-styles' );
 }
 add_action( 'enqueue_block_assets', 'blablablocks_highlighted_formats_enqueue_assets' );
