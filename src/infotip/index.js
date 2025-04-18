@@ -1,15 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Icon, info } from '@wordpress/icons';
-import {
-	toggleFormat,
-	getTextContent,
-	registerFormatType,
-} from '@wordpress/rich-text';
-import {
-	RichTextToolbarButton,
-} from '@wordpress/block-editor';
+import { info } from '@wordpress/icons';
+import { toggleFormat } from '@wordpress/rich-text';
+import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -23,25 +17,22 @@ const title = __( 'Infotip', 'blablablocks-formats' );
 
 /**
  *  Format edit
+ *
+ * @param {Object} props - The component properties.
+ * @return {JSX.Element} - The rendered infotip button.
  */
-function EditButton(props) {
-	const {
-		value,
-		onChange,
-		onFocus,
-		isActive,
-		activeAttributes,
-	} = props;
+function EditButton( props ) {
+	const { value, onChange, onFocus, isActive } = props;
 
 	function onToggle() {
 		onChange(
-			toggleFormat(value, {
+			toggleFormat( value, {
 				type: name,
-				attributes:{
+				attributes: {
 					content: 'Welcome to <strong>Gutenberg</strong>!',
 					allowHtml: 'true',
-				}
-			})
+				},
+			} )
 		);
 	}
 
@@ -52,13 +43,13 @@ function EditButton(props) {
 
 	return (
 		<RichTextToolbarButton
-			icon={info}
-			title={title}
-			onClick={() => onClick()}
-			isActive={isActive}
+			icon={ info }
+			title={ title }
+			onClick={ () => onClick() }
+			isActive={ isActive }
 		/>
 	);
-};
+}
 
 export const infotip = {
 	name,
