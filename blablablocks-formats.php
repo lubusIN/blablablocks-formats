@@ -32,7 +32,9 @@ add_action( 'init', 'blablablocks_formats_init' );
 /**
  * Enqueue scripts and styles for BlaBlaBlocks formats.
  *
- * Includes scripts needed within iFrame for frontend as well as editor.
+ * We use enqueue_block_assets, available since WP 6.3, to load scripts easily within the iFramed editor too.
+ *
+ * @see https://developer.wordpress.org/block-editor/how-to-guides/enqueueing-assets-in-the-editor/#editor-content-scripts-and-styles
  */
 function blablablocks_formats_enqueue_assets() {
 	blablablocks_highlighted_format_enqueue_assets();
