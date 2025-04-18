@@ -1,5 +1,5 @@
 /**
- * BlaBlaBlocks: Highlighted Formats
+ * BlaBlaBlocks: Highlighted text formats
  */
 /* global HTMLElement */
 class BlaBlaBlocksHighlighted extends HTMLElement {
@@ -173,5 +173,8 @@ window.BlaBlaBlocksHighlighted = BlaBlaBlocksHighlighted;
 
 // Register Element
 if ( ! window.customElements.get( 'blablablocks-highlighted' ) ) {
-	window.customElements.define( 'blablablocks-highlighted', BlaBlaBlocksHighlighted );
+	window.customElements.define(
+		'blablablocks-highlighted',
+		BlaBlaBlocksHighlighted
+	);
 }
