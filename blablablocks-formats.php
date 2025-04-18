@@ -10,7 +10,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-formats
  *
- * @package BlaBlaBlocks Formats.
+ * @package Lubusin\BlaBlaBlocksFormats
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,16 +18,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/highlighted-format-init.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/infotip-init.php';
 
 /**
  * Register BlaBlaBlocks_formats
  */
 function blablablocks_formats_init() {
 	blablablocks_highlighted_format_init();
-
-	// Enqueue scripts required within iFrame for frontend as well as editor.
-	blablablocks_highlighted_format_enqueue_assets();
+	blablablocks_infotip_format_init();
 }
-
 add_action( 'init', 'blablablocks_formats_init' );
-add_action( 'enqueue_block_assets', 'blablablocks_highlighted_format_enqueue_assets' );
+
+/**
+ * Enqueue scripts and styles for BlaBlaBlocks formats.
+ *
+ * Includes scripts needed within iFrame for frontend as well as editor.
+ */
+function blablablocks_formats_enqueue_assets() {
+	blablablocks_highlighted_format_enqueue_assets();
+	blablablocks_infotip_format_enqueue_assets();
+}
+add_action( 'enqueue_block_assets', 'blablablocks_formats_enqueue_assets' );

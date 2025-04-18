@@ -2,7 +2,7 @@
 /**
  * BlaBlaBlocks highlighted format init.
  *
- * @package BlaBlaBlocks_formats
+ * @package Lubusin\BlaBlaBlocksFormats
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Register BlaBlaBlocks formats scripts and styles.
  */
 function blablablocks_highlighted_format_init() {
-	// automatically load dependencies and version.
 	$asset_file = include plugin_dir_path( __FILE__ ) . '../build/index.asset.php';
 
 	wp_register_script(
