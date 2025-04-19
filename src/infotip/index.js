@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
 import './editor.scss';
 import './style.scss';
 
-const name = 'lubus/infotip';
+const name = 'blablablocks/infotip';
 const title = __( 'Infotip', 'blablablocks-formats' );
 
 /**
