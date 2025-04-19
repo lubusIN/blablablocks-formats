@@ -3,5 +3,6 @@
  */
 
 import { highlightedText } from './highlighted-text';
+import { infotip } from './infotip';
 
-export const formats = [ highlightedText ];
+export const formats = [ highlightedText, infotip ];
