@@ -8,9 +8,6 @@ import { registerFormatType } from '@wordpress/rich-text';
  */
 import { formats } from './formats';
 
-formats.forEach( ( format ) => {
-	const { name, ...settings } = format;
-	registerFormatType( name, {
-		...settings,
-	} );
+formats.forEach( ( { name, ...settings } ) => {
+	registerFormatType( name, settings );
 } );
