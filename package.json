@@ -12,7 +12,8 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --blocks-manifest"
+		"start": "wp-scripts start --blocks-manifest",
+		"serve": "npx @wp-now/wp-now start"
 	},
 	"devDependencies": {
 		"@wordpress/icons": "^10.22.0",
