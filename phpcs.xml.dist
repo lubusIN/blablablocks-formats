@@ -29,6 +29,9 @@
 	<!-- Exclude minified Javascript files. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
 
+	<!-- Exclude build files -->
+	<exclude-pattern>/build/*</exclude-pattern>
+
 	<!-- Strip the filepaths down to the relevant bit. -->
 	<arg name="basepath" value="."/>
 
