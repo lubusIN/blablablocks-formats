@@ -120,10 +120,11 @@ function InlineUI( {
 			/>
 			{ activeAttributes.type && (
 				// If the format is applied, show the clear button.
-				<Flex justify="right">
+				<Flex justify="flex-end">
 					<Button
 						variant="tertiary"
 						onClick={ () => onSetPreset( 'none' ) }
+						className="block-editor-format-toolbar__clear-button"
 					>
 						Clear
 					</Button>
