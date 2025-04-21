@@ -4,7 +4,7 @@
 import { useState } from '@wordpress/element';
 import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Popover, MenuItem, MenuItemsChoice } from '@wordpress/components';
+import { Button, Flex, MenuItemsChoice, Popover } from '@wordpress/components';
 import {
 	slice,
 	applyFormat,
@@ -111,14 +111,23 @@ function InlineUI( {
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			onClose={ onClose }
 		>
-			<MenuItem onClick={ () => onSetPreset( 'none' ) }>
-				<span className="has-highlighted-text">none</span>
-			</MenuItem>
 			<MenuItemsChoice
 				choices={ presetChoices }
 				value={ activeAttributes.type }
 				onSelect={ ( preset ) => onSetPreset( preset ) }
 			/>
+			{ activeAttributes.type && (
+				// If the format is applied, show the clear button.
+				<Flex justify="flex-end">
+					<Button
+						variant="tertiary"
+						onClick={ () => onSetPreset( 'none' ) }
+						className="block-editor-format-toolbar__clear-button"
+					>
+						Clear
+					</Button>
+				</Flex>
+			) }
 		</Popover>
 	);
 }
