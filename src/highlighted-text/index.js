@@ -9,7 +9,7 @@ import {
 	slice,
 	applyFormat,
 	removeFormat,
-	useAnchorRef,
+	useAnchor,
 	getTextContent,
 } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
@@ -70,12 +70,8 @@ function InlineUI( {
 	activeAttributes,
 	contentRef,
 } ) {
-	const anchorRef = useAnchorRef( {
-		ref: contentRef,
-		value,
-		settings: {
-			title,
-		},
+	const anchor = useAnchor( {
+		editableContentElement: contentRef.current,
 	} );
 
 	const text = getTextContent( slice( value ) );
@@ -113,7 +109,7 @@ function InlineUI( {
 	return (
 		<Popover
 			position="bottom center"
-			anchorRef={ anchorRef }
+			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			onClose={ onClose }
 		>
