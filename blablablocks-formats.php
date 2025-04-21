@@ -10,34 +10,92 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-formats
  *
- * @package Lubusin\BlaBlaBlocksFormats
+ * @package Blablablocks\Formats
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/highlighted-format-init.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/infotip-init.php';
-
 /**
- * Register BlaBlaBlocks_formats
+ * Register BlaBlaBlocks formats scripts and styles.
  */
 function blablablocks_formats_init() {
-	blablablocks_highlighted_format_init();
-	blablablocks_infotip_format_init();
+	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+
+	// Register highlighted format custom element script.
+	wp_register_script(
+		'blablablocks-highlighted-format-asset',
+		plugins_url( 'assets/highlighted-format/highlighted-format.js', __FILE__ ),
+		array(),
+		$asset_file['version'],
+		array( 'in_footer' => true )
+	);
+
+	// Register infotip dependencies.
+	wp_register_script(
+		'blablablocks-infotip-popperjs',
+		'https://unpkg.com/@popperjs/core@2',
+		array(),
+		'2',
+		array( 'in_footer' => true )
+	);
+
+	wp_register_script(
+		'blablablocks-infotip-tippy',
+		'https://unpkg.com/tippy.js@6',
+		array( 'blablablocks-infotip-popperjs' ),
+		'6',
+		array( 'in_footer' => true )
+	);
+
+	wp_add_inline_script(
+		'blablablocks-infotip-tippy',
+		"tippy('[data-tippy-content]');"
+	);
+
+	$asset_file['dependencies'][] = 'blablablocks-infotip-tippy';
+
+	// Add highlighted format custom element as dependency.
+	$asset_file['dependencies'][] = 'blablablocks-highlighted-format-asset';
+
+	// Register main formats script.
+	wp_register_script(
+		'blablablocks-formats',
+		plugins_url( 'build/index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		array( 'in_footer' => true )
+	);
+
+	// Register styles.
+	wp_register_style(
+		'blablablocks-formats-editor',
+		plugins_url( 'build/index.css', __FILE__ ),
+		array(),
+		$asset_file['version']
+	);
+
+	wp_register_style(
+		'blablablocks-formats-editor-styles',
+		plugins_url( 'build/style-index.css', __FILE__ ),
+		array(),
+		$asset_file['version']
+	);
 }
 add_action( 'init', 'blablablocks_formats_init' );
 
 /**
  * Enqueue scripts and styles for BlaBlaBlocks formats.
- *
- * We use enqueue_block_assets, available since WP 6.3, to load scripts easily within the iFramed editor too.
- *
- * @see https://developer.wordpress.org/block-editor/how-to-guides/enqueueing-assets-in-the-editor/#editor-content-scripts-and-styles
  */
 function blablablocks_formats_enqueue_assets() {
-	blablablocks_highlighted_format_enqueue_assets();
-	blablablocks_infotip_format_enqueue_assets();
+	// Enqueue main script and frontend styles.
+	wp_enqueue_script( 'blablablocks-formats' );
+	wp_enqueue_style( 'blablablocks-formats-editor-styles' );
+
+	// Enqueue editor styles in admin.
+	if ( is_admin() ) {
+		wp_enqueue_style( 'blablablocks-formats-editor' );
+	}
 }
 add_action( 'enqueue_block_assets', 'blablablocks_formats_enqueue_assets' );
