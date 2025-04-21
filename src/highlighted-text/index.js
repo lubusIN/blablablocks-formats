@@ -74,14 +74,12 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const text = getTextContent( slice( value ) );
-
 	const presetChoices = presets.map( ( preset ) => {
 		const choice = {
 			value: preset,
 			label: (
 				<blablablocks-highlighted type={ preset }>
-					{ text || preset }
+					{ preset }
 				</blablablocks-highlighted>
 			),
 		};
