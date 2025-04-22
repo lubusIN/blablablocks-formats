@@ -6,13 +6,8 @@
 
 blablablocks-highlighted {
 	white-space: normal;
+}
 
-	&.block-editor-format-toolbar__blablablocks-highlighted-popover {
-		white-space: nowrap;
-
-		> div {
-			padding: 12px;
-		}
-
-	}
+.block-editor-format-toolbar__clear-button {
+	margin: 12px;
 }
