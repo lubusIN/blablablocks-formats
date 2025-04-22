@@ -25,17 +25,21 @@ import './style.scss';
  */
 const name = 'blablablocks/highlighted';
 const title = __( 'Highlighted', 'blablablocks-formats' );
-const presets = [
-	'circle',
-	'curly',
-	'underline',
-	'double',
-	'double-underline',
-	'underline-zigzag',
-	'strikethrough',
-	'cross',
-	'strike',
-];
+const presets = {
+	circle: { label: __( 'Circle', 'blablablocks-formats' ) },
+	curly: { label: __( 'Curly', 'blablablocks-formats' ) },
+	underline: { label: __( 'Underline', 'blablablocks-formats' ) },
+	double: { label: __( 'Double', 'blablablocks-formats' ) },
+	'double-underline': {
+		label: __( 'Double Underline', 'blablablocks-formats' ),
+	},
+	'underline-zigzag': {
+		label: __( 'Underline Zigzag', 'blablablocks-formats' ),
+	},
+	strikethrough: { label: __( 'Strikethrough', 'blablablocks-formats' ) },
+	cross: { label: __( 'Cross', 'blablablocks-formats' ) },
+	strike: { label: __( 'Strike', 'blablablocks-formats' ) },
+};
 
 /**
  * Icon
@@ -74,18 +78,18 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const presetChoices = presets.map( ( preset ) => {
-		const choice = {
-			value: preset,
-			label: (
-				<blablablocks-highlighted type={ preset }>
-					{ preset }
-				</blablablocks-highlighted>
-			),
-		};
-
-		return choice;
-	} );
+	const presetChoices = Object.entries( presets ).map(
+		( [ preset, { label } ] ) => {
+			return {
+				value: preset,
+				label: (
+					<blablablocks-highlighted type={ preset }>
+						{ label }
+					</blablablocks-highlighted>
+				),
+			};
+		}
+	);
 
 	function onSetPreset( preset ) {
 		if ( 'none' === preset ) {
