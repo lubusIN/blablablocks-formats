@@ -4,14 +4,14 @@
 import { useState } from '@wordpress/element';
 import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Flex, MenuItemsChoice, Popover } from '@wordpress/components';
 import {
-	slice,
-	applyFormat,
-	removeFormat,
-	useAnchor,
-	getTextContent,
-} from '@wordpress/rich-text';
+	Button,
+	Flex,
+	MenuItemsChoice,
+	Popover,
+	privateApis as componentsPrivateApis,
+} from '@wordpress/components';
+import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 
 /**
@@ -40,6 +40,8 @@ const presets = {
 	cross: { label: __( 'Cross', 'blablablocks-formats' ) },
 	strike: { label: __( 'Strike', 'blablablocks-formats' ) },
 };
+
+const { Tabs } = componentsPrivateApis;
 
 /**
  * Icon
