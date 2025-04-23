@@ -43,6 +43,10 @@ const presets = [
 		label: __( 'Double', 'blablablocks-formats' ),
 	},
 	{
+		id: 'double-underline',
+		label: __( 'Double Underline', 'blablablocks-formats' ),
+	},
+	{
 		id: 'underline-zigzag',
 		label: __( 'Underline Zigzag', 'blablablocks-formats' ),
 	},
@@ -110,7 +114,7 @@ function InlineUI( {
 				} )
 			);
 		}
-		onClose(); // Close InlineUI
+		//onClose(); // Close InlineUI
 	};
 
 	const highlightTabContent = (
@@ -139,7 +143,7 @@ function InlineUI( {
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
 			offset={ 20 }
 			onClose={ onClose }
-			position="bottom center"
+			placement="bottom"
 		>
 			<TabPanel
 				onSelect={ () => {} }
