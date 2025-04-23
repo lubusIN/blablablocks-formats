@@ -114,10 +114,10 @@ function InlineUI( {
 				} )
 			);
 		}
-		//onClose(); // Close InlineUI
+		onClose(); // Close InlineUI
 	};
 
-	const highlightTabContent = (
+	const styleTabContent = (
 		<Grid columns={ 3 } gap={ 5 }>
 			{ presets.map( ( preset ) => (
 				<Button
@@ -135,7 +135,7 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const animationTabContent = <p> This is some test content</p>;
+	const animationTabContent = <p>Animation settings will go here.</p>;
 
 	return (
 		<Popover
@@ -149,9 +149,9 @@ function InlineUI( {
 				onSelect={ () => {} }
 				tabs={ [
 					{
-						name: 'highlighted',
-						title: __( 'Highlight effects', 'blablablocks-format' ),
-						content: highlightTabContent,
+						name: 'style',
+						title: __( 'Style', 'blablablocks-format' ),
+						content: styleTabContent,
 					},
 					{
 						name: 'animation',

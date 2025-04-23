@@ -14,7 +14,6 @@ blablablocks-highlighted {
 }
 
 .block-editor-format-toolbar__blablablocks-highlighted-popover {
-
 	.components-popover__content {
 		min-width: 280px;
 	}
@@ -24,10 +23,13 @@ blablablocks-highlighted {
 	}
 }
 
-.block-editor-format-toolbar__blablablocks-highlighted-button {
+ .block-editor-format-toolbar__blablablocks-highlighted-button {
 	justify-content: center;
-	padding: 10px 12px;
 	border-radius: 4px;
+
+	&:hover {
+		background-color: aliceblue;
+	}
 
 	blablablocks-highlighted {
 		font-size: 14px;
