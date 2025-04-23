@@ -7,9 +7,9 @@ import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	Flex,
-	MenuItemsChoice,
 	Popover,
-	privateApis as componentsPrivateApis,
+	TabPanel,
+	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
@@ -25,23 +25,40 @@ import './style.scss';
  */
 const name = 'blablablocks/highlighted';
 const title = __( 'Highlighted', 'blablablocks-formats' );
-const presets = {
-	circle: { label: __( 'Circle', 'blablablocks-formats' ) },
-	curly: { label: __( 'Curly', 'blablablocks-formats' ) },
-	underline: { label: __( 'Underline', 'blablablocks-formats' ) },
-	double: { label: __( 'Double', 'blablablocks-formats' ) },
-	'double-underline': {
-		label: __( 'Double Underline', 'blablablocks-formats' ),
+const presets = [
+	{
+		id: 'circle',
+		label: __( 'Circle', 'blablablocks-formats' ),
 	},
-	'underline-zigzag': {
+	{
+		id: 'curly',
+		label: __( 'Curly', 'blablablocks-formats' ),
+	},
+	{
+		id: 'underline',
+		label: __( 'Underline', 'blablablocks-formats' ),
+	},
+	{
+		id: 'double',
+		label: __( 'Double', 'blablablocks-formats' ),
+	},
+	{
+		id: 'underline-zigzag',
 		label: __( 'Underline Zigzag', 'blablablocks-formats' ),
 	},
-	strikethrough: { label: __( 'Strikethrough', 'blablablocks-formats' ) },
-	cross: { label: __( 'Cross', 'blablablocks-formats' ) },
-	strike: { label: __( 'Strike', 'blablablocks-formats' ) },
-};
-
-const { Tabs } = componentsPrivateApis;
+	{
+		id: 'strikethrough',
+		label: __( 'Strikethrough', 'blablablocks-formats' ),
+	},
+	{
+		id: 'cross',
+		label: __( 'Cross', 'blablablocks-formats' ),
+	},
+	{
+		id: 'strike',
+		label: __( 'Strike', 'blablablocks-formats' ),
+	},
+];
 
 /**
  * Icon
@@ -80,20 +97,7 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const presetChoices = Object.entries( presets ).map(
-		( [ preset, { label } ] ) => {
-			return {
-				value: preset,
-				label: (
-					<blablablocks-highlighted type={ preset }>
-						{ label }
-					</blablablocks-highlighted>
-				),
-			};
-		}
-	);
-
-	function onSetPreset( preset ) {
+	const onSetPreset = ( preset ) => {
 		if ( 'none' === preset ) {
 			onChange( removeFormat( value, name ) );
 		} else {
@@ -106,31 +110,64 @@ function InlineUI( {
 				} )
 			);
 		}
-
 		onClose(); // Close InlineUI
-	}
+	};
+
+	const highlightTabContent = (
+		<Grid columns={ 3 } gap={ 5 }>
+			{ presets.map( ( preset ) => (
+				<Button
+					key={ preset.id }
+					id={ preset.id }
+					onClick={ () => onSetPreset( preset.id ) }
+					isPressed={ activeAttributes.type === preset.id }
+					className="block-editor-format-toolbar__blablablocks-highlighted-button"
+				>
+					<blablablocks-highlighted type={ preset.id }>
+						{ preset.label }
+					</blablablocks-highlighted>
+				</Button>
+			) ) }
+		</Grid>
+	);
+
+	const animationTabContent = <p> This is some test content</p>;
 
 	return (
 		<Popover
-			position="bottom center"
 			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
+			offset={ 20 }
 			onClose={ onClose }
+			position="bottom center"
 		>
-			<MenuItemsChoice
-				choices={ presetChoices }
-				value={ activeAttributes.type }
-				onSelect={ ( preset ) => onSetPreset( preset ) }
-			/>
+			<TabPanel
+				onSelect={ () => {} }
+				tabs={ [
+					{
+						name: 'highlighted',
+						title: __( 'Highlight effects', 'blablablocks-format' ),
+						content: highlightTabContent,
+					},
+					{
+						name: 'animation',
+						title: __( 'Animation', 'blablablocks-format' ),
+						content: animationTabContent,
+					},
+				] }
+			>
+				{ ( tab ) => tab.content }
+			</TabPanel>
+
 			{ activeAttributes.type && (
-				// If the format is applied, show the clear button.
+				// Show a clear button, if there is a highlight format applied.
 				<Flex justify="flex-end">
 					<Button
 						variant="tertiary"
 						onClick={ () => onSetPreset( 'none' ) }
 						className="block-editor-format-toolbar__clear-button"
 					>
-						Clear
+						{ __( 'Clear', 'blablablocks-formats' ) }
 					</Button>
 				</Flex>
 			) }
