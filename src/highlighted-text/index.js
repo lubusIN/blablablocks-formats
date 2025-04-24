@@ -118,7 +118,7 @@ function InlineUI( {
 	};
 
 	const styleTabContent = (
-		<Grid columns={ 3 } gap={ 5 }>
+		<Grid columns={ 3 } gap={ 2 }>
 			{ presets.map( ( preset ) => (
 				<Button
 					key={ preset.id }
@@ -144,18 +144,19 @@ function InlineUI( {
 			offset={ 20 }
 			onClose={ onClose }
 			placement="bottom"
+			shift={ true }
 		>
 			<TabPanel
 				onSelect={ () => {} }
 				tabs={ [
 					{
 						name: 'style',
-						title: __( 'Style', 'blablablocks-format' ),
+						title: __( 'Style', 'blablablocks-formats' ),
 						content: styleTabContent,
 					},
 					{
 						name: 'animation',
-						title: __( 'Animation', 'blablablocks-format' ),
+						title: __( 'Animation', 'blablablocks-formats' ),
 						content: animationTabContent,
 					},
 				] }
