@@ -6,8 +6,32 @@
 
 blablablocks-highlighted {
 	white-space: normal;
+	overflow-wrap: break-word;
 }
 
 .block-editor-format-toolbar__clear-button {
 	margin: 12px;
+}
+
+.block-editor-format-toolbar__blablablocks-highlighted-popover {
+	.components-popover__content {
+		min-width: 280px;
+	}
+
+	.components-tab-panel__tab-content {
+		padding: 1rem;
+	}
+}
+
+ .block-editor-format-toolbar__blablablocks-highlighted-button {
+	justify-content: center;
+	border-radius: 4px;
+
+	&:hover {
+		background-color: aliceblue;
+	}
+
+	blablablocks-highlighted {
+		font-size: 14px;
+	}
 }

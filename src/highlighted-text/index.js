@@ -4,14 +4,14 @@
 import { useState } from '@wordpress/element';
 import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { Button, Flex, MenuItemsChoice, Popover } from '@wordpress/components';
 import {
-	slice,
-	applyFormat,
-	removeFormat,
-	useAnchor,
-	getTextContent,
-} from '@wordpress/rich-text';
+	Button,
+	Flex,
+	Popover,
+	TabPanel,
+	__experimentalGrid as Grid, // eslint-disable-line
+} from '@wordpress/components';
+import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 
 /**
@@ -26,15 +26,42 @@ import './style.scss';
 const name = 'blablablocks/highlighted';
 const title = __( 'Highlighted', 'blablablocks-formats' );
 const presets = [
-	'circle',
-	'curly',
-	'underline',
-	'double',
-	'double-underline',
-	'underline-zigzag',
-	'strikethrough',
-	'cross',
-	'strike',
+	{
+		id: 'circle',
+		label: __( 'Circle', 'blablablocks-formats' ),
+	},
+	{
+		id: 'curly',
+		label: __( 'Curly', 'blablablocks-formats' ),
+	},
+	{
+		id: 'underline',
+		label: __( 'Underline', 'blablablocks-formats' ),
+	},
+	{
+		id: 'double',
+		label: __( 'Double', 'blablablocks-formats' ),
+	},
+	{
+		id: 'double-underline',
+		label: __( 'Double Underline', 'blablablocks-formats' ),
+	},
+	{
+		id: 'underline-zigzag',
+		label: __( 'Underline Zigzag', 'blablablocks-formats' ),
+	},
+	{
+		id: 'strikethrough',
+		label: __( 'Strikethrough', 'blablablocks-formats' ),
+	},
+	{
+		id: 'cross',
+		label: __( 'Cross', 'blablablocks-formats' ),
+	},
+	{
+		id: 'strike',
+		label: __( 'Strike', 'blablablocks-formats' ),
+	},
 ];
 
 /**
@@ -74,22 +101,7 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const text = getTextContent( slice( value ) );
-
-	const presetChoices = presets.map( ( preset ) => {
-		const choice = {
-			value: preset,
-			label: (
-				<blablablocks-highlighted type={ preset }>
-					{ text || preset }
-				</blablablocks-highlighted>
-			),
-		};
-
-		return choice;
-	} );
-
-	function onSetPreset( preset ) {
+	const onSetPreset = ( preset ) => {
 		if ( 'none' === preset ) {
 			onChange( removeFormat( value, name ) );
 		} else {
@@ -102,31 +114,64 @@ function InlineUI( {
 				} )
 			);
 		}
-
 		onClose(); // Close InlineUI
-	}
+	};
+
+	const styleTabContent = (
+		<Grid columns={ 3 } gap={ 5 }>
+			{ presets.map( ( preset ) => (
+				<Button
+					key={ preset.id }
+					id={ preset.id }
+					onClick={ () => onSetPreset( preset.id ) }
+					isPressed={ activeAttributes.type === preset.id }
+					className="block-editor-format-toolbar__blablablocks-highlighted-button"
+				>
+					<blablablocks-highlighted type={ preset.id }>
+						{ preset.label }
+					</blablablocks-highlighted>
+				</Button>
+			) ) }
+		</Grid>
+	);
+
+	const animationTabContent = <p>Animation settings will go here.</p>;
 
 	return (
 		<Popover
-			position="bottom center"
 			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
+			offset={ 20 }
 			onClose={ onClose }
+			placement="bottom"
 		>
-			<MenuItemsChoice
-				choices={ presetChoices }
-				value={ activeAttributes.type }
-				onSelect={ ( preset ) => onSetPreset( preset ) }
-			/>
+			<TabPanel
+				onSelect={ () => {} }
+				tabs={ [
+					{
+						name: 'style',
+						title: __( 'Style', 'blablablocks-format' ),
+						content: styleTabContent,
+					},
+					{
+						name: 'animation',
+						title: __( 'Animation', 'blablablocks-format' ),
+						content: animationTabContent,
+					},
+				] }
+			>
+				{ ( tab ) => tab.content }
+			</TabPanel>
+
 			{ activeAttributes.type && (
-				// If the format is applied, show the clear button.
+				// Show a clear button, if there is a highlight format applied.
 				<Flex justify="flex-end">
 					<Button
 						variant="tertiary"
 						onClick={ () => onSetPreset( 'none' ) }
 						className="block-editor-format-toolbar__clear-button"
 					>
-						Clear
+						{ __( 'Clear', 'blablablocks-formats' ) }
 					</Button>
 				</Flex>
 			) }
