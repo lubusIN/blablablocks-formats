@@ -7,9 +7,14 @@ import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	Flex,
+	FormToggle,
 	Popover,
+	SelectControl,
 	TabPanel,
 	__experimentalGrid as Grid, // eslint-disable-line
+	__experimentalVStack as VStack, // eslint-disable-line
+	__experimentalHStack as HStack, // eslint-disable-line
+	__experimentalNumberControl as NumberControl, // eslint-disable-line
 } from '@wordpress/components';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
@@ -135,7 +140,70 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const animationTabContent = <p>Animation settings will go here.</p>;
+	const [ isAnimationEnabled, setIsAnimationEnabled ] = useState( true );
+	const [ animationDuration, setAnimationDuration ] = useState( 1 );
+	const [ animationType, setAnimationType ] = useState( 'linear' );
+
+	const animationTabContent = (
+		<VStack gap={ 5 }>
+			<HStack gap={ 3 } alignment="left">
+				<span className="animation-enabled-label">
+					{ __( 'Enabled', 'blablablocks-formats' ) }
+				</span>
+				<FormToggle
+					checked={ isAnimationEnabled }
+					onChange={ () =>
+						setIsAnimationEnabled( ( state ) => ! state )
+					}
+				/>
+			</HStack>
+			<HStack gap={ 3 } alignment="left">
+				<NumberControl
+					value={ animationDuration }
+					min={ 1 }
+					max={ 1000 }
+					onChange={ ( value ) =>
+						setAnimationDuration( parseFloat( value ) )
+					}
+					label={ __( 'Duration', 'blablablocks-formats' ) }
+					labelPosition="side"
+					__next40pxDefaultSize={ true }
+				/>
+				<span>{ __( 'seconds', 'blablablocks-formats' ) }</span>
+			</HStack>
+			<SelectControl
+				label={ __( 'Type', 'blablablocks-formats' ) }
+				value={ animationType }
+				options={ [
+					{
+						label: __( 'Linear', 'blablablocks-formats' ),
+						value: 'linear',
+					},
+					{
+						label: __( 'Ease In', 'blablablocks-formats' ),
+						value: 'ease-in',
+					},
+					{
+						label: __( 'Ease out', 'blablablocks-formats' ),
+						value: 'ease-out',
+					},
+					{
+						label: __( 'Ease In Out', 'blablablocks-formats' ),
+						value: 'ease-in-out',
+					},
+					{
+						label: __( 'Step', 'blablablocks-formats' ),
+						value: 'step',
+					},
+				] }
+				labelPosition="side"
+				onChange={ ( value ) => setAnimationType( value ) }
+				__next40pxDefaultSize={ true }
+				__nextHasNoMarginBottom={ true }
+				variant={ 'minimal' }
+			/>
+		</VStack>
+	);
 
 	return (
 		<Popover

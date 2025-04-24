@@ -15,7 +15,8 @@ blablablocks-highlighted {
 
 .block-editor-format-toolbar__blablablocks-highlighted-popover {
 	.components-popover__content {
-		min-width: 400px;
+		min-width: 300px;
+
 	}
 
 	.components-tab-panel__tab-content {
@@ -36,6 +37,13 @@ blablablocks-highlighted {
 		}
 
 		padding: 1.8rem;
+	}
+
+	.animation-enabled-label {
+		font-weight: 500;
+		text-transform: uppercase;
+		font-size: 11px;
+		color: #1e1e1e;
 	}
 }
 
