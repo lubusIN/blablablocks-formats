@@ -173,8 +173,8 @@ function InlineUI( {
 				min={ 1 }
 				max={ 10 }
 				step={ 0.5 }
-				onChange={ ( value ) =>
-					setAnimationDuration( parseFloat( value ) )
+				onChange={ ( duration ) =>
+					setAnimationDuration( parseFloat( duration ) )
 				}
 				label={ __( 'Duration', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
@@ -212,7 +212,7 @@ function InlineUI( {
 					},
 				] }
 				hideLabelFromVision={ true }
-				onChange={ ( value ) => setAnimationType( value ) }
+				onChange={ ( type ) => setAnimationType( type ) }
 				__next40pxDefaultSize={ true }
 				__nextHasNoMarginBottom={ true }
 			/>
