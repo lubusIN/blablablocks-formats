@@ -14,21 +14,18 @@ blablablocks-highlighted {
 }
 
 .block-editor-format-toolbar__blablablocks-highlighted-popover {
+
 	.components-popover__content {
-		min-width: 400px;
+		min-width: 330px;
+
 	}
 
 	.components-tab-panel__tab-content {
 		padding: 1rem;
-
-		.components-grid {
-			grid-template-rows: repeat( 3, minmax( 0, 1fr ) );
-			grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
-		}
-
 	}
 
 	.components-button {
+
 		&.is-pressed:hover:not(:disabled, [aria-disabled="true"]),
 		&.components-button.is-pressed:not(:disabled, [aria-disabled="true"]) {
 			background-color: #f0f0f1;
@@ -36,6 +33,13 @@ blablablocks-highlighted {
 		}
 
 		padding: 1.8rem;
+	}
+
+	.animation-tab-label {
+		font-weight: 500;
+		text-transform: uppercase;
+		font-size: 11px;
+		color: #1e1e1e;
 	}
 }
 

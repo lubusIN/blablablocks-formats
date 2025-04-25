@@ -7,9 +7,14 @@ import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	Flex,
+	FormToggle,
 	Popover,
+	SelectControl,
 	TabPanel,
 	__experimentalGrid as Grid, // eslint-disable-line
+	__experimentalVStack as VStack, // eslint-disable-line
+	__experimentalHStack as HStack, // eslint-disable-line
+	__experimentalNumberControl as NumberControl, // eslint-disable-line
 } from '@wordpress/components';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
@@ -118,7 +123,10 @@ function InlineUI( {
 	};
 
 	const styleTabContent = (
-		<Grid columns={ 3 } gap={ 2 }>
+		<Grid
+			templateColumns="repeat( 3, minmax( 0, 1fr ) )"
+			templateRows="repeat( 3, minmax( 0, 1fr ) )"
+		>
 			{ presets.map( ( preset ) => (
 				<Button
 					key={ preset.id }
@@ -135,7 +143,81 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const animationTabContent = <p>Animation settings will go here.</p>;
+	const [ isAnimationEnabled, setIsAnimationEnabled ] = useState( true );
+	const [ animationDuration, setAnimationDuration ] = useState( 1 );
+	const [ animationType, setAnimationType ] = useState( 'linear' );
+
+	const animationTabContent = (
+		<Grid
+			columns={ 2 }
+			rows={ 3 }
+			templateColumns="3fr 7fr"
+			alignment="center"
+			className="block-editor-format-toolbar__blablablocks-highlighted-animation-tab"
+		>
+			{ /* row 1 - Animation enable */ }
+			<span className="animation-tab-label">
+				{ __( 'Enabled', 'blablablocks-formats' ) }
+			</span>
+			<FormToggle
+				checked={ isAnimationEnabled }
+				onChange={ () => setIsAnimationEnabled( ( state ) => ! state ) }
+			/>
+
+			{ /* row 2 - Animation duration  */ }
+			<span className="animation-tab-label">
+				{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
+			</span>
+			<NumberControl
+				value={ animationDuration }
+				min={ 1 }
+				max={ 10 }
+				step={ 0.5 }
+				onChange={ ( duration ) =>
+					setAnimationDuration( parseFloat( duration ) )
+				}
+				label={ __( 'Duration', 'blablablocks-formats' ) }
+				hideLabelFromVision={ true }
+				__next40pxDefaultSize={ true }
+				style={ { justifySelf: 'start' } }
+			/>
+
+			{ /* row 3 - Animation type selection  */ }
+			<span className="animation-tab-label">
+				{ __( 'Type', 'blablablocks-formats' ) }
+			</span>
+			<SelectControl
+				label={ __( 'Type', 'blablablocks-formats' ) }
+				value={ animationType }
+				options={ [
+					{
+						label: __( 'Linear', 'blablablocks-formats' ),
+						value: 'linear',
+					},
+					{
+						label: __( 'Ease In', 'blablablocks-formats' ),
+						value: 'ease-in',
+					},
+					{
+						label: __( 'Ease Out', 'blablablocks-formats' ),
+						value: 'ease-out',
+					},
+					{
+						label: __( 'Ease In Out', 'blablablocks-formats' ),
+						value: 'ease-in-out',
+					},
+					{
+						label: __( 'Step', 'blablablocks-formats' ),
+						value: 'step',
+					},
+				] }
+				hideLabelFromVision={ true }
+				onChange={ ( type ) => setAnimationType( type ) }
+				__next40pxDefaultSize={ true }
+				__nextHasNoMarginBottom={ true }
+			/>
+		</Grid>
+	);
 
 	return (
 		<Popover
@@ -158,6 +240,7 @@ function InlineUI( {
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
 						content: animationTabContent,
+						disabled: ! activeAttributes.type,
 					},
 				] }
 			>
