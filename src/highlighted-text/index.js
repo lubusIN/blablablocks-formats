@@ -199,7 +199,7 @@ function InlineUI( {
 						value: 'ease-in',
 					},
 					{
-						label: __( 'Ease out', 'blablablocks-formats' ),
+						label: __( 'Ease Out', 'blablablocks-formats' ),
 						value: 'ease-out',
 					},
 					{
