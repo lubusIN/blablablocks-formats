@@ -4,35 +4,69 @@
 /* global HTMLElement */
 class BlaBlaBlocksHighlighted extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'type' ];
+		console.log( 'BlaBlaBlocksHighlighted: observedAttributes' );
+		return [ 'type', 'data-animation-enabled' ]; // Changed 'is-animated' to 'data-animation-enabled'
+	}
+
+	constructor() {
+		super();
+		console.log( 'BlaBlaBlocksHighlighted: constructor' );
+		// Attach shadow root early
+		this.attachShadow( { mode: 'open' } );
 	}
 
 	connectedCallback() {
-		const template = this.renderElement();
-		this.attachShadow( { mode: 'open' } );
-		this.shadowRoot.appendChild( template.content.cloneNode( true ) );
+		console.log( 'BlaBlaBlocksHighlighted: connectedCallback' );
+		// Check if shadow root already has content (e.g., from previous connection)
+		if ( ! this.shadowRoot.firstChild ) {
+			const template = this.renderElement();
+			this.shadowRoot.appendChild( template.content.cloneNode( true ) );
+			console.log( 'BlaBlaBlocksHighlighted: Shadow DOM populated' );
+		} else {
+			console.log(
+				'BlaBlaBlocksHighlighted: Shadow DOM already populated'
+			);
+			// Ensure styles are up-to-date if re-connecting
+			const style = this.shadowRoot.querySelector( 'style' );
+			if ( style ) style.textContent = this.renderStyle();
+		}
+		console.log(
+			`BlaBlaBlocksHighlighted: Initial type=${ this.getAttribute(
+				'type'
+			) }, data-animation-enabled=${ this.getAttribute(
+				'data-animation-enabled'
+			) }`
+		);
+	}
+
+	disconnectedCallback() {
+		console.log( 'BlaBlaBlocksHighlighted: disconnectedCallback' );
 	}
 
 	renderElement() {
 		const type = this.getAttribute( 'type' ) ?? 'circle';
+		const svgContent = this.renderPath( type );
+		const styleContent = this.renderStyle();
 
 		const template = document.createElement( 'template' );
 		template.innerHTML = `
             <style>
-             ${ this.renderStyle() }
+             ${ styleContent }
             </style>
-
             <span class="wrapper">
                 <span class="text">
                     <slot></slot>
                 </span>
                 <svg class="highlighted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150"
                     preserveAspectRatio="none">
-                        ${ this.renderPath( type ) }
+                        ${ svgContent }
                 </svg>
             </span>
         `;
-
+		console.log(
+			'BlaBlaBlocksHighlighted: renderElement created template.',
+			{ hasSVG: svgContent.includes( '<path' ) }
+		);
 		return template;
 	}
 
@@ -90,17 +124,24 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	}
 
 	renderStyle() {
-		return `
+		const isAnimated =
+			this.getAttribute( 'data-animation-enabled' ) === 'true';
+		console.log(
+			`BlaBlaBlocksHighlighted: renderStyle called, isAnimated=${ isAnimated } (attribute value: '${ this.getAttribute(
+				'data-animation-enabled'
+			) }')`
+		);
+
+		// Base styles, always present
+		let baseCSS = `
             .wrapper {
                 position: relative;
                 overflow: visible;
             }
-
             .text {
                 position: relative;
                 z-index: 1;
             }
-
             .highlighted {
                 fill: none;
                 position: absolute;
@@ -110,62 +151,94 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
                 width: calc(100% + 2px);
                 stroke-width: 9;
                 height: calc(100% + 5px);
-                -webkit-transform: translate(-50%, -50%);
-                -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
-                overflow: visible;
             }
-
             .highlighted path {
-                stroke: red;
+                stroke: red; /* Consider making color dynamic */
                 stroke-dasharray: 1500;
-                stroke-dashoffset: 1500;
-                animation-name: acfb-hh-dash;
-                animation-iteration-count: infinite;
-                animation-duration: 5s;
-            }
-
-            .highlighted path:nth-of-type(2) {
-                animation-delay: 0.3s;
-            }
-
-            @keyframes acfb-hh-dash {
-                0% {
-                    stroke-dashoffset: 1500;
-                }
-
-                15% {
-                    stroke-dashoffset: 0;
-                }
-
-                85% {
-                    opacity: 1;
-                }
-
-                90% {
-                    stroke-dashoffset: 0;
-                    opacity: 0;
-                }
-
-                100% {
-                    stroke-dashoffset: 1500;
-                    opacity: 0;
-                }
+                /* Default state (non-animated or initial state before animation) */
+                stroke-dashoffset: 0; /* Path fully visible when not animating */
+                animation: none; /* Explicitly no animation by default */
             }
         `;
+
+		// Animation styles, added conditionally
+		let animationCSS = '';
+		if ( isAnimated ) {
+			animationCSS = `
+                .highlighted path {
+                    /* Animated state */
+                    stroke-dashoffset: 1500; /* Start animation from hidden */
+                    animation-name: acfb-hh-dash;
+                    animation-iteration-count: infinite; /* Or 1 ? */
+                    animation-duration: 5s; /* TODO: Make dynamic */
+                    animation-timing-function: linear; /* TODO: Make dynamic */
+                    animation-delay: 0s;
+                }
+                .highlighted path:nth-of-type(2) {
+                    animation-delay: 0.3s; /* Apply delay only when animated */
+                }
+                @keyframes acfb-hh-dash {
+                    0% { stroke-dashoffset: 1500; opacity: 1; }
+                    15% { stroke-dashoffset: 0; opacity: 1; }
+                    85% { stroke-dashoffset: 0; opacity: 1; }
+                    90% { stroke-dashoffset: 0; opacity: 0; }
+                    100% { stroke-dashoffset: 1500; opacity: 0; }
+                }
+            `;
+		}
+
+		return baseCSS + animationCSS;
 	}
 
 	attributeChangedCallback( name, oldValue, newValue ) {
-		if ( ! oldValue ) {
+		console.log(
+			`BlaBlaBlocksHighlighted: attributeChangedCallback - name=${ name }, oldValue=${ oldValue }, newValue=${ newValue }`
+		);
+
+		// Wait until the shadow DOM is populated before trying to query it.
+		if ( ! this.shadowRoot || ! this.shadowRoot.firstChild ) {
+			console.warn(
+				'BlaBlaBlocksHighlighted: attributeChangedCallback skipped - shadow DOM not ready.'
+			);
 			return;
 		}
-		const shadow = this.shadowRoot;
 
-		const svg = shadow.querySelector( 'svg' );
-		const style = shadow.querySelector( 'style' );
+		const style = this.shadowRoot.querySelector( 'style' );
+		const svg = this.shadowRoot.querySelector( 'svg' );
 
-		svg.innerHTML = this.renderPath( newValue );
-		style.textContent = this.renderStyle();
+		if ( name === 'data-animation-enabled' ) {
+			console.log(
+				`BlaBlaBlocksHighlighted: Updating style for data-animation-enabled change to ${ newValue }`
+			);
+			if ( style ) {
+				style.textContent = this.renderStyle();
+				console.log(
+					'BlaBlaBlocksHighlighted: Style textContent updated.'
+				);
+			} else {
+				console.warn(
+					'BlaBlaBlocksHighlighted: Could not find style element to update.'
+				);
+			}
+		}
+
+		if ( name === 'type' ) {
+			console.log(
+				`BlaBlaBlocksHighlighted: Updating path for type change to ${ newValue }`
+			);
+			if ( svg ) {
+				svg.innerHTML = this.renderPath( newValue );
+				console.log(
+					'BlaBlaBlocksHighlighted: SVG innerHTML updated.'
+				);
+			} else {
+				// This warning should now be less frequent with the check above.
+				console.warn(
+					'BlaBlaBlocksHighlighted: Could not find SVG element to update in attributeChangedCallback.'
+				);
+			}
+		}
 	}
 }
 

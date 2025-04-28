@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import {
@@ -106,15 +106,74 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
+	// Initialize isAnimated state based on activeAttributes, defaulting to true
+	const [ isAnimated, setIsAnimated ] = useState(
+		activeAttributes.dataAnimationEnabled !== undefined
+			? activeAttributes.dataAnimationEnabled
+			: true
+	);
+	// Initialize other states based on activeAttributes or defaults
+	const [ animationDuration, setAnimationDuration ] = useState(
+		activeAttributes.duration !== undefined ? activeAttributes.duration : 1
+	);
+	const [ animationType, setAnimationType ] = useState(
+		activeAttributes.animationType !== undefined
+			? activeAttributes.animationType
+			: 'linear'
+	);
+
+	// Effect to sync local state with activeAttributes when they change
+	useEffect( () => {
+		setIsAnimated(
+			activeAttributes.dataAnimationEnabled !== undefined
+				? activeAttributes.dataAnimationEnabled
+				: true
+		);
+		setAnimationDuration(
+			activeAttributes.duration !== undefined
+				? activeAttributes.duration
+				: 1
+		);
+		setAnimationType(
+			activeAttributes.animationType !== undefined
+				? activeAttributes.animationType
+				: 'linear'
+		);
+	}, [
+		activeAttributes.dataAnimationEnabled,
+		activeAttributes.duration,
+		activeAttributes.animationType,
+	] );
+
+	// Simplified updateFormat - applies format with current state
+	const applyFormatWithCurrentState = ( preset ) => {
+		onChange(
+			applyFormat( value, {
+				type: name,
+				attributes: {
+					type: preset,
+					dataAnimationEnabled: isAnimated,
+					duration: animationDuration,
+					animationType: animationType,
+				},
+			} )
+		);
+	};
+
+	// Handle preset selection
 	const onSetPreset = ( preset ) => {
 		if ( 'none' === preset ) {
 			onChange( removeFormat( value, name ) );
 		} else {
+			// Apply format with the selected preset and current animation state
 			onChange(
 				applyFormat( value, {
 					type: name,
 					attributes: {
 						type: preset,
+						dataAnimationEnabled: isAnimated,
+						duration: animationDuration,
+						animationType: animationType,
 					},
 				} )
 			);
@@ -122,7 +181,28 @@ function InlineUI( {
 		onClose(); // Close InlineUI
 	};
 
-	const styleTabContent = (
+	// Handle animation toggle - Directly apply format change
+	const handleAnimationToggle = () => {
+		const newIsAnimated = ! isAnimated;
+		setIsAnimated( newIsAnimated );
+		// Apply the format change immediately if a type is active
+		if ( activeAttributes.type ) {
+			onChange(
+				applyFormat( value, {
+					type: name,
+					attributes: {
+						...activeAttributes, // Keep existing attributes
+						dataAnimationEnabled: newIsAnimated, // Update only animation state
+						// Ensure other animation attributes are included if needed
+						duration: animationDuration,
+						animationType: animationType,
+					},
+				} )
+			);
+		}
+	};
+
+	const StyleTabContent = () => (
 		<Grid
 			templateColumns="repeat( 3, minmax( 0, 1fr ) )"
 			templateRows="repeat( 3, minmax( 0, 1fr ) )"
@@ -135,7 +215,10 @@ function InlineUI( {
 					isPressed={ activeAttributes.type === preset.id }
 					className="block-editor-format-toolbar__blablablocks-highlighted-button"
 				>
-					<blablablocks-highlighted type={ preset.id }>
+					<blablablocks-highlighted
+						type={ preset.id }
+						data-animation-enabled={ isAnimated }
+					>
 						{ preset.label }
 					</blablablocks-highlighted>
 				</Button>
@@ -143,11 +226,7 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const [ isAnimationEnabled, setIsAnimationEnabled ] = useState( true );
-	const [ animationDuration, setAnimationDuration ] = useState( 1 );
-	const [ animationType, setAnimationType ] = useState( 'linear' );
-
-	const animationTabContent = (
+	const AnimationTabContent = () => (
 		<Grid
 			columns={ 2 }
 			rows={ 3 }
@@ -160,8 +239,8 @@ function InlineUI( {
 				{ __( 'Enabled', 'blablablocks-formats' ) }
 			</span>
 			<FormToggle
-				checked={ isAnimationEnabled }
-				onChange={ () => setIsAnimationEnabled( ( state ) => ! state ) }
+				checked={ isAnimated } // Controlled by the isAnimated state
+				onChange={ handleAnimationToggle } // Use the updated handler
 			/>
 
 			{ /* row 2 - Animation duration  */ }
@@ -234,12 +313,12 @@ function InlineUI( {
 					{
 						name: 'style',
 						title: __( 'Style', 'blablablocks-formats' ),
-						content: styleTabContent,
+						content: <StyleTabContent />,
 					},
 					{
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
-						content: animationTabContent,
+						content: <AnimationTabContent />,
 						disabled: ! activeAttributes.type,
 					},
 				] }
@@ -311,5 +390,8 @@ export const highlightedText = {
 	edit: EditButton,
 	attributes: {
 		type: 'type',
+		dataAnimationEnabled: 'data-animation-enabled',
+		dataDuration: 'duration',
+		dataAnimationType: 'animationType',
 	},
 };
