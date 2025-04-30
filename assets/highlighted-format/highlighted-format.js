@@ -102,7 +102,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 			this.getAttribute( 'data-animation-duration' ) ?? '5s';
 
 		const animationFunction =
-			this.getAttribute( 'data-animation-function' ) ?? 'linear';
+			this.getAttribute( 'data-animation-function' ) ?? 'easeIn';
 
 		let style = `
 			.wrapper {
@@ -142,7 +142,8 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 					stroke-dashoffset: 1500;
 					animation-name: acfb-hh-dash;
 					animation-iteration-count: infinite;
-					animation-duration: 5s;
+					animation-duration: ${ animationDuration };
+					animation-timing-function: ${ animationFunction };
 				}
 
 				.highlighted path:nth-of-type(2) {
