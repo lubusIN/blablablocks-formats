@@ -143,8 +143,6 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const [ isAnimationEnabled, setIsAnimationEnabled ] = useState( true );
-
 	const AnimationTabContent = () => (
 		<Grid
 			columns={ 2 }
@@ -181,7 +179,7 @@ function InlineUI( {
 			</span>
 			<SelectControl
 				label={ __( 'Type', 'blablablocks-formats' ) }
-				value={ animationType }
+				value={ 'linear' }
 				options={ [
 					{
 						label: __( 'Linear', 'blablablocks-formats' ),
