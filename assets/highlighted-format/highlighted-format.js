@@ -4,7 +4,12 @@
 /* global HTMLElement */
 class BlaBlaBlocksHighlighted extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'type' ];
+		return [
+			'type',
+			'data-animation-enabled',
+			'data-animation-duration',
+			'data-animation-function',
+		];
 	}
 
 	connectedCallback() {
@@ -90,8 +95,17 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	}
 
 	renderStyle() {
-		return `
-            .wrapper {
+		const isAnimationEnabled =
+			this.getAttribute( 'data-animation-enabled' ) ?? 'true';
+
+		const animationDuration =
+			this.getAttribute( 'data-animation-duration' ) ?? '5s';
+
+		const animationFunction =
+			this.getAttribute( 'data-animation-function' ) ?? 'linear';
+
+		let style = `
+			.wrapper {
                 position: relative;
                 overflow: visible;
             }
@@ -119,40 +133,49 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
             .highlighted path {
                 stroke: red;
                 stroke-dasharray: 1500;
-                stroke-dashoffset: 1500;
-                animation-name: acfb-hh-dash;
-                animation-iteration-count: infinite;
-                animation-duration: 5s;
             }
+		`;
 
-            .highlighted path:nth-of-type(2) {
-                animation-delay: 0.3s;
-            }
+		if ( isAnimationEnabled === 'true' ) {
+			style += `
+				.highlighted path {
+					stroke-dashoffset: 1500;
+					animation-name: acfb-hh-dash;
+					animation-iteration-count: infinite;
+					animation-duration: 5s;
+				}
 
-            @keyframes acfb-hh-dash {
-                0% {
-                    stroke-dashoffset: 1500;
-                }
+				.highlighted path:nth-of-type(2) {
+					animation-delay: 0.3s;
+				}
 
-                15% {
-                    stroke-dashoffset: 0;
-                }
+				@keyframes acfb-hh-dash {
+					0% {
+						stroke-dashoffset: 1500;
+					}
 
-                85% {
-                    opacity: 1;
-                }
+					15% {
+						stroke-dashoffset: 0;
+					}
 
-                90% {
-                    stroke-dashoffset: 0;
-                    opacity: 0;
-                }
+					85% {
+						opacity: 1;
+					}
 
-                100% {
-                    stroke-dashoffset: 1500;
-                    opacity: 0;
-                }
-            }
-        `;
+					90% {
+						stroke-dashoffset: 0;
+						opacity: 0;
+					}
+
+					100% {
+						stroke-dashoffset: 1500;
+						opacity: 0;
+					}
+				}
+			`;
+		}
+
+		return style;
 	}
 
 	attributeChangedCallback( name, oldValue, newValue ) {
