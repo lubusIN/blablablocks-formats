@@ -122,7 +122,7 @@ function InlineUI( {
 		onClose(); // Close InlineUI
 	};
 
-	const styleTabContent = (
+	const StyleTabContent = () => (
 		<Grid
 			templateColumns="repeat( 3, minmax( 0, 1fr ) )"
 			templateRows="repeat( 3, minmax( 0, 1fr ) )"
@@ -144,10 +144,8 @@ function InlineUI( {
 	);
 
 	const [ isAnimationEnabled, setIsAnimationEnabled ] = useState( true );
-	const [ animationDuration, setAnimationDuration ] = useState( 1 );
-	const [ animationType, setAnimationType ] = useState( 'linear' );
 
-	const animationTabContent = (
+	const AnimationTabContent = () => (
 		<Grid
 			columns={ 2 }
 			rows={ 3 }
@@ -159,23 +157,18 @@ function InlineUI( {
 			<span className="animation-tab-label">
 				{ __( 'Enabled', 'blablablocks-formats' ) }
 			</span>
-			<FormToggle
-				checked={ isAnimationEnabled }
-				onChange={ () => setIsAnimationEnabled( ( state ) => ! state ) }
-			/>
+			<FormToggle checked={ true } onChange={ () => {} } />
 
 			{ /* row 2 - Animation duration  */ }
 			<span className="animation-tab-label">
 				{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
 			</span>
 			<NumberControl
-				value={ animationDuration }
+				value={ 5 }
 				min={ 1 }
 				max={ 10 }
 				step={ 0.5 }
-				onChange={ ( duration ) =>
-					setAnimationDuration( parseFloat( duration ) )
-				}
+				onChange={ () => {} }
 				label={ __( 'Duration', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
 				__next40pxDefaultSize={ true }
@@ -212,7 +205,7 @@ function InlineUI( {
 					},
 				] }
 				hideLabelFromVision={ true }
-				onChange={ ( type ) => setAnimationType( type ) }
+				onChange={ () => {} }
 				__next40pxDefaultSize={ true }
 				__nextHasNoMarginBottom={ true }
 			/>
@@ -234,12 +227,12 @@ function InlineUI( {
 					{
 						name: 'style',
 						title: __( 'Style', 'blablablocks-formats' ),
-						content: styleTabContent,
+						content: <StyleTabContent />,
 					},
 					{
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
-						content: animationTabContent,
+						content: <AnimationTabContent />,
 						disabled: ! activeAttributes.type,
 					},
 				] }
