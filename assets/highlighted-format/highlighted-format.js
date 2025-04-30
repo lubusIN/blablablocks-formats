@@ -9,6 +9,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 			'data-animation-enabled',
 			'data-animation-duration',
 			'data-animation-function',
+			'data-animation-color',
 		];
 	}
 
@@ -104,6 +105,9 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 		const animationFunction =
 			this.getAttribute( 'data-animation-function' ) ?? 'easeIn';
 
+		const animationColor =
+			this.getAttribute( 'data-animation-color' ) ?? '#ff0000';
+
 		let style = `
 			.wrapper {
                 position: relative;
@@ -131,7 +135,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
             }
 
             .highlighted path {
-                stroke: red;
+                stroke: ${ animationColor };
                 stroke-dasharray: 1500;
             }
 		`;
@@ -183,12 +187,17 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 		if ( ! oldValue ) {
 			return;
 		}
+
 		const shadow = this.shadowRoot;
 
-		const svg = shadow.querySelector( 'svg' );
-		const style = shadow.querySelector( 'style' );
+		if ( name === 'type' ) {
+			// Update the path only if the type attribute changes.
+			const svg = shadow.querySelector( 'svg' );
+			svg.innerHTML = this.renderPath( newValue );
+		}
 
-		svg.innerHTML = this.renderPath( newValue );
+		// Changes of all other attributes will require a re-render of the style.
+		const style = shadow.querySelector( 'style' );
 		style.textContent = this.renderStyle();
 	}
 }
