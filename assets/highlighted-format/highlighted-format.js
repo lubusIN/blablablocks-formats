@@ -99,10 +99,10 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 		const isAnimationEnabled = this.getAttribute( 'animation' ) ?? 'true';
 
 		const animationDuration =
-			this.getAttribute( 'animation-duration' ) ?? '5s';
+			this.getAttribute( 'animation-duration' ) ?? '5';
 
 		const animationFunction =
-			this.getAttribute( 'animation-function' ) ?? 'easeIn';
+			this.getAttribute( 'animation-function' ) ?? 'ease-in';
 
 		const animationColor = this.getAttribute( 'color' ) ?? '#ff0000';
 
@@ -144,7 +144,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 					stroke-dashoffset: 1500;
 					animation-name: acfb-hh-dash;
 					animation-iteration-count: infinite;
-					animation-duration: ${ animationDuration };
+					animation-duration: ${ animationDuration }s;
 					animation-timing-function: ${ animationFunction };
 				}
 
