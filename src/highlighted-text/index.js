@@ -12,8 +12,6 @@ import {
 	SelectControl,
 	TabPanel,
 	__experimentalGrid as Grid, // eslint-disable-line
-	__experimentalVStack as VStack, // eslint-disable-line
-	__experimentalHStack as HStack, // eslint-disable-line
 	__experimentalNumberControl as NumberControl, // eslint-disable-line
 } from '@wordpress/components';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
@@ -302,5 +300,9 @@ export const highlightedText = {
 	edit: EditButton,
 	attributes: {
 		type: 'type',
+		animation: 'animation',
+		'animation-duration': 'animation-duration',
+		'animation-function': 'animation-function',
+		color: 'color',
 	},
 };
