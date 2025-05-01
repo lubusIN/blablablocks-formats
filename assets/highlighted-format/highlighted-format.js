@@ -4,7 +4,13 @@
 /* global HTMLElement */
 class BlaBlaBlocksHighlighted extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'type' ];
+		return [
+			'type',
+			'animation',
+			'animation-duration',
+			'animation-function',
+			'color',
+		];
 	}
 
 	connectedCallback() {
@@ -90,8 +96,18 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	}
 
 	renderStyle() {
-		return `
-            .wrapper {
+		const isAnimationEnabled = this.getAttribute( 'animation' ) ?? 'true';
+
+		const animationDuration =
+			this.getAttribute( 'animation-duration' ) ?? '5';
+
+		const animationFunction =
+			this.getAttribute( 'animation-function' ) ?? 'ease-in';
+
+		const animationColor = this.getAttribute( 'color' ) ?? '#ff0000';
+
+		let style = `
+			.wrapper {
                 position: relative;
                 overflow: visible;
             }
@@ -117,54 +133,69 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
             }
 
             .highlighted path {
-                stroke: red;
+                stroke: ${ animationColor };
                 stroke-dasharray: 1500;
-                stroke-dashoffset: 1500;
-                animation-name: acfb-hh-dash;
-                animation-iteration-count: infinite;
-                animation-duration: 5s;
             }
+		`;
 
-            .highlighted path:nth-of-type(2) {
-                animation-delay: 0.3s;
-            }
+		if ( isAnimationEnabled === 'true' ) {
+			style += `
+				.highlighted path {
+					stroke-dashoffset: 1500;
+					animation-name: acfb-hh-dash;
+					animation-iteration-count: infinite;
+					animation-duration: ${ animationDuration }s;
+					animation-timing-function: ${ animationFunction };
+				}
 
-            @keyframes acfb-hh-dash {
-                0% {
-                    stroke-dashoffset: 1500;
-                }
+				.highlighted path:nth-of-type(2) {
+					animation-delay: 0.3s;
+				}
 
-                15% {
-                    stroke-dashoffset: 0;
-                }
+				@keyframes acfb-hh-dash {
+					0% {
+						stroke-dashoffset: 1500;
+					}
 
-                85% {
-                    opacity: 1;
-                }
+					15% {
+						stroke-dashoffset: 0;
+					}
 
-                90% {
-                    stroke-dashoffset: 0;
-                    opacity: 0;
-                }
+					85% {
+						opacity: 1;
+					}
 
-                100% {
-                    stroke-dashoffset: 1500;
-                    opacity: 0;
-                }
-            }
-        `;
+					90% {
+						stroke-dashoffset: 0;
+						opacity: 0;
+					}
+
+					100% {
+						stroke-dashoffset: 1500;
+						opacity: 0;
+					}
+				}
+			`;
+		}
+
+		return style;
 	}
 
 	attributeChangedCallback( name, oldValue, newValue ) {
 		if ( ! oldValue ) {
 			return;
 		}
+
 		const shadow = this.shadowRoot;
 
-		const svg = shadow.querySelector( 'svg' );
-		const style = shadow.querySelector( 'style' );
+		if ( name === 'type' ) {
+			// Update the path only if the type attribute changes.
+			const svg = shadow.querySelector( 'svg' );
+			svg.innerHTML = this.renderPath( newValue );
+		}
 
-		svg.innerHTML = this.renderPath( newValue );
+		// Changes of all other attributes will require a re-render of the style.
+		const style = shadow.querySelector( 'style' );
 		style.textContent = this.renderStyle();
 	}
 }
