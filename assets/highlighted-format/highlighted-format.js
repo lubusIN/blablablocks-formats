@@ -129,7 +129,6 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
                 -webkit-transform: translate(-50%, -50%);
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
-                overflow: visible;
             }
 
             .highlighted path {
@@ -140,41 +139,41 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 
 		if ( isAnimationEnabled === 'true' ) {
 			style += `
-				.highlighted path {
+			.highlighted path {
+				stroke-dashoffset: 1500;
+				animation-name: acfb-hh-dash;
+				animation-iteration-count: infinite;
+				animation-duration: ${ animationDuration }s;
+				animation-timing-function: ${ animationFunction };
+			}
+
+			.highlighted path:nth-of-type(2) {
+				animation-delay: 0.3s;
+			}
+
+			@keyframes acfb-hh-dash {
+				0% {
 					stroke-dashoffset: 1500;
-					animation-name: acfb-hh-dash;
-					animation-iteration-count: infinite;
-					animation-duration: ${ animationDuration }s;
-					animation-timing-function: ${ animationFunction };
 				}
 
-				.highlighted path:nth-of-type(2) {
-					animation-delay: 0.3s;
+				15% {
+					stroke-dashoffset: 0;
 				}
 
-				@keyframes acfb-hh-dash {
-					0% {
-						stroke-dashoffset: 1500;
-					}
-
-					15% {
-						stroke-dashoffset: 0;
-					}
-
-					85% {
-						opacity: 1;
-					}
-
-					90% {
-						stroke-dashoffset: 0;
-						opacity: 0;
-					}
-
-					100% {
-						stroke-dashoffset: 1500;
-						opacity: 0;
-					}
+				85% {
+					opacity: 1;
 				}
+
+				90% {
+					stroke-dashoffset: 0;
+					opacity: 0;
+				}
+
+				100% {
+					stroke-dashoffset: 1500;
+					opacity: 0;
+				}
+			}
 			`;
 		}
 

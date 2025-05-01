@@ -104,7 +104,9 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const onSetPreset = ( preset ) => {
+	console.log( 'InlineUI', activeAttributes );
+	const onSetPreset = ( preset, animation ) => {
+		console.log( 'onSetPreset', preset, animation );
 		if ( 'none' === preset ) {
 			onChange( removeFormat( value, name ) );
 		} else {
@@ -113,6 +115,10 @@ function InlineUI( {
 					type: name,
 					attributes: {
 						type: preset,
+						animation: animation ?? true,
+						'animation-duration': '5',
+						'animation-function': 'linear',
+						color: 'green',
 					},
 				} )
 			);
@@ -129,11 +135,26 @@ function InlineUI( {
 				<Button
 					key={ preset.id }
 					id={ preset.id }
-					onClick={ () => onSetPreset( preset.id ) }
+					onClick={ () =>
+						onSetPreset(
+							preset.id,
+							activeAttributes.animation ?? true
+						)
+					}
 					isPressed={ activeAttributes.type === preset.id }
 					className="block-editor-format-toolbar__blablablocks-highlighted-button"
 				>
-					<blablablocks-highlighted type={ preset.id }>
+					<blablablocks-highlighted
+						type={ preset.id }
+						animation={ activeAttributes.animation ?? true }
+						animation-duration={
+							activeAttributes[ 'animation-duration' ] ?? '5'
+						}
+						animation-function={
+							activeAttributes[ 'animation-function' ] ?? 'linear'
+						}
+						color={ activeAttributes.color ?? 'red' }
+					>
 						{ preset.label }
 					</blablablocks-highlighted>
 				</Button>
@@ -153,7 +174,17 @@ function InlineUI( {
 			<span className="animation-tab-label">
 				{ __( 'Enabled', 'blablablocks-formats' ) }
 			</span>
-			<FormToggle checked={ true } onChange={ () => {} } />
+			<FormToggle
+				checked={ activeAttributes.animation ?? false }
+				onChange={ () =>
+					onSetPreset(
+						activeAttributes.type,
+						! activeAttributes.animation
+					)
+				}
+				label={ __( 'Enable Animation', 'blablablocks-formats' ) }
+				hideLabelFromVision={ true }
+			/>
 
 			{ /* row 2 - Animation duration  */ }
 			<span className="animation-tab-label">
