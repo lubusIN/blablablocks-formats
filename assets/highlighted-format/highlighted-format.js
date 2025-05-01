@@ -6,10 +6,10 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	static get observedAttributes() {
 		return [
 			'type',
-			'data-animation-enabled',
-			'data-animation-duration',
-			'data-animation-function',
-			'data-animation-color',
+			'animation',
+			'animation-duration',
+			'animation-function',
+			'color',
 		];
 	}
 
@@ -96,17 +96,15 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	}
 
 	renderStyle() {
-		const isAnimationEnabled =
-			this.getAttribute( 'data-animation-enabled' ) ?? 'true';
+		const isAnimationEnabled = this.getAttribute( 'animation' ) ?? 'true';
 
 		const animationDuration =
-			this.getAttribute( 'data-animation-duration' ) ?? '5s';
+			this.getAttribute( 'animation-duration' ) ?? '5s';
 
 		const animationFunction =
-			this.getAttribute( 'data-animation-function' ) ?? 'easeIn';
+			this.getAttribute( 'animation-function' ) ?? 'easeIn';
 
-		const animationColor =
-			this.getAttribute( 'data-animation-color' ) ?? '#ff0000';
+		const animationColor = this.getAttribute( 'color' ) ?? '#ff0000';
 
 		let style = `
 			.wrapper {
