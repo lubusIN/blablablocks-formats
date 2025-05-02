@@ -104,9 +104,7 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	console.log( 'InlineUI', activeAttributes );
 	const onSetPreset = ( preset, animation ) => {
-		console.log( 'onSetPreset', preset, animation );
 		if ( 'none' === preset ) {
 			onChange( removeFormat( value, name ) );
 		} else {
