@@ -116,9 +116,6 @@ function InlineUI( {
 					attributes: {
 						type: preset,
 						animation: animation ?? true,
-						'animation-duration': '5',
-						'animation-function': 'linear',
-						color: 'green',
 					},
 				} )
 			);
@@ -332,8 +329,5 @@ export const highlightedText = {
 	attributes: {
 		type: 'type',
 		animation: 'animation',
-		'animation-duration': 'animation-duration',
-		'animation-function': 'animation-function',
-		color: 'color',
 	},
 };
