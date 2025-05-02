@@ -104,16 +104,19 @@ function InlineUI( {
 		editableContentElement: contentRef.current,
 	} );
 
-	const onSetPreset = ( preset, animation ) => {
-		if ( 'none' === preset ) {
+	const onSetPreset = ( animationType, isAnimationEnabled ) => {
+		if ( 'none' === animationType ) {
 			onChange( removeFormat( value, name ) );
 		} else {
 			onChange(
 				applyFormat( value, {
 					type: name,
 					attributes: {
-						type: preset,
-						animation: animation ?? true,
+						type: animationType,
+						animation: isAnimationEnabled ?? true,
+						'animation-duration': '5',
+						'animation-function': 'linear',
+						color: 'red',
 					},
 				} )
 			);
@@ -327,5 +330,8 @@ export const highlightedText = {
 	attributes: {
 		type: 'type',
 		animation: 'animation',
+		'animation-duration': 'animation-duration',
+		'animation-function': 'animation-function',
+		color: 'color',
 	},
 };
