@@ -105,22 +105,18 @@ function InlineUI( {
 	} );
 
 	const onSetPreset = ( animationType, isAnimationEnabled ) => {
-		if ( 'none' === animationType ) {
-			onChange( removeFormat( value, name ) );
-		} else {
-			onChange(
-				applyFormat( value, {
-					type: name,
-					attributes: {
-						type: animationType,
-						animation: isAnimationEnabled ?? true,
-						'animation-duration': '5',
-						'animation-function': 'linear',
-						color: 'red',
-					},
-				} )
-			);
-		}
+		onChange(
+			applyFormat( value, {
+				type: name,
+				attributes: {
+					type: animationType,
+					animation: String( isAnimationEnabled ?? true ),
+					'animation-duration': '5',
+					'animation-function': 'linear',
+					color: 'red',
+				},
+			} )
+		);
 		onClose(); // Close InlineUI
 	};
 
@@ -270,7 +266,9 @@ function InlineUI( {
 				<Flex justify="flex-end">
 					<Button
 						variant="tertiary"
-						onClick={ () => onSetPreset( 'none' ) }
+						onClick={ () =>
+							onChange( removeFormat( value, name ) )
+						}
 						className="block-editor-format-toolbar__clear-button"
 					>
 						{ __( 'Clear', 'blablablocks-formats' ) }
