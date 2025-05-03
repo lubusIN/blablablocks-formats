@@ -4,7 +4,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-blablablocks-highlighted {
+blablablocks-marker {
 	white-space: normal;
 	overflow-wrap: break-word;
 }
@@ -13,7 +13,7 @@ blablablocks-highlighted {
 	margin: 12px;
 }
 
-.block-editor-format-toolbar__blablablocks-highlighted-popover {
+.block-editor-format-toolbar__blablablocks-marker-popover {
 
 	.components-popover__content {
 		min-width: 330px;
@@ -43,7 +43,7 @@ blablablocks-highlighted {
 	}
 }
 
-.block-editor-format-toolbar__blablablocks-highlighted-button {
+.block-editor-format-toolbar__blablablocks-marker-button {
 	justify-content: center;
 	border-radius: 4px;
 
@@ -51,7 +51,7 @@ blablablocks-highlighted {
 		background-color: #f0f0f1;
 	}
 
-	blablablocks-highlighted {
+	blablablocks-marker {
 		font-size: 14px;
 	}
 }
