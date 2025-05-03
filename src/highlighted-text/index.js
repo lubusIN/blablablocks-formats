@@ -206,17 +206,21 @@ function InlineUI( {
 				style={ { justifySelf: 'start' } }
 			/>
 
-			{ /* row 3 - Animation type selection  */ }
+			{ /* row 3 - Animation timing function  */ }
 			<span className="animation-tab-label">
 				{ __( 'Type', 'blablablocks-formats' ) }
 			</span>
 			<SelectControl
 				label={ __( 'Type', 'blablablocks-formats' ) }
-				value={ 'linear' }
+				value={ activeAttributes[ 'animation-function' ] ?? 'linear' }
 				options={ [
 					{
 						label: __( 'Linear', 'blablablocks-formats' ),
 						value: 'linear',
+					},
+					{
+						label: __( 'Ease', 'blablablocks-formats' ),
+						value: 'ease',
 					},
 					{
 						label: __( 'Ease In', 'blablablocks-formats' ),
@@ -231,8 +235,12 @@ function InlineUI( {
 						value: 'ease-in-out',
 					},
 					{
-						label: __( 'Step', 'blablablocks-formats' ),
-						value: 'step',
+						label: __( '3 Steps', 'blablablocks-formats' ),
+						value: 'steps(3, start)',
+					},
+					{
+						label: __( '5 Steps', 'blablablocks-formats' ),
+						value: 'steps(5, end)',
 					},
 				] }
 				hideLabelFromVision={ true }
