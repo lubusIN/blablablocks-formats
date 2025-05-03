@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function blablablocks_formats_init() {
 	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
-	// Register highlighted format custom element script.
+	// Register marker format custom element script.
 	wp_register_script(
-		'blablablocks-highlighted-format-asset',
-		plugins_url( 'assets/highlighted-format/highlighted-format.js', __FILE__ ),
+		'blablablocks-marker-format-asset',
+		plugins_url( 'assets/marker/marker-web-component.js', __FILE__ ),
 		array(),
 		$asset_file['version'],
 		array( 'in_footer' => true )
@@ -56,8 +56,8 @@ function blablablocks_formats_init() {
 
 	$asset_file['dependencies'][] = 'blablablocks-infotip-tippy';
 
-	// Add highlighted format custom element as dependency.
-	$asset_file['dependencies'][] = 'blablablocks-highlighted-format-asset';
+	// Add marker format custom element as dependency.
+	$asset_file['dependencies'][] = 'blablablocks-marker-format-asset';
 
 	// Register main formats script.
 	wp_register_script(
