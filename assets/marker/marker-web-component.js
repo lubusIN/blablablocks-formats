@@ -1,8 +1,8 @@
 /**
- * BlaBlaBlocks: Highlighted text formats
+ * BlaBlaBlocks: Marker text formats
  */
 /* global HTMLElement */
-class BlaBlaBlocksHighlighted extends HTMLElement {
+class BlaBlaBlocksMarker extends HTMLElement {
 	static get observedAttributes() {
 		return [
 			'type',
@@ -32,7 +32,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
                 <span class="text">
                     <slot></slot>
                 </span>
-                <svg class="highlighted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150"
+                <svg class="marker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150"
                     preserveAspectRatio="none">
                         ${ this.renderPath( type ) }
                 </svg>
@@ -117,7 +117,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
                 z-index: 1;
             }
 
-            .highlighted {
+            .marker {
                 fill: none;
                 position: absolute;
                 overflow: visible;
@@ -131,7 +131,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
                 transform: translate(-50%, -50%);
             }
 
-            .highlighted path {
+            .marker path {
                 stroke: ${ animationColor };
                 stroke-dasharray: 1500;
             }
@@ -139,7 +139,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 
 		if ( isAnimationEnabled === 'true' ) {
 			style += `
-			.highlighted path {
+			.marker path {
 				stroke-dashoffset: 1500;
 				animation-name: acfb-hh-dash;
 				animation-iteration-count: infinite;
@@ -147,7 +147,7 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 				animation-timing-function: ${ animationFunction };
 			}
 
-			.highlighted path:nth-of-type(2) {
+			.marker path:nth-of-type(2) {
 				animation-delay: 0.3s;
 			}
 
@@ -199,12 +199,9 @@ class BlaBlaBlocksHighlighted extends HTMLElement {
 	}
 }
 
-window.BlaBlaBlocksHighlighted = BlaBlaBlocksHighlighted;
+window.BlaBlaBlocksMarker = BlaBlaBlocksMarker;
 
 // Register Element
-if ( ! window.customElements.get( 'blablablocks-highlighted' ) ) {
-	window.customElements.define(
-		'blablablocks-highlighted',
-		BlaBlaBlocksHighlighted
-	);
+if ( ! window.customElements.get( 'blablablocks-marker' ) ) {
+	window.customElements.define( 'blablablocks-marker', BlaBlaBlocksMarker );
 }
