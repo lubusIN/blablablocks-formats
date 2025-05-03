@@ -99,9 +99,11 @@ function InlineUI( {
 	onClose,
 	activeAttributes,
 	contentRef,
+	isActive,
 } ) {
 	const anchor = useAnchor( {
 		editableContentElement: contentRef,
+		settings: { isActive },
 	} );
 
 	const updateAttributes = ( newAttributes ) => {
@@ -334,6 +336,7 @@ function EditButton( props ) {
 					onClose={ closeSettings }
 					activeAttributes={ activeAttributes }
 					contentRef={ contentRef.current }
+					isActive={ isActive }
 				/>
 			) }
 		</>
