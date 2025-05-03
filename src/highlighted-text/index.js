@@ -101,23 +101,26 @@ function InlineUI( {
 	contentRef,
 } ) {
 	const anchor = useAnchor( {
-		editableContentElement: contentRef.current,
+		editableContentElement: contentRef,
 	} );
 
-	const onSetPreset = ( animationType, isAnimationEnabled ) => {
-		onChange(
-			applyFormat( value, {
-				type: name,
-				attributes: {
-					type: animationType,
-					animation: String( isAnimationEnabled ?? true ),
-					'animation-duration': '5',
-					'animation-function': 'linear',
-					color: 'red',
-				},
-			} )
-		);
-		onClose(); // Close InlineUI
+	const updateAttributes = ( newAttributes ) => {
+		const defaultAttributes = {
+			type: 'circle',
+			animation: 'true',
+			'animation-duration': '5',
+			'animation-function': 'linear',
+			color: 'red',
+		};
+
+		return applyFormat( value, {
+			type: name,
+			attributes: {
+				...defaultAttributes,
+				...activeAttributes,
+				...newAttributes,
+			},
+		} );
 	};
 
 	const StyleTabContent = () => (
@@ -129,18 +132,19 @@ function InlineUI( {
 				<Button
 					key={ preset.id }
 					id={ preset.id }
-					onClick={ () =>
-						onSetPreset(
-							preset.id,
-							activeAttributes.animation ?? true
-						)
-					}
+					onClick={ () => {
+						onChange(
+							updateAttributes( {
+								type: preset.id,
+							} )
+						);
+					} }
 					isPressed={ activeAttributes.type === preset.id }
 					className="block-editor-format-toolbar__blablablocks-highlighted-button"
 				>
 					<blablablocks-highlighted
 						type={ preset.id }
-						animation={ activeAttributes.animation ?? true }
+						animation={ activeAttributes.animation ?? 'true' }
 						animation-duration={
 							activeAttributes[ 'animation-duration' ] ?? '5'
 						}
@@ -169,13 +173,16 @@ function InlineUI( {
 				{ __( 'Enabled', 'blablablocks-formats' ) }
 			</span>
 			<FormToggle
-				checked={ activeAttributes.animation ?? false }
-				onChange={ () =>
-					onSetPreset(
-						activeAttributes.type,
-						! activeAttributes.animation
-					)
-				}
+				checked={ activeAttributes.animation !== 'false' }
+				onChange={ () => {
+					const newAttributes = updateAttributes( {
+						animation:
+							activeAttributes.animation !== 'false'
+								? 'false'
+								: 'true',
+					} );
+					onChange( newAttributes );
+				} }
 				label={ __( 'Enable Animation', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
 			/>
@@ -185,11 +192,16 @@ function InlineUI( {
 				{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
 			</span>
 			<NumberControl
-				value={ 5 }
+				value={ activeAttributes[ 'animation-duration' ] ?? '5' }
 				min={ 1 }
 				max={ 10 }
 				step={ 0.5 }
-				onChange={ () => {} }
+				onChange={ ( newValue ) => {
+					const newAttributes = updateAttributes( {
+						'animation-duration': newValue,
+					} );
+					onChange( newAttributes );
+				} }
 				label={ __( 'Duration', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
 				__next40pxDefaultSize={ true }
@@ -226,7 +238,12 @@ function InlineUI( {
 					},
 				] }
 				hideLabelFromVision={ true }
-				onChange={ () => {} }
+				onChange={ ( newValue ) => {
+					const newAttributes = updateAttributes( {
+						'animation-function': newValue,
+					} );
+					onChange( newAttributes );
+				} }
 				__next40pxDefaultSize={ true }
 				__nextHasNoMarginBottom={ true }
 			/>
@@ -243,7 +260,6 @@ function InlineUI( {
 			shift={ true }
 		>
 			<TabPanel
-				onSelect={ () => {} }
 				tabs={ [
 					{
 						name: 'style',
@@ -312,7 +328,7 @@ function EditButton( props ) {
 					onChange={ onChange }
 					onClose={ closeSettings }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef }
+					contentRef={ contentRef.current }
 				/>
 			) }
 		</>
