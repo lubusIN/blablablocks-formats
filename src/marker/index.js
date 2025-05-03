@@ -343,7 +343,7 @@ function EditButton( props ) {
 	);
 }
 
-export const markerText = {
+export const marker = {
 	name,
 	title,
 	tagName: 'blablablocks-marker',

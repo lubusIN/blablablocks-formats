@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 
-import { markerText } from './marker-text';
+import { marker } from './marker';
 import { infotip } from './infotip';
 
-export const formats = [ markerText, infotip ];
+export const formats = [ marker, infotip ];
