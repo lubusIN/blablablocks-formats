@@ -113,7 +113,7 @@ function InlineUI( {
 			color: 'red',
 		};
 
-		return applyFormat( value, {
+		const updatedFormat = applyFormat( value, {
 			type: name,
 			attributes: {
 				...defaultAttributes,
@@ -121,6 +121,8 @@ function InlineUI( {
 				...newAttributes,
 			},
 		} );
+
+		return onChange( updatedFormat );
 	};
 
 	const StyleTabContent = () => (
@@ -133,11 +135,9 @@ function InlineUI( {
 					key={ preset.id }
 					id={ preset.id }
 					onClick={ () => {
-						onChange(
-							updateAttributes( {
-								type: preset.id,
-							} )
-						);
+						updateAttributes( {
+							type: preset.id,
+						} );
 					} }
 					isPressed={ activeAttributes.type === preset.id }
 					className="block-editor-format-toolbar__blablablocks-highlighted-button"
@@ -175,13 +175,12 @@ function InlineUI( {
 			<FormToggle
 				checked={ activeAttributes.animation !== 'false' }
 				onChange={ () => {
-					const newAttributes = updateAttributes( {
+					updateAttributes( {
 						animation:
 							activeAttributes.animation !== 'false'
 								? 'false'
 								: 'true',
 					} );
-					onChange( newAttributes );
 				} }
 				label={ __( 'Enable Animation', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
@@ -197,10 +196,9 @@ function InlineUI( {
 				max={ 10 }
 				step={ 0.5 }
 				onChange={ ( newValue ) => {
-					const newAttributes = updateAttributes( {
+					updateAttributes( {
 						'animation-duration': newValue,
 					} );
-					onChange( newAttributes );
 				} }
 				label={ __( 'Duration', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
@@ -239,10 +237,9 @@ function InlineUI( {
 				] }
 				hideLabelFromVision={ true }
 				onChange={ ( newValue ) => {
-					const newAttributes = updateAttributes( {
+					updateAttributes( {
 						'animation-function': newValue,
 					} );
-					onChange( newAttributes );
 				} }
 				__next40pxDefaultSize={ true }
 				__nextHasNoMarginBottom={ true }
