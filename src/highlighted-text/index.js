@@ -26,8 +26,8 @@ import './style.scss';
 /**
  * Format constants
  */
-const name = 'blablablocks/highlighted';
-const title = __( 'Highlighted', 'blablablocks-formats' );
+const name = 'blablablocks/marker';
+const title = __( 'Marker', 'blablablocks-formats' );
 const presets = [
 	{
 		id: 'circle',
@@ -83,11 +83,11 @@ function formatIcon() {
 	);
 }
 /**
- * InlineUI component for handling highlighted text formatting options.
+ * InlineUI component for handling Marker text formatting options.
  *
  * @param {Object}   props                  - The component properties.
- * @param {string}   props.value            - The current highlighted format preset name.
- * @param {Function} props.onChange         - Callback to update the highlighted format preset.
+ * @param {string}   props.value            - The current marker format preset name.
+ * @param {Function} props.onChange         - Callback to update the marker format preset.
  * @param {Function} props.onClose          - Callback to close the UI.
  * @param {Object}   props.activeAttributes - The currently active format attributes.
  * @param {Object}   props.contentRef       - Reference to the content element.
@@ -142,9 +142,9 @@ function InlineUI( {
 						} );
 					} }
 					isPressed={ activeAttributes.type === preset.id }
-					className="block-editor-format-toolbar__blablablocks-highlighted-button"
+					className="block-editor-format-toolbar__blablablocks-marker-button"
 				>
-					<blablablocks-highlighted
+					<blablablocks-marker
 						type={ preset.id }
 						animation={ activeAttributes.animation ?? 'true' }
 						animation-duration={
@@ -156,7 +156,7 @@ function InlineUI( {
 						color={ activeAttributes.color ?? 'red' }
 					>
 						{ preset.label }
-					</blablablocks-highlighted>
+					</blablablocks-marker>
 				</Button>
 			) ) }
 		</Grid>
@@ -168,7 +168,7 @@ function InlineUI( {
 			rows={ 3 }
 			templateColumns="3fr 7fr"
 			alignment="center"
-			className="block-editor-format-toolbar__blablablocks-highlighted-animation-tab"
+			className="block-editor-format-toolbar__blablablocks-marker-animation-tab"
 		>
 			{ /* row 1 - Animation enable */ }
 			<span className="animation-tab-label">
@@ -260,7 +260,7 @@ function InlineUI( {
 	return (
 		<Popover
 			anchor={ anchor }
-			className="block-editor-format-toolbar__blablablocks-highlighted-popover"
+			className="block-editor-format-toolbar__blablablocks-marker-popover"
 			offset={ 20 }
 			onClose={ onClose }
 			placement="bottom"
@@ -285,7 +285,7 @@ function InlineUI( {
 			</TabPanel>
 
 			{ activeAttributes.type && (
-				// Show a clear button, if there is a highlight format applied.
+				// Show a clear button, if there is a marker format applied.
 				<Flex justify="flex-end">
 					<Button
 						variant="tertiary"
@@ -302,7 +302,7 @@ function InlineUI( {
 	);
 }
 /**
- * Button for editing the highlighted text format.
+ * Button for editing the marker text format.
  *
  * @param {Object} props - The component properties.
  * @return {JSX.Element} The rendered component.
@@ -343,11 +343,11 @@ function EditButton( props ) {
 	);
 }
 
-export const highlightedText = {
+export const markerText = {
 	name,
 	title,
-	tagName: 'blablablocks-highlighted',
-	className: 'has-highlighted-text',
+	tagName: 'blablablocks-marker',
+	className: 'has-marker-text',
 	edit: EditButton,
 	attributes: {
 		type: 'type',
