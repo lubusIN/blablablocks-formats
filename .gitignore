@@ -137,3 +137,6 @@ dist
 
 # Build files
 build/
+
+# Mac system files
+*.DS_Store
