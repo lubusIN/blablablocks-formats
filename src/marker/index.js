@@ -151,9 +151,10 @@ function InlineUI( {
 	);
 
 	const ColorTabContent = () => {
-		const themeColors =
-			useSelect( 'core/block-editor' ).getSettings().colors;
-
+		const themeColors = useSelect(
+			( select ) => select( 'core/block-editor' ).getSettings().colors,
+			[]
+		);
 		return (
 			<ColorPalette
 				value={ activeAttributes.color ?? 'red' }
