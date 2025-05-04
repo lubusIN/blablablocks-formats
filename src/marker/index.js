@@ -154,7 +154,6 @@ function InlineUI( {
 		const themeColors =
 			useSelect( 'core/block-editor' ).getSettings().colors;
 
-		console.log( themeColors );
 		return (
 			<ColorPalette
 				value={ activeAttributes.color ?? 'red' }
