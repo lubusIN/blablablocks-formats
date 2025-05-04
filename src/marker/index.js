@@ -5,6 +5,7 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
+	ColorPalette,
 	Flex,
 	FormToggle,
 	Popover,
@@ -148,6 +149,34 @@ function InlineUI( {
 		</Grid>
 	);
 
+	const ColorTabContent = () => (
+		<ColorPalette
+			value={ activeAttributes.color ?? 'red' }
+			onChange={ ( newValue ) => {
+				updateAttributes( {
+					color: newValue,
+				} );
+			} }
+			label={ __( 'Color', 'blablablocks-formats' ) }
+			aria-label="Marker format color selection"
+			colors={ [
+				{
+					name: __( 'Red', 'blablablocks-formats' ),
+					color: '#ff0000',
+				},
+				{
+					name: __( 'Green', 'blablablocks-formats' ),
+					color: '#00ff00',
+				},
+				{
+					name: __( 'Blue', 'blablablocks-formats' ),
+					color: '#0000ff',
+				},
+			] }
+			clearable={ false }
+		/>
+	);
+
 	const AnimationTabContent = () => (
 		<Grid
 			columns={ 2 }
@@ -258,6 +287,11 @@ function InlineUI( {
 						name: 'style',
 						title: __( 'Style', 'blablablocks-formats' ),
 						content: <StyleTabContent />,
+					},
+					{
+						name: 'color',
+						title: __( 'Color', 'blablablocks-formats' ),
+						content: <ColorTabContent />,
 					},
 					{
 						name: 'animation',
