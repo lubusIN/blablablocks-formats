@@ -312,6 +312,7 @@ function InlineUI( {
 						name: 'color',
 						title: __( 'Color', 'blablablocks-formats' ),
 						content: <ColorTabContent />,
+						disabled: ! activeAttributes.type,
 					},
 					{
 						name: 'animation',
