@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
@@ -149,33 +150,53 @@ function InlineUI( {
 		</Grid>
 	);
 
-	const ColorTabContent = () => (
-		<ColorPalette
-			value={ activeAttributes.color ?? 'red' }
-			onChange={ ( newValue ) => {
-				updateAttributes( {
-					color: newValue,
-				} );
-			} }
-			label={ __( 'Color', 'blablablocks-formats' ) }
-			aria-label="Marker format color selection"
-			colors={ [
-				{
-					name: __( 'Red', 'blablablocks-formats' ),
-					color: '#ff0000',
-				},
-				{
-					name: __( 'Green', 'blablablocks-formats' ),
-					color: '#00ff00',
-				},
-				{
-					name: __( 'Blue', 'blablablocks-formats' ),
-					color: '#0000ff',
-				},
-			] }
-			clearable={ false }
-		/>
-	);
+	const ColorTabContent = () => {
+		const themeColors =
+			useSelect( 'core/block-editor' ).getSettings().colors;
+
+		console.log( themeColors );
+		return (
+			<ColorPalette
+				value={ activeAttributes.color ?? 'red' }
+				onChange={ ( newValue ) => {
+					updateAttributes( {
+						color: newValue,
+					} );
+				} }
+				label={ __( 'Color', 'blablablocks-formats' ) }
+				aria-label="Marker format color selection"
+				colors={ [
+					{
+						name: __( 'Primary colors', 'blablablocks-formats' ),
+						colors: [
+							{
+								name: 'Red',
+								color: '#f00',
+							},
+							{
+								name: 'Green',
+								color: '#0f0',
+							},
+							{
+								name: 'Blue',
+								color: '#00f',
+							},
+						],
+					},
+					{
+						name: __( 'Theme colors', 'blablablocks-formats' ),
+						colors: themeColors.map( ( color ) => {
+							return {
+								name: color.name,
+								color: color.color,
+							};
+						} ),
+					},
+				] }
+				clearable={ false }
+			/>
+		);
+	};
 
 	const AnimationTabContent = () => (
 		<Grid
