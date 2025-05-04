@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
-import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
@@ -22,6 +21,7 @@ import { RichTextToolbarButton } from '@wordpress/block-editor';
  */
 import './editor.scss';
 import './style.scss';
+import { ReactComponent as MarkerLogo } from '../../assets/images/marker.svg';
 
 /**
  * Format constants
@@ -68,21 +68,6 @@ const presets = [
 ];
 
 /**
- * Icon
- */
-function formatIcon() {
-	return (
-		<Icon
-			icon={
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<path fill="none" d="M0 0h24v24H0z" />
-					<path d="M6 14l3 3v5h6v-5l3-3V9H6v5zm2-3h8v2.17l-3 3V20h-2v-3.83l-3-3V11zm3-9h2v3h-2zM3.502 5.874L4.916 4.46l2.122 2.12-1.414 1.415zm13.458.708l2.123-2.12 1.413 1.416-2.123 2.12z" />
-				</svg>
-			}
-		/>
-	);
-}
-/**
  * InlineUI component for handling Marker text formatting options.
  *
  * @param {Object}   props                  - The component properties.
@@ -91,7 +76,8 @@ function formatIcon() {
  * @param {Function} props.onClose          - Callback to close the UI.
  * @param {Object}   props.activeAttributes - The currently active format attributes.
  * @param {Object}   props.contentRef       - Reference to the content element.
- * @return {JSX.Element}                     - The rendered component.
+ * @param {boolean}  props.isActive         - Indicates if the format is active.
+ * @return {JSX.Element}                    - The rendered component.
  */
 function InlineUI( {
 	value,
@@ -323,7 +309,7 @@ function EditButton( props ) {
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={ formatIcon }
+				icon={ <MarkerLogo /> }
 				title={ title }
 				onClick={ openSettings }
 				isActive={ isActive }
