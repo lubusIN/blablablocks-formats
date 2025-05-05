@@ -73,10 +73,10 @@ const presets = [
  * ColorTabContent component for selecting colors.
  * The component has been moved out of InlineUI to avoid color picker changes from re-rendering the entire InlineUI component.
  *
- * @param {props} 	 props
- * @param {string} 	 props.currentColor - The current color selected.
+ * @param {Object}   props                  - The component properties.
+ * @param {string}   props.currentColor     - The current color selected.
  * @param {Function} props.updateAttributes - Function to update the attributes.
- * @returns {JSX.Element}
+ * @return {JSX.Element}                    - The rendered component.
  */
 function ColorTabContent( { currentColor, updateAttributes } ) {
 	const themeColors = useSelect(
