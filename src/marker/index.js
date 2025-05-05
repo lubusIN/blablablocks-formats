@@ -369,20 +369,14 @@ function EditButton( props ) {
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
-	const openSettings = () => {
-		setIsSettingOpen( true );
-	};
-
-	const closeSettings = () => {
-		setIsSettingOpen( false );
-	};
-
 	return (
 		<>
 			<RichTextToolbarButton
 				icon={ <MarkerLogo /> }
 				title={ title }
-				onClick={ openSettings }
+				onClick={ () => {
+					setIsSettingOpen( true );
+				} }
 				isActive={ isActive }
 			/>
 
@@ -390,7 +384,9 @@ function EditButton( props ) {
 				<InlineUI
 					value={ value }
 					onChange={ onChange }
-					onClose={ closeSettings }
+					onClose={ () => {
+						setIsSettingOpen( false );
+					} }
 					activeAttributes={ activeAttributes }
 					contentRef={ contentRef.current }
 					isActive={ isActive }
