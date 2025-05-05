@@ -2,9 +2,11 @@
  * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
+	ColorPalette,
 	Flex,
 	FormToggle,
 	Popover,
@@ -66,6 +68,64 @@ const presets = [
 		label: __( 'Strike', 'blablablocks-formats' ),
 	},
 ];
+
+/**
+ * ColorTabContent component for selecting colors.
+ * The component has been moved out of InlineUI to avoid color picker changes from re-rendering the entire InlineUI component.
+ *
+ * @param {Object}   props                  - The component properties.
+ * @param {string}   props.currentColor     - The current color selected.
+ * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @return {JSX.Element}                    - The rendered component.
+ */
+function ColorTabContent( { currentColor, updateAttributes } ) {
+	const themeColors = useSelect(
+		( select ) => select( 'core/block-editor' ).getSettings().colors,
+		[]
+	);
+	return (
+		<ColorPalette
+			as="div"
+			value={ currentColor ?? 'red' }
+			onChange={ ( newValue ) => {
+				updateAttributes( {
+					color: newValue,
+				} );
+			} }
+			label={ __( 'Color', 'blablablocks-formats' ) }
+			aria-label="Marker format color selection"
+			colors={ [
+				{
+					name: __( 'Primary colors', 'blablablocks-formats' ),
+					colors: [
+						{
+							name: 'Red',
+							color: '#f00',
+						},
+						{
+							name: 'Green',
+							color: '#0f0',
+						},
+						{
+							name: 'Blue',
+							color: '#00f',
+						},
+					],
+				},
+				{
+					name: __( 'Theme colors', 'blablablocks-formats' ),
+					colors: themeColors.map( ( color ) => {
+						return {
+							name: color.name,
+							color: color.color,
+						};
+					} ),
+				},
+			] }
+			clearable={ false }
+		/>
+	);
+}
 
 /**
  * InlineUI component for handling Marker text formatting options.
@@ -260,6 +320,17 @@ function InlineUI( {
 						content: <StyleTabContent />,
 					},
 					{
+						name: 'color',
+						title: __( 'Color', 'blablablocks-formats' ),
+						content: (
+							<ColorTabContent
+								currentColor={ activeAttributes.color }
+								updateAttributes={ updateAttributes }
+							/>
+						),
+						disabled: ! activeAttributes.type,
+					},
+					{
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
 						content: <AnimationTabContent />,
@@ -298,20 +369,14 @@ function EditButton( props ) {
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
-	function openSettings() {
-		setIsSettingOpen( true );
-	}
-
-	function closeSettings() {
-		setIsSettingOpen( false );
-	}
-
 	return (
 		<>
 			<RichTextToolbarButton
 				icon={ <MarkerLogo /> }
 				title={ title }
-				onClick={ openSettings }
+				onClick={ () => {
+					setIsSettingOpen( true );
+				} }
 				isActive={ isActive }
 			/>
 
@@ -319,7 +384,9 @@ function EditButton( props ) {
 				<InlineUI
 					value={ value }
 					onChange={ onChange }
-					onClose={ closeSettings }
+					onClose={ () => {
+						setIsSettingOpen( false );
+					} }
 					activeAttributes={ activeAttributes }
 					contentRef={ contentRef.current }
 					isActive={ isActive }
