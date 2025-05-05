@@ -174,38 +174,55 @@ function InlineUI( {
 	};
 
 	const StyleTabContent = () => (
-		<Grid
-			templateColumns="repeat( 3, minmax( 0, 1fr ) )"
-			templateRows="repeat( 3, minmax( 0, 1fr ) )"
-		>
-			{ presets.map( ( preset ) => (
-				<Button
-					key={ preset.id }
-					id={ preset.id }
-					onClick={ () => {
-						updateAttributes( {
-							type: preset.id,
-						} );
-					} }
-					isPressed={ activeAttributes.type === preset.id }
-					className="block-editor-format-toolbar__blablablocks-marker-button"
-				>
-					<blablablocks-marker
-						type={ preset.id }
-						animation={ activeAttributes.animation ?? 'true' }
-						animation-duration={
-							activeAttributes[ 'animation-duration' ] ?? '5'
-						}
-						animation-function={
-							activeAttributes[ 'animation-function' ] ?? 'linear'
-						}
-						color={ activeAttributes.color ?? 'red' }
+		<>
+			<Grid
+				templateColumns="repeat( 3, minmax( 0, 1fr ) )"
+				templateRows="repeat( 3, minmax( 0, 1fr ) )"
+			>
+				{ presets.map( ( preset ) => (
+					<Button
+						key={ preset.id }
+						id={ preset.id }
+						onClick={ () => {
+							updateAttributes( {
+								type: preset.id,
+							} );
+						} }
+						isPressed={ activeAttributes.type === preset.id }
+						className="block-editor-format-toolbar__blablablocks-marker-button"
 					>
-						{ preset.label }
-					</blablablocks-marker>
-				</Button>
-			) ) }
-		</Grid>
+						<blablablocks-marker
+							type={ preset.id }
+							animation={ activeAttributes.animation ?? 'true' }
+							animation-duration={
+								activeAttributes[ 'animation-duration' ] ?? '5'
+							}
+							animation-function={
+								activeAttributes[ 'animation-function' ] ??
+								'linear'
+							}
+							color={ activeAttributes.color ?? 'red' }
+						>
+							{ preset.label }
+						</blablablocks-marker>
+					</Button>
+				) ) }
+			</Grid>
+			{ activeAttributes.type && (
+				// Show a clear button, if there is a marker format applied.
+				<Flex justify="flex-end">
+					<Button
+						variant="tertiary"
+						onClick={ () =>
+							onChange( removeFormat( value, name ) )
+						}
+						className="block-editor-format-toolbar__clear-button"
+					>
+						{ __( 'Clear Marker', 'blablablocks-formats' ) }
+					</Button>
+				</Flex>
+			) }
+		</>
 	);
 
 	const AnimationTabContent = () => (
@@ -340,21 +357,6 @@ function InlineUI( {
 			>
 				{ ( tab ) => tab.content }
 			</TabPanel>
-
-			{ activeAttributes.type && (
-				// Show a clear button, if there is a marker format applied.
-				<Flex justify="flex-end">
-					<Button
-						variant="tertiary"
-						onClick={ () =>
-							onChange( removeFormat( value, name ) )
-						}
-						className="block-editor-format-toolbar__clear-button"
-					>
-						{ __( 'Clear', 'blablablocks-formats' ) }
-					</Button>
-				</Flex>
-			) }
 		</Popover>
 	);
 }
