@@ -70,6 +70,64 @@ const presets = [
 ];
 
 /**
+ * ColorTabContent component for selecting colors.
+ * The component has been moved out of InlineUI to avoid color picker changes from re-rendering the entire InlineUI component.
+ *
+ * @param {props} 	 props
+ * @param {string} 	 props.currentColor - The current color selected.
+ * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @returns {JSX.Element}
+ */
+function ColorTabContent( { currentColor, updateAttributes } ) {
+	const themeColors = useSelect(
+		( select ) => select( 'core/block-editor' ).getSettings().colors,
+		[]
+	);
+	return (
+		<ColorPalette
+			as="div"
+			value={ currentColor ?? 'red' }
+			onChange={ ( newValue ) => {
+				updateAttributes( {
+					color: newValue,
+				} );
+			} }
+			label={ __( 'Color', 'blablablocks-formats' ) }
+			aria-label="Marker format color selection"
+			colors={ [
+				{
+					name: __( 'Primary colors', 'blablablocks-formats' ),
+					colors: [
+						{
+							name: 'Red',
+							color: '#f00',
+						},
+						{
+							name: 'Green',
+							color: '#0f0',
+						},
+						{
+							name: 'Blue',
+							color: '#00f',
+						},
+					],
+				},
+				{
+					name: __( 'Theme colors', 'blablablocks-formats' ),
+					colors: themeColors.map( ( color ) => {
+						return {
+							name: color.name,
+							color: color.color,
+						};
+					} ),
+				},
+			] }
+			clearable={ false }
+		/>
+	);
+}
+
+/**
  * InlineUI component for handling Marker text formatting options.
  *
  * @param {Object}   props                  - The component properties.
@@ -149,54 +207,6 @@ function InlineUI( {
 			) ) }
 		</Grid>
 	);
-
-	const ColorTabContent = () => {
-		const themeColors = useSelect(
-			( select ) => select( 'core/block-editor' ).getSettings().colors,
-			[]
-		);
-		return (
-			<ColorPalette
-				value={ activeAttributes.color ?? 'red' }
-				onChange={ ( newValue ) => {
-					updateAttributes( {
-						color: newValue,
-					} );
-				} }
-				label={ __( 'Color', 'blablablocks-formats' ) }
-				aria-label="Marker format color selection"
-				colors={ [
-					{
-						name: __( 'Primary colors', 'blablablocks-formats' ),
-						colors: [
-							{
-								name: 'Red',
-								color: '#f00',
-							},
-							{
-								name: 'Green',
-								color: '#0f0',
-							},
-							{
-								name: 'Blue',
-								color: '#00f',
-							},
-						],
-					},
-					{
-						name: __( 'Theme colors', 'blablablocks-formats' ),
-						colors: themeColors.map( ( color ) => {
-							return {
-								name: color.name,
-								color: color.color,
-							};
-						} ),
-					},
-				] }
-				clearable={ false }
-			/>
-		);
-	};
 
 	const AnimationTabContent = () => (
 		<Grid
@@ -312,7 +322,12 @@ function InlineUI( {
 					{
 						name: 'color',
 						title: __( 'Color', 'blablablocks-formats' ),
-						content: <ColorTabContent />,
+						content: (
+							<ColorTabContent
+								currentColor={ activeAttributes.color }
+								updateAttributes={ updateAttributes }
+							/>
+						),
 						disabled: ! activeAttributes.type,
 					},
 					{
