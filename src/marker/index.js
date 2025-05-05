@@ -354,13 +354,13 @@ function EditButton( props ) {
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
-	function openSettings() {
+	const openSettings = () => {
 		setIsSettingOpen( true );
-	}
+	};
 
-	function closeSettings() {
+	const closeSettings = () => {
 		setIsSettingOpen( false );
-	}
+	};
 
 	return (
 		<>
