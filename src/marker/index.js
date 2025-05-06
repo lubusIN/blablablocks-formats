@@ -28,7 +28,7 @@ import { ReactComponent as MarkerLogo } from '../../assets/images/marker.svg';
 /**
  * Format constants
  */
-const formatName = 'blablablocks/marker';
+const name = 'blablablocks/marker';
 const title = __( 'Marker', 'blablablocks-formats' );
 const presets = [
 	{
@@ -180,7 +180,7 @@ function InlineUI( {
 
 	const updateAttributes = ( newAttributes ) => {
 		const updatedFormat = applyFormat( value, {
-			type: formatName,
+			type: name,
 			attributes: {
 				...defaultAttributes,
 				...activeAttributes,
