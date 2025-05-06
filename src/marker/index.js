@@ -256,7 +256,10 @@ function InlineUI( {
 				{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
 			</span>
 			<NumberControl
-				value={ activeAttributes[ 'animation-duration' ] ?? '5' }
+						disabled={ activeAttributes.animation === 'false' }
+						value={
+							activeAttributes[ 'animation-duration' ] ?? '5'
+						}
 				min={ 1 }
 				max={ 10 }
 				step={ 0.5 }
@@ -276,6 +279,7 @@ function InlineUI( {
 				{ __( 'Type', 'blablablocks-formats' ) }
 			</span>
 			<SelectControl
+						disabled={ activeAttributes.animation === 'false' }
 				label={ __( 'Type', 'blablablocks-formats' ) }
 				value={ activeAttributes[ 'animation-function' ] ?? 'linear' }
 				options={ [
