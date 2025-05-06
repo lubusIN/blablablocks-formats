@@ -67,8 +67,27 @@ jobs:
             const { owner, repo } = context.repo;
             const prNumber = context.payload.pull_request.number;
 
-            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}/artifacts`;
-            const zipUrl = `https://playground.wordpress.net/?plugin=${artifactUrl}`;
+            // List artifacts for this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner,
+              repo,
+              run_id: runId,
+            });
+
+            const artifact = artifacts.data.artifacts.find(a => a.name === "build-zip");
+            if (!artifact) throw new Error("Artifact not found");
+
+            // Get the direct download URL (requires auth)
+            const { url: artifactApiUrl } = artifact;
+            const download = await github.request(`GET ${artifactApiUrl}/zip`, {
+              headers: {
+                accept: 'application/vnd.github+json'
+              }
+            });
+
+            const zipUrl = download.url;
+
+            const body = `📦 Plugin ZIP ready for testing\n\n🔗 [Download ZIP (auth required)](${zipUrl})\n\n🌐 Try in Playground (requires public ZIP):\nhttps://playground.wordpress.net/?plugin=${zipUrl}`;
 
             const comments = await github.rest.issues.listComments({
               owner,
@@ -76,17 +95,12 @@ jobs:
               issue_number: prNumber,
             });
 
-            const body = `🔗 Plugin ZIP ready for testing:\n\n👉 ${zipUrl}`;
-
-            const existingComment = comments.data.find(c =>
-              c.body.includes("Plugin ZIP ready for testing")
-            );
-
-            if (existingComment) {
+            const existing = comments.data.find(c => c.body.includes("📦 Plugin ZIP ready for testing"));
+            if (existing) {
               await github.rest.issues.updateComment({
                 owner,
                 repo,
-                comment_id: existingComment.id,
+                comment_id: existing.id,
                 body,
               });
             } else {
