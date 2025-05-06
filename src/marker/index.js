@@ -133,22 +133,20 @@ function ColorTabContent( { currentColor, updateAttributes } ) {
 				] }
 				clearable={ false }
 			/>
-			{ currentColor !== defaultAttributes.color && (
-				// Show a reset button if custom color is set.
-				<Flex justify="flex-end">
-					<Button
-						variant="tertiary"
-						onClick={ () =>
-							updateAttributes( {
-								color: defaultAttributes.color,
-							} )
-						}
-						className="reset-button"
-					>
-						{ __( 'Reset color', 'blablablocks-formats' ) }
-					</Button>
-				</Flex>
-			) }
+			<Flex justify="flex-end">
+				<Button
+					disabled={ currentColor === defaultAttributes.color }
+					variant="tertiary"
+					onClick={ () =>
+						updateAttributes( {
+							color: defaultAttributes.color,
+						} )
+					}
+					className="reset-button"
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
 		</>
 	);
 }
@@ -233,30 +231,24 @@ function InlineUI( {
 					</Button>
 				) ) }
 			</Grid>
-			{ activeAttributes.type && (
-				// Show a clear button, if there is a marker format applied.
-				<Flex justify="flex-end">
-					<Button
-						variant="tertiary"
-						onClick={ () =>
-							onChange( removeFormat( value, formatName ) )
-						}
-						className="reset-button"
-					>
-						{ __( 'Clear Marker', 'blablablocks-formats' ) }
-					</Button>
-				</Flex>
-			) }
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					disabled={ ! activeAttributes.type }
+					onClick={ () => onChange( removeFormat( value, name ) ) }
+					variant="tertiary"
+				>
+					{ __( 'Clear', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
 		</>
 	);
 
 	const AnimationTabContent = () => {
-		const hasCustomAnimationSetting =
-			activeAttributes.animation !== 'false' &&
-			( activeAttributes[ 'animation-duration' ] !==
-				defaultAttributes[ 'animation-duration' ] ||
-				activeAttributes[ 'animation-function' ] !==
-					defaultAttributes[ 'animation-function' ] );
+		console.log( activeAttributes );
+		const hasCustomAnimationSetting = Object.keys( activeAttributes ).some(
+			( key ) => key.includes( 'animation' )
+		);
 
 		return (
 			<>
@@ -366,29 +358,23 @@ function InlineUI( {
 						__nextHasNoMarginBottom={ true }
 					/>
 				</Grid>
-				{ hasCustomAnimationSetting && (
-					// Show a reset animation button, if there is any custom animation applied.
-					<Flex justify="flex-end">
-						<Button
-							variant="tertiary"
-							onClick={ () =>
-								updateAttributes( {
-									'animation-duration':
-										defaultAttributes[
-											'animation-duration'
-										],
-									'animation-function':
-										defaultAttributes[
-											'animation-function'
-										],
-								} )
-							}
-							className="reset-button"
-						>
-							{ __( 'Reset animation', 'blablablocks-formats' ) }
-						</Button>
-					</Flex>
-				) }
+				<Flex justify="flex-end">
+					<Button
+						className="reset-button"
+						disabled={ ! hasCustomAnimationSetting }
+						onClick={ () =>
+							updateAttributes( {
+								'animation-duration':
+									defaultAttributes[ 'animation-duration' ],
+								'animation-function':
+									defaultAttributes[ 'animation-function' ],
+							} )
+						}
+						variant="tertiary"
+					>
+						{ __( 'Reset', 'blablablocks-formats' ) }
+					</Button>
+				</Flex>
 			</>
 		);
 	};
@@ -472,7 +458,7 @@ function EditButton( props ) {
 }
 
 export const marker = {
-	name: formatName,
+	name: name,
 	title,
 	tagName: 'blablablocks-marker',
 	className: 'has-marker-text',
