@@ -99,15 +99,15 @@ function ColorTabContent( { currentColor, updateAttributes } ) {
 					name: __( 'Primary colors', 'blablablocks-formats' ),
 					colors: [
 						{
-							name: 'Red',
+							name: __( 'Red', 'blablablocks-formats' ),
 							color: '#f00',
 						},
 						{
-							name: 'Green',
+							name: __( 'Green', 'blablablocks-formats' ),
 							color: '#0f0',
 						},
 						{
-							name: 'Blue',
+							name: __( 'Blue', 'blablablocks-formats' ),
 							color: '#00f',
 						},
 					],
