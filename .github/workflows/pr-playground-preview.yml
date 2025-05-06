@@ -38,6 +38,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
+      actions: read    # Required to access artifacts
       pull-requests: write
 
     steps:
