@@ -86,7 +86,11 @@ const defaultAttributes = {
  * @param {Function} props.updateAttributes - Function to update the attributes.
  * @return {JSX.Element}                    - The rendered component.
  */
-function ColorTabContent( { currentColor, updateAttributes } ) {
+function ColorTabContent( {
+	currentColor,
+	updateAttributes,
+	removeAttributes,
+} ) {
 	const themeColors = useSelect(
 		( select ) => select( 'core/block-editor' ).getSettings().colors,
 		[]
@@ -137,11 +141,9 @@ function ColorTabContent( { currentColor, updateAttributes } ) {
 				<Button
 					disabled={ currentColor === defaultAttributes.color }
 					variant="tertiary"
-					onClick={ () =>
-						updateAttributes( {
-							color: defaultAttributes.color,
-						} )
-					}
+					onClick={ () => {
+						removeAttributes( [ 'color' ] );
+					} }
 					className="reset-button"
 				>
 					{ __( 'Reset', 'blablablocks-formats' ) }
@@ -180,13 +182,20 @@ function InlineUI( {
 		const updatedFormat = applyFormat( value, {
 			type: name,
 			attributes: {
-				...defaultAttributes,
 				...activeAttributes,
 				...newAttributes,
 			},
 		} );
 
 		return onChange( updatedFormat );
+	};
+
+	const removeAttributes = ( attributes ) => {
+		attributes.forEach( ( attribute ) => {
+			delete activeAttributes[ attribute ];
+		} );
+
+		updateAttributes( activeAttributes );
 	};
 
 	const StyleTabContent = () => (
@@ -208,23 +217,8 @@ function InlineUI( {
 						className="block-editor-format-toolbar__blablablocks-marker-button"
 					>
 						<blablablocks-marker
+							{ ...activeAttributes }
 							type={ preset.id }
-							animation={
-								activeAttributes.animation ??
-								defaultAttributes.animation
-							}
-							animation-duration={
-								activeAttributes[ 'animation-duration' ] ??
-								defaultAttributes[ 'animation-duration' ]
-							}
-							animation-function={
-								activeAttributes[ 'animation-function' ] ??
-								defaultAttributes[ 'animation-function' ]
-							}
-							color={
-								activeAttributes.color ??
-								defaultAttributes.color
-							}
 						>
 							{ preset.label }
 						</blablablocks-marker>
@@ -405,6 +399,7 @@ function InlineUI( {
 							<ColorTabContent
 								currentColor={ activeAttributes.color }
 								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
 							/>
 						),
 						disabled: ! activeAttributes.type,
