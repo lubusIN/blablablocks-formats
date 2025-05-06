@@ -28,7 +28,7 @@ import { ReactComponent as MarkerLogo } from '../../assets/images/marker.svg';
 /**
  * Format constants
  */
-const name = 'blablablocks/marker';
+const formatName = 'blablablocks/marker';
 const title = __( 'Marker', 'blablablocks-formats' );
 const presets = [
 	{
@@ -162,7 +162,7 @@ function InlineUI( {
 		};
 
 		const updatedFormat = applyFormat( value, {
-			type: name,
+			type: formatName,
 			attributes: {
 				...defaultAttributes,
 				...activeAttributes,
@@ -214,7 +214,7 @@ function InlineUI( {
 					<Button
 						variant="tertiary"
 						onClick={ () =>
-							onChange( removeFormat( value, name ) )
+							onChange( removeFormat( value, formatName ) )
 						}
 						className="block-editor-format-toolbar__clear-button"
 					>
@@ -318,6 +318,20 @@ function InlineUI( {
 				__nextHasNoMarginBottom={ true }
 			/>
 		</Grid>
+			{ activeAttributes.type && (
+				// Show a reset animation button, if there is any custom animation applied.
+				<Flex justify="flex-end">
+					<Button
+						variant="tertiary"
+						onClick={ () =>
+							onChange( removeFormat( value, formatName ) )
+						}
+					>
+						{ __( 'Clear Marker', 'blablablocks-formats' ) }
+					</Button>
+				</Flex>
+			) }
+		</>
 	);
 
 	return (
@@ -399,7 +413,7 @@ function EditButton( props ) {
 }
 
 export const marker = {
-	name,
+	name: formatName,
 	title,
 	tagName: 'blablablocks-marker',
 	className: 'has-marker-text',
