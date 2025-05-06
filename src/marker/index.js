@@ -92,46 +92,64 @@ function ColorTabContent( { currentColor, updateAttributes } ) {
 		[]
 	);
 	return (
-		<ColorPalette
-			as="div"
-			value={ currentColor ?? 'red' }
-			onChange={ ( newValue ) => {
-				updateAttributes( {
-					color: newValue,
-				} );
-			} }
-			label={ __( 'Color', 'blablablocks-formats' ) }
-			aria-label="Marker format color selection"
-			colors={ [
-				{
-					name: __( 'Primary colors', 'blablablocks-formats' ),
-					colors: [
-						{
-							name: __( 'Red', 'blablablocks-formats' ),
-							color: '#f00',
-						},
-						{
-							name: __( 'Green', 'blablablocks-formats' ),
-							color: '#0f0',
-						},
-						{
-							name: __( 'Blue', 'blablablocks-formats' ),
-							color: '#00f',
-						},
-					],
-				},
-				{
-					name: __( 'Theme colors', 'blablablocks-formats' ),
-					colors: themeColors.map( ( color ) => {
-						return {
-							name: color.name,
-							color: color.color,
-						};
-					} ),
-				},
-			] }
-			clearable={ false }
-		/>
+		<>
+			<ColorPalette
+				as="div"
+				value={ currentColor ?? 'red' }
+				onChange={ ( newValue ) => {
+					updateAttributes( {
+						color: newValue,
+					} );
+				} }
+				label={ __( 'Color', 'blablablocks-formats' ) }
+				aria-label="Marker format color selection"
+				colors={ [
+					{
+						name: __( 'Primary colors', 'blablablocks-formats' ),
+						colors: [
+							{
+								name: __( 'Red', 'blablablocks-formats' ),
+								color: '#f00',
+							},
+							{
+								name: __( 'Green', 'blablablocks-formats' ),
+								color: '#0f0',
+							},
+							{
+								name: __( 'Blue', 'blablablocks-formats' ),
+								color: '#00f',
+							},
+						],
+					},
+					{
+						name: __( 'Theme colors', 'blablablocks-formats' ),
+						colors: themeColors.map( ( color ) => {
+							return {
+								name: color.name,
+								color: color.color,
+							};
+						} ),
+					},
+				] }
+				clearable={ false }
+			/>
+			{ currentColor !== defaultAttributes.color && (
+				// Show a reset button if custom color is set.
+				<Flex justify="flex-end">
+					<Button
+						variant="tertiary"
+						onClick={ () =>
+							updateAttributes( {
+								color: defaultAttributes.color,
+							} )
+						}
+						className="reset-button"
+					>
+						{ __( 'Reset color', 'blablablocks-formats' ) }
+					</Button>
+				</Flex>
+			) }
+		</>
 	);
 }
 
@@ -216,7 +234,7 @@ function InlineUI( {
 						onClick={ () =>
 							onChange( removeFormat( value, formatName ) )
 						}
-						className="block-editor-format-toolbar__clear-button"
+						className="reset-button"
 					>
 						{ __( 'Clear Marker', 'blablablocks-formats' ) }
 					</Button>
@@ -348,8 +366,9 @@ function InlineUI( {
 									'animation-function': 'linear',
 								} )
 							}
+							className="reset-button"
 						>
-							{ __( 'Reset', 'blablablocks-formats' ) }
+							{ __( 'Reset animation', 'blablablocks-formats' ) }
 						</Button>
 					</Flex>
 				) }
