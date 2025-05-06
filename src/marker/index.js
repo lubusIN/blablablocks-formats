@@ -211,15 +211,22 @@ function InlineUI( {
 					>
 						<blablablocks-marker
 							type={ preset.id }
-							animation={ activeAttributes.animation ?? 'true' }
+							animation={
+								activeAttributes.animation ??
+								defaultAttributes.animation
+							}
 							animation-duration={
-								activeAttributes[ 'animation-duration' ] ?? '5'
+								activeAttributes[ 'animation-duration' ] ??
+								defaultAttributes[ 'animation-duration' ]
 							}
 							animation-function={
 								activeAttributes[ 'animation-function' ] ??
-								'linear'
+								defaultAttributes[ 'animation-function' ]
 							}
-							color={ activeAttributes.color ?? 'red' }
+							color={
+								activeAttributes.color ??
+								defaultAttributes.color
+							}
 						>
 							{ preset.label }
 						</blablablocks-marker>
@@ -246,8 +253,10 @@ function InlineUI( {
 	const AnimationTabContent = () => {
 		const hasCustomAnimationSetting =
 			activeAttributes.animation !== 'false' &&
-			( activeAttributes[ 'animation-duration' ] !== '5' ||
-				activeAttributes[ 'animation-function' ] !== 'linear' );
+			( activeAttributes[ 'animation-duration' ] !==
+				defaultAttributes[ 'animation-duration' ] ||
+				activeAttributes[ 'animation-function' ] !==
+					defaultAttributes[ 'animation-function' ] );
 
 		return (
 			<>
@@ -286,7 +295,8 @@ function InlineUI( {
 					<NumberControl
 						disabled={ activeAttributes.animation === 'false' }
 						value={
-							activeAttributes[ 'animation-duration' ] ?? '5'
+							activeAttributes[ 'animation-duration' ] ??
+							defaultAttributes[ 'animation-duration' ]
 						}
 						min={ 1 }
 						max={ 10 }
@@ -310,7 +320,8 @@ function InlineUI( {
 						disabled={ activeAttributes.animation === 'false' }
 						label={ __( 'Type', 'blablablocks-formats' ) }
 						value={
-							activeAttributes[ 'animation-function' ] ?? 'linear'
+							activeAttributes[ 'animation-function' ] ??
+							defaultAttributes[ 'animation-function' ]
 						}
 						options={ [
 							{
@@ -362,8 +373,14 @@ function InlineUI( {
 							variant="tertiary"
 							onClick={ () =>
 								updateAttributes( {
-									'animation-duration': '5',
-									'animation-function': 'linear',
+									'animation-duration':
+										defaultAttributes[
+											'animation-duration'
+										],
+									'animation-function':
+										defaultAttributes[
+											'animation-function'
+										],
 								} )
 							}
 							className="reset-button"
