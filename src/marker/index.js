@@ -235,7 +235,10 @@ function InlineUI( {
 				<Button
 					className="reset-button"
 					disabled={ ! activeAttributes.type }
-					onClick={ () => onChange( removeFormat( value, name ) ) }
+					onClick={ () => {
+						onChange( removeFormat( value, name ) );
+						onClose();
+					} }
 					variant="tertiary"
 				>
 					{ __( 'Clear', 'blablablocks-formats' ) }
