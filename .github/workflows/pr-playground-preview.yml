@@ -23,9 +23,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Create zip of project excluding node_modules, .git, .github
+      - name: Create zip file of build output
         run: |
-          zip -r build.zip . -x "node_modules/**" ".git/**" ".github/**"
+          zip -r build.zip . -x "node_modules/*" "node_modules/**"
 
       - name: Upload build.zip as artifact
         uses: actions/upload-artifact@v4
@@ -41,38 +41,46 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Get artifact URL and comment
+      - name: Download build.zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-zip
+          path: ./
+
+      - name: Get PR info
+        id: pr
         uses: actions/github-script@v7
         with:
           script: |
-            const runId = process.env.GITHUB_RUN_ID;
-            const { owner, repo } = context.repo;
-            const prNumber = context.payload.pull_request.number;
+            const pr = context.payload.pull_request;
+            return {
+              number: pr.number,
+              repo: context.repo.repo,
+              owner: context.repo.owner
+            };
 
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id: runId,
-            });
+      - name: Create or update PR comment with ZIP URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { number, owner, repo } = ${JSON.stringify({
+              number: "${{ steps.pr.outputs.number }}",
+              owner: "${{ steps.pr.outputs.owner }}",
+              repo: "${{ steps.pr.outputs.repo }}",
+            })};
 
-            const artifact = artifacts.data.artifacts.find(a => a.name === "build-zip");
-            if (!artifact) {
-              throw new Error("Artifact not found");
-            }
-
-            const downloadUrl = artifact.archive_download_url;
+            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts`;
+            const zipUrl = `https://playground.wordpress.net/?plugin=${artifactUrl}`;
 
             const comments = await github.rest.issues.listComments({
               owner,
               repo,
-              issue_number: prNumber,
+              issue_number: number,
             });
 
-            const body = `📦 Build Artifact Ready\n\n🔗 [Download ZIP (GitHub login required)](${downloadUrl})\n\n🌐 Playground URL (requires publicly hosted ZIP):\nhttps://playground.wordpress.net/?plugin=${downloadUrl}`;
+            const body = `🔗 Plugin ZIP ready for testing:\n\n👉 ${zipUrl}`;
 
-            const existingComment = comments.data.find(c =>
-              c.body.includes("📦 Build Artifact Ready")
-            );
+            const existingComment = comments.data.find(c => c.body.includes("Plugin ZIP ready for testing"));
 
             if (existingComment) {
               await github.rest.issues.updateComment({
@@ -85,7 +93,7 @@ jobs:
               await github.rest.issues.createComment({
                 owner,
                 repo,
-                issue_number: prNumber,
+                issue_number: number,
                 body,
               });
-            }
+            };
