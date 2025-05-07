@@ -9,10 +9,6 @@ blablablocks-marker {
 	overflow-wrap: break-word;
 }
 
-.block-editor-format-toolbar__clear-button {
-	margin: 0.75rem;
-}
-
 .block-editor-format-toolbar__blablablocks-marker-popover {
 
 	.components-popover__content {
@@ -37,6 +33,10 @@ blablablocks-marker {
 		text-transform: uppercase;
 		font-size: 0.6875rem;
 		color: #1e1e1e;
+	}
+
+	.reset-button {
+		margin-top: 1rem;
 	}
 }
 

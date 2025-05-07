@@ -69,61 +69,226 @@ const presets = [
 	},
 ];
 
+const defaultAttributes = {
+	type: 'circle',
+	animation: 'true',
+	'animation-duration': '5',
+	'animation-function': 'linear',
+	color: 'red',
+};
+
 /**
  * ColorTabContent component for selecting colors.
- * The component has been moved out of InlineUI to avoid color picker changes from re-rendering the entire InlineUI component.
  *
  * @param {Object}   props                  - The component properties.
  * @param {string}   props.currentColor     - The current color selected.
  * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @param {Function} props.removeAttributes - Function to remove attributes.
  * @return {JSX.Element}                    - The rendered component.
  */
-function ColorTabContent( { currentColor, updateAttributes } ) {
+function ColorTabContent( {
+	currentColor,
+	updateAttributes,
+	removeAttributes,
+} ) {
 	const themeColors = useSelect(
 		( select ) => select( 'core/block-editor' ).getSettings().colors,
 		[]
 	);
 	return (
-		<ColorPalette
-			as="div"
-			value={ currentColor ?? 'red' }
-			onChange={ ( newValue ) => {
-				updateAttributes( {
-					color: newValue,
-				} );
-			} }
-			label={ __( 'Color', 'blablablocks-formats' ) }
-			aria-label="Marker format color selection"
-			colors={ [
-				{
-					name: __( 'Primary colors', 'blablablocks-formats' ),
-					colors: [
+		<>
+			<ColorPalette
+				as="div"
+				value={ currentColor ?? defaultAttributes.color }
+				onChange={ ( newValue ) => {
+					updateAttributes( {
+						color: newValue,
+					} );
+				} }
+				label={ __( 'Color', 'blablablocks-formats' ) }
+				aria-label="Marker format color selection"
+				colors={ [
+					{
+						name: __( 'Primary colors', 'blablablocks-formats' ),
+						colors: [
+							{
+								name: __( 'Red', 'blablablocks-formats' ),
+								color: '#f00',
+							},
+							{
+								name: __( 'Green', 'blablablocks-formats' ),
+								color: '#0f0',
+							},
+							{
+								name: __( 'Blue', 'blablablocks-formats' ),
+								color: '#00f',
+							},
+						],
+					},
+					{
+						name: __( 'Theme colors', 'blablablocks-formats' ),
+						colors: themeColors.map( ( color ) => {
+							return {
+								name: color.name,
+								color: color.color,
+							};
+						} ),
+					},
+				] }
+				clearable={ false }
+			/>
+			<Flex justify="flex-end">
+				<Button
+					disabled={ ! currentColor }
+					variant="tertiary"
+					onClick={ () => {
+						removeAttributes( [ 'color' ] );
+					} }
+					className="reset-button"
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
+	);
+}
+
+/**
+ * AnimationTabContent component for managing animation settings tab.
+ *
+ * @param {Object}   props                  - The component properties.
+ * @param {Object}   props.activeAttributes - The currently active format attributes.
+ * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @param {Function} props.removeAttributes - Function to remove attributes.
+ * @return {JSX.Element} - The rendered component.
+ */
+function AnimationTabContent( {
+	activeAttributes,
+	updateAttributes,
+	removeAttributes,
+} ) {
+	const hasCustomAnimationSetting = Object.keys( activeAttributes ).some(
+		( key ) => key.includes( 'animation' )
+	);
+
+	return (
+		<>
+			<Grid
+				columns={ 2 }
+				rows={ 3 }
+				templateColumns="3fr 7fr"
+				alignment="center"
+				className="block-editor-format-toolbar__blablablocks-marker-animation-tab"
+			>
+				{ /* row 1 - Animation enable */ }
+				<span className="animation-tab-label">
+					{ __( 'Enabled', 'blablablocks-formats' ) }
+				</span>
+				<FormToggle
+					checked={ activeAttributes.animation !== 'false' }
+					onChange={ () => {
+						if ( activeAttributes.animation === 'false' ) {
+							removeAttributes( [ 'animation' ] );
+						} else {
+							updateAttributes( { animation: 'false' } );
+						}
+					} }
+					label={ __( 'Enable Animation', 'blablablocks-formats' ) }
+					hideLabelFromVision={ true }
+				/>
+
+				{ /* row 2 - Animation duration  */ }
+				<span className="animation-tab-label">
+					{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
+				</span>
+				<NumberControl
+					disabled={ activeAttributes.animation === 'false' }
+					value={
+						activeAttributes[ 'animation-duration' ] ??
+						defaultAttributes[ 'animation-duration' ]
+					}
+					min={ 1 }
+					max={ 10 }
+					step={ 0.5 }
+					onChange={ ( newValue ) => {
+						updateAttributes( {
+							'animation-duration': newValue,
+						} );
+					} }
+					label={ __( 'Duration', 'blablablocks-formats' ) }
+					hideLabelFromVision={ true }
+					__next40pxDefaultSize={ true }
+					style={ { justifySelf: 'start' } }
+				/>
+
+				{ /* row 3 - Animation timing function  */ }
+				<span className="animation-tab-label">
+					{ __( 'Type', 'blablablocks-formats' ) }
+				</span>
+				<SelectControl
+					disabled={ activeAttributes.animation === 'false' }
+					label={ __( 'Type', 'blablablocks-formats' ) }
+					value={
+						activeAttributes[ 'animation-function' ] ??
+						defaultAttributes[ 'animation-function' ]
+					}
+					options={ [
 						{
-							name: 'Red',
-							color: '#f00',
+							label: __( 'Linear', 'blablablocks-formats' ),
+							value: 'linear',
 						},
 						{
-							name: 'Green',
-							color: '#0f0',
+							label: __( 'Ease', 'blablablocks-formats' ),
+							value: 'ease',
 						},
 						{
-							name: 'Blue',
-							color: '#00f',
+							label: __( 'Ease In', 'blablablocks-formats' ),
+							value: 'ease-in',
 						},
-					],
-				},
-				{
-					name: __( 'Theme colors', 'blablablocks-formats' ),
-					colors: themeColors.map( ( color ) => {
-						return {
-							name: color.name,
-							color: color.color,
-						};
-					} ),
-				},
-			] }
-			clearable={ false }
-		/>
+						{
+							label: __( 'Ease Out', 'blablablocks-formats' ),
+							value: 'ease-out',
+						},
+						{
+							label: __( 'Ease In Out', 'blablablocks-formats' ),
+							value: 'ease-in-out',
+						},
+						{
+							label: __( '3 Steps', 'blablablocks-formats' ),
+							value: 'steps(3, start)',
+						},
+						{
+							label: __( '5 Steps', 'blablablocks-formats' ),
+							value: 'steps(5, end)',
+						},
+					] }
+					hideLabelFromVision={ true }
+					onChange={ ( newValue ) => {
+						updateAttributes( {
+							'animation-function': newValue,
+						} );
+					} }
+					__next40pxDefaultSize={ true }
+					__nextHasNoMarginBottom={ true }
+				/>
+			</Grid>
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					disabled={ ! hasCustomAnimationSetting }
+					onClick={ () =>
+						removeAttributes( [
+							'animation',
+							'animation-duration',
+							'animation-function',
+						] )
+					}
+					variant="tertiary"
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
 	);
 }
 
@@ -153,18 +318,9 @@ function InlineUI( {
 	} );
 
 	const updateAttributes = ( newAttributes ) => {
-		const defaultAttributes = {
-			type: 'circle',
-			animation: 'true',
-			'animation-duration': '5',
-			'animation-function': 'linear',
-			color: 'red',
-		};
-
 		const updatedFormat = applyFormat( value, {
 			type: name,
 			attributes: {
-				...defaultAttributes,
 				...activeAttributes,
 				...newAttributes,
 			},
@@ -173,134 +329,55 @@ function InlineUI( {
 		return onChange( updatedFormat );
 	};
 
+	const removeAttributes = ( attributes ) => {
+		attributes.forEach( ( attribute ) => {
+			delete activeAttributes[ attribute ];
+		} );
+
+		updateAttributes( activeAttributes );
+	};
+
 	const StyleTabContent = () => (
-		<Grid
-			templateColumns="repeat( 3, minmax( 0, 1fr ) )"
-			templateRows="repeat( 3, minmax( 0, 1fr ) )"
-		>
-			{ presets.map( ( preset ) => (
-				<Button
-					key={ preset.id }
-					id={ preset.id }
-					onClick={ () => {
-						updateAttributes( {
-							type: preset.id,
-						} );
-					} }
-					isPressed={ activeAttributes.type === preset.id }
-					className="block-editor-format-toolbar__blablablocks-marker-button"
-				>
-					<blablablocks-marker
-						type={ preset.id }
-						animation={ activeAttributes.animation ?? 'true' }
-						animation-duration={
-							activeAttributes[ 'animation-duration' ] ?? '5'
-						}
-						animation-function={
-							activeAttributes[ 'animation-function' ] ?? 'linear'
-						}
-						color={ activeAttributes.color ?? 'red' }
+		<>
+			<Grid
+				templateColumns="repeat( 3, minmax( 0, 1fr ) )"
+				templateRows="repeat( 3, minmax( 0, 1fr ) )"
+			>
+				{ presets.map( ( preset ) => (
+					<Button
+						key={ preset.id }
+						id={ preset.id }
+						onClick={ () => {
+							updateAttributes( {
+								type: preset.id,
+							} );
+						} }
+						isPressed={ activeAttributes.type === preset.id }
+						className="block-editor-format-toolbar__blablablocks-marker-button"
 					>
-						{ preset.label }
-					</blablablocks-marker>
+						<blablablocks-marker
+							{ ...activeAttributes }
+							type={ preset.id }
+						>
+							{ preset.label }
+						</blablablocks-marker>
+					</Button>
+				) ) }
+			</Grid>
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					disabled={ ! activeAttributes.type }
+					onClick={ () => {
+						onChange( removeFormat( value, name ) );
+						onClose();
+					} }
+					variant="tertiary"
+				>
+					{ __( 'Clear', 'blablablocks-formats' ) }
 				</Button>
-			) ) }
-		</Grid>
-	);
-
-	const AnimationTabContent = () => (
-		<Grid
-			columns={ 2 }
-			rows={ 3 }
-			templateColumns="3fr 7fr"
-			alignment="center"
-			className="block-editor-format-toolbar__blablablocks-marker-animation-tab"
-		>
-			{ /* row 1 - Animation enable */ }
-			<span className="animation-tab-label">
-				{ __( 'Enabled', 'blablablocks-formats' ) }
-			</span>
-			<FormToggle
-				checked={ activeAttributes.animation !== 'false' }
-				onChange={ () => {
-					updateAttributes( {
-						animation:
-							activeAttributes.animation !== 'false'
-								? 'false'
-								: 'true',
-					} );
-				} }
-				label={ __( 'Enable Animation', 'blablablocks-formats' ) }
-				hideLabelFromVision={ true }
-			/>
-
-			{ /* row 2 - Animation duration  */ }
-			<span className="animation-tab-label">
-				{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
-			</span>
-			<NumberControl
-				value={ activeAttributes[ 'animation-duration' ] ?? '5' }
-				min={ 1 }
-				max={ 10 }
-				step={ 0.5 }
-				onChange={ ( newValue ) => {
-					updateAttributes( {
-						'animation-duration': newValue,
-					} );
-				} }
-				label={ __( 'Duration', 'blablablocks-formats' ) }
-				hideLabelFromVision={ true }
-				__next40pxDefaultSize={ true }
-				style={ { justifySelf: 'start' } }
-			/>
-
-			{ /* row 3 - Animation timing function  */ }
-			<span className="animation-tab-label">
-				{ __( 'Type', 'blablablocks-formats' ) }
-			</span>
-			<SelectControl
-				label={ __( 'Type', 'blablablocks-formats' ) }
-				value={ activeAttributes[ 'animation-function' ] ?? 'linear' }
-				options={ [
-					{
-						label: __( 'Linear', 'blablablocks-formats' ),
-						value: 'linear',
-					},
-					{
-						label: __( 'Ease', 'blablablocks-formats' ),
-						value: 'ease',
-					},
-					{
-						label: __( 'Ease In', 'blablablocks-formats' ),
-						value: 'ease-in',
-					},
-					{
-						label: __( 'Ease Out', 'blablablocks-formats' ),
-						value: 'ease-out',
-					},
-					{
-						label: __( 'Ease In Out', 'blablablocks-formats' ),
-						value: 'ease-in-out',
-					},
-					{
-						label: __( '3 Steps', 'blablablocks-formats' ),
-						value: 'steps(3, start)',
-					},
-					{
-						label: __( '5 Steps', 'blablablocks-formats' ),
-						value: 'steps(5, end)',
-					},
-				] }
-				hideLabelFromVision={ true }
-				onChange={ ( newValue ) => {
-					updateAttributes( {
-						'animation-function': newValue,
-					} );
-				} }
-				__next40pxDefaultSize={ true }
-				__nextHasNoMarginBottom={ true }
-			/>
-		</Grid>
+			</Flex>
+		</>
 	);
 
 	return (
@@ -326,6 +403,7 @@ function InlineUI( {
 							<ColorTabContent
 								currentColor={ activeAttributes.color }
 								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
 							/>
 						),
 						disabled: ! activeAttributes.type,
@@ -333,28 +411,19 @@ function InlineUI( {
 					{
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
-						content: <AnimationTabContent />,
+						content: (
+							<AnimationTabContent
+								activeAttributes={ activeAttributes }
+								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
+							/>
+						),
 						disabled: ! activeAttributes.type,
 					},
 				] }
 			>
 				{ ( tab ) => tab.content }
 			</TabPanel>
-
-			{ activeAttributes.type && (
-				// Show a clear button, if there is a marker format applied.
-				<Flex justify="flex-end">
-					<Button
-						variant="tertiary"
-						onClick={ () =>
-							onChange( removeFormat( value, name ) )
-						}
-						className="block-editor-format-toolbar__clear-button"
-					>
-						{ __( 'Clear', 'blablablocks-formats' ) }
-					</Button>
-				</Flex>
-			) }
 		</Popover>
 	);
 }
