@@ -4,6 +4,7 @@
 import { info } from '@wordpress/icons';
 import { toggleFormat } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -11,6 +12,7 @@ import { __ } from '@wordpress/i18n';
  */
 import './editor.scss';
 import './style.scss';
+import { InlineUI } from './inline-ui';
 
 const name = 'blablablocks/infotip';
 const title = __( 'Infotip', 'blablablocks-formats' );
@@ -22,7 +24,9 @@ const title = __( 'Infotip', 'blablablocks-formats' );
  * @return {JSX.Element} - The rendered infotip button.
  */
 function EditButton( props ) {
-	const { value, onChange, onFocus, isActive } = props;
+	const { value, onChange, onFocus, isActive, contentRef } = props;
+
+	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
 	function onToggle() {
 		onChange(
@@ -42,12 +46,21 @@ function EditButton( props ) {
 	}
 
 	return (
-		<RichTextToolbarButton
-			icon={ info }
-			title={ title }
-			onClick={ () => onClick() }
-			isActive={ isActive }
-		/>
+		<>
+			<RichTextToolbarButton
+				icon={ info }
+				title={ title }
+				onClick={ () => setIsSettingOpen( true ) }
+				isActive={ isActive }
+			/>
+			{ isSettingOpen && (
+				<InlineUI
+					onClose={ () => setIsSettingOpen( false ) }
+					contentRef={ contentRef.current }
+					isActive={ isActive }
+				/>
+			) }
+		</>
 	);
 }
 
