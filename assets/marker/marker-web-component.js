@@ -181,8 +181,6 @@ class BlaBlaBlocksMarker extends HTMLElement {
 	}
 
 	attributeChangedCallback( name, oldValue, newValue ) {
-		console.log( 'attributeChangedCallback', name, oldValue, newValue );
-
 		const shadow = this.shadowRoot;
 
 		if ( ! shadow ) {
