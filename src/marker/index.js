@@ -79,11 +79,11 @@ const defaultAttributes = {
 
 /**
  * ColorTabContent component for selecting colors.
- * The component has been moved out of InlineUI to avoid color picker changes from re-rendering the entire InlineUI component.
  *
  * @param {Object}   props                  - The component properties.
  * @param {string}   props.currentColor     - The current color selected.
  * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @param {Function} props.removeAttributes - Function to remove attributes.
  * @return {JSX.Element}                    - The rendered component.
  */
 function ColorTabContent( {
@@ -99,7 +99,7 @@ function ColorTabContent( {
 		<>
 			<ColorPalette
 				as="div"
-				value={ currentColor ?? 'red' }
+				value={ currentColor ?? defaultAttributes.color }
 				onChange={ ( newValue ) => {
 					updateAttributes( {
 						color: newValue,
@@ -139,12 +139,151 @@ function ColorTabContent( {
 			/>
 			<Flex justify="flex-end">
 				<Button
-					disabled={ currentColor === defaultAttributes.color }
+					disabled={ ! currentColor }
 					variant="tertiary"
 					onClick={ () => {
 						removeAttributes( [ 'color' ] );
 					} }
 					className="reset-button"
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
+	);
+}
+
+/**
+ * AnimationTabContent component for managing animation settings tab.
+ *
+ * @param {Object}   props                  - The component properties.
+ * @param {Object}   props.activeAttributes - The currently active format attributes.
+ * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @param {Function} props.removeAttributes - Function to remove attributes.
+ * @return {JSX.Element} - The rendered component.
+ */
+function AnimationTabContent( {
+	activeAttributes,
+	updateAttributes,
+	removeAttributes,
+} ) {
+	const hasCustomAnimationSetting = Object.keys( activeAttributes ).some(
+		( key ) => key.includes( 'animation' )
+	);
+
+	return (
+		<>
+			<Grid
+				columns={ 2 }
+				rows={ 3 }
+				templateColumns="3fr 7fr"
+				alignment="center"
+				className="block-editor-format-toolbar__blablablocks-marker-animation-tab"
+			>
+				{ /* row 1 - Animation enable */ }
+				<span className="animation-tab-label">
+					{ __( 'Enabled', 'blablablocks-formats' ) }
+				</span>
+				<FormToggle
+					checked={ activeAttributes.animation !== 'false' }
+					onChange={ () => {
+						if ( activeAttributes.animation === 'false' ) {
+							removeAttributes( [ 'animation' ] );
+						} else {
+							updateAttributes( { animation: 'false' } );
+						}
+					} }
+					label={ __( 'Enable Animation', 'blablablocks-formats' ) }
+					hideLabelFromVision={ true }
+				/>
+
+				{ /* row 2 - Animation duration  */ }
+				<span className="animation-tab-label">
+					{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
+				</span>
+				<NumberControl
+					disabled={ activeAttributes.animation === 'false' }
+					value={
+						activeAttributes[ 'animation-duration' ] ??
+						defaultAttributes[ 'animation-duration' ]
+					}
+					min={ 1 }
+					max={ 10 }
+					step={ 0.5 }
+					onChange={ ( newValue ) => {
+						updateAttributes( {
+							'animation-duration': newValue,
+						} );
+					} }
+					label={ __( 'Duration', 'blablablocks-formats' ) }
+					hideLabelFromVision={ true }
+					__next40pxDefaultSize={ true }
+					style={ { justifySelf: 'start' } }
+				/>
+
+				{ /* row 3 - Animation timing function  */ }
+				<span className="animation-tab-label">
+					{ __( 'Type', 'blablablocks-formats' ) }
+				</span>
+				<SelectControl
+					disabled={ activeAttributes.animation === 'false' }
+					label={ __( 'Type', 'blablablocks-formats' ) }
+					value={
+						activeAttributes[ 'animation-function' ] ??
+						defaultAttributes[ 'animation-function' ]
+					}
+					options={ [
+						{
+							label: __( 'Linear', 'blablablocks-formats' ),
+							value: 'linear',
+						},
+						{
+							label: __( 'Ease', 'blablablocks-formats' ),
+							value: 'ease',
+						},
+						{
+							label: __( 'Ease In', 'blablablocks-formats' ),
+							value: 'ease-in',
+						},
+						{
+							label: __( 'Ease Out', 'blablablocks-formats' ),
+							value: 'ease-out',
+						},
+						{
+							label: __( 'Ease In Out', 'blablablocks-formats' ),
+							value: 'ease-in-out',
+						},
+						{
+							label: __( '3 Steps', 'blablablocks-formats' ),
+							value: 'steps(3, start)',
+						},
+						{
+							label: __( '5 Steps', 'blablablocks-formats' ),
+							value: 'steps(5, end)',
+						},
+					] }
+					hideLabelFromVision={ true }
+					onChange={ ( newValue ) => {
+						updateAttributes( {
+							'animation-function': newValue,
+						} );
+					} }
+					__next40pxDefaultSize={ true }
+					__nextHasNoMarginBottom={ true }
+				/>
+			</Grid>
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					disabled={ ! hasCustomAnimationSetting }
+					onClick={ () =>
+						removeAttributes( [
+							'animation',
+							'animation-duration',
+							'animation-function',
+						] )
+					}
+					variant="tertiary"
 				>
 					{ __( 'Reset', 'blablablocks-formats' ) }
 				</Button>
@@ -241,141 +380,6 @@ function InlineUI( {
 		</>
 	);
 
-	const AnimationTabContent = () => {
-		console.log( activeAttributes );
-		const hasCustomAnimationSetting = Object.keys( activeAttributes ).some(
-			( key ) => key.includes( 'animation' )
-		);
-
-		return (
-			<>
-				<Grid
-					columns={ 2 }
-					rows={ 3 }
-					templateColumns="3fr 7fr"
-					alignment="center"
-					className="block-editor-format-toolbar__blablablocks-marker-animation-tab"
-				>
-					{ /* row 1 - Animation enable */ }
-					<span className="animation-tab-label">
-						{ __( 'Enabled', 'blablablocks-formats' ) }
-					</span>
-					<FormToggle
-						checked={ activeAttributes.animation !== 'false' }
-						onChange={ () => {
-							updateAttributes( {
-								animation:
-									activeAttributes.animation !== 'false'
-										? 'false'
-										: 'true',
-							} );
-						} }
-						label={ __(
-							'Enable Animation',
-							'blablablocks-formats'
-						) }
-						hideLabelFromVision={ true }
-					/>
-
-					{ /* row 2 - Animation duration  */ }
-					<span className="animation-tab-label">
-						{ __( 'Duration (seconds)', 'blablablocks-formats' ) }
-					</span>
-					<NumberControl
-						disabled={ activeAttributes.animation === 'false' }
-						value={
-							activeAttributes[ 'animation-duration' ] ??
-							defaultAttributes[ 'animation-duration' ]
-						}
-						min={ 1 }
-						max={ 10 }
-						step={ 0.5 }
-						onChange={ ( newValue ) => {
-							updateAttributes( {
-								'animation-duration': newValue,
-							} );
-						} }
-						label={ __( 'Duration', 'blablablocks-formats' ) }
-						hideLabelFromVision={ true }
-						__next40pxDefaultSize={ true }
-						style={ { justifySelf: 'start' } }
-					/>
-
-					{ /* row 3 - Animation timing function  */ }
-					<span className="animation-tab-label">
-						{ __( 'Type', 'blablablocks-formats' ) }
-					</span>
-					<SelectControl
-						disabled={ activeAttributes.animation === 'false' }
-						label={ __( 'Type', 'blablablocks-formats' ) }
-						value={
-							activeAttributes[ 'animation-function' ] ??
-							defaultAttributes[ 'animation-function' ]
-						}
-						options={ [
-							{
-								label: __( 'Linear', 'blablablocks-formats' ),
-								value: 'linear',
-							},
-							{
-								label: __( 'Ease', 'blablablocks-formats' ),
-								value: 'ease',
-							},
-							{
-								label: __( 'Ease In', 'blablablocks-formats' ),
-								value: 'ease-in',
-							},
-							{
-								label: __( 'Ease Out', 'blablablocks-formats' ),
-								value: 'ease-out',
-							},
-							{
-								label: __(
-									'Ease In Out',
-									'blablablocks-formats'
-								),
-								value: 'ease-in-out',
-							},
-							{
-								label: __( '3 Steps', 'blablablocks-formats' ),
-								value: 'steps(3, start)',
-							},
-							{
-								label: __( '5 Steps', 'blablablocks-formats' ),
-								value: 'steps(5, end)',
-							},
-						] }
-						hideLabelFromVision={ true }
-						onChange={ ( newValue ) => {
-							updateAttributes( {
-								'animation-function': newValue,
-							} );
-						} }
-						__next40pxDefaultSize={ true }
-						__nextHasNoMarginBottom={ true }
-					/>
-				</Grid>
-				<Flex justify="flex-end">
-					<Button
-						className="reset-button"
-						disabled={ ! hasCustomAnimationSetting }
-						onClick={ () =>
-							updateAttributes( {
-								'animation-duration':
-									defaultAttributes[ 'animation-duration' ],
-								'animation-function':
-									defaultAttributes[ 'animation-function' ],
-							} )
-						}
-						variant="tertiary"
-					>
-						{ __( 'Reset', 'blablablocks-formats' ) }
-					</Button>
-				</Flex>
-			</>
-		);
-	};
-
 	return (
 		<Popover
 			anchor={ anchor }
@@ -407,7 +411,13 @@ function InlineUI( {
 					{
 						name: 'animation',
 						title: __( 'Animation', 'blablablocks-formats' ),
-						content: <AnimationTabContent />,
+						content: (
+							<AnimationTabContent
+								activeAttributes={ activeAttributes }
+								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
+							/>
+						),
 						disabled: ! activeAttributes.type,
 					},
 				] }
@@ -456,7 +466,7 @@ function EditButton( props ) {
 }
 
 export const marker = {
-	name: name,
+	name,
 	title,
 	tagName: 'blablablocks-marker',
 	className: 'has-marker-text',
