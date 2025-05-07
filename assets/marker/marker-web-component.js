@@ -181,18 +181,19 @@ class BlaBlaBlocksMarker extends HTMLElement {
 	}
 
 	attributeChangedCallback( name, oldValue, newValue ) {
-		if ( ! oldValue ) {
-			return;
-		}
+		console.log( 'attributeChangedCallback', name, oldValue, newValue );
 
 		const shadow = this.shadowRoot;
+
+		if ( ! shadow ) {
+			return;
+		}
 
 		if ( name === 'type' ) {
 			// Update the path only if the type attribute changes.
 			const svg = shadow.querySelector( 'svg' );
 			svg.innerHTML = this.renderPath( newValue );
 		}
-
 		// Changes of all other attributes will require a re-render of the style.
 		const style = shadow.querySelector( 'style' );
 		style.textContent = this.renderStyle();
