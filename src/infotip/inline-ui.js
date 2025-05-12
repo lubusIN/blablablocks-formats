@@ -1,8 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Popover } from '@wordpress/components';
+import { Popover, TabPanel } from '@wordpress/components';
 import { useAnchor } from '@wordpress/rich-text';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -23,12 +24,30 @@ export function InlineUI( { onClose, contentRef, isActive } ) {
 
 	return (
 		<Popover
+			anchor={ anchor }
+			className="block-editor-format-toolbar__blablablocks-infotip-popover"
 			position="middle center"
 			onClose={ onClose }
-			anchor={ anchor }
 			offset={ 30 }
+			shift={ true }
 		>
-			<h2>Content goes here.</h2>
+			<TabPanel
+				className="block-editor-format-toolbar__blablablocks-infotip-tab-panel"
+				tabs={ [
+					{
+						name: 'text',
+						title: __( 'Text', 'blablablocks-formats' ),
+						content: 'Content for Tab 1',
+					},
+					{
+						name: 'icon',
+						title: __( 'Icon', 'blablablocks-formats' ),
+						content: 'Content for Tab 2',
+					},
+				] }
+			>
+				{ ( tab ) => tab.content }
+			</TabPanel>
 		</Popover>
 	);
 }

@@ -2,6 +2,16 @@
  * The following styles get applied inside the editor only.
  */
 
-.wp-block-blablablocks-infotip-format {
-	border: 1px dotted #f00;
+.has-infotip {
+	text-decoration: dotted underline;
+}
+
+.block-editor-format-toolbar__blablablocks-infotip-popover {
+	.components-popover__content {
+		min-width: 20.625rem;
+	}
+
+	.components-tab-panel__tab-content {
+		padding: 1rem;
+	}
 }
