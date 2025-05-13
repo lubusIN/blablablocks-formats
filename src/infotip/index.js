@@ -33,8 +33,7 @@ function EditButton( props ) {
 			toggleFormat( value, {
 				type: name,
 				attributes: {
-					content: 'Welcome to <strong>Gutenberg</strong>!',
-					allowHtml: 'true',
+					content: 'Welcome to Gutenberg!',
 				},
 			} )
 		);
@@ -58,6 +57,9 @@ function EditButton( props ) {
 					onClose={ () => setIsSettingOpen( false ) }
 					contentRef={ contentRef.current }
 					isActive={ isActive }
+					value={ value }
+					name={ name }
+					onChange={ onChange }
 				/>
 			) }
 		</>

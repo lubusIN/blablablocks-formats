@@ -1,13 +1,75 @@
 /**
  * WordPress dependencies
  */
-import { Popover, TabPanel } from '@wordpress/components';
-import { useAnchor } from '@wordpress/rich-text';
+import {
+	Button,
+	Flex,
+	Popover,
+	TabPanel,
+	TextareaControl,
+} from '@wordpress/components';
+import { remove, useAnchor } from '@wordpress/rich-text';
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import { applyFormat, removeFormat } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
  */
+
+/**
+ * TextTabContent Renders the content for the text tab.
+ *
+ * @return {JSX.Element} - The rendered text tab content.
+ */
+function TextTabContent( { name, value, onChange, onClose } ) {
+	const [ infotipText, setInfotipText ] = useState( 'Add text here.' );
+	return (
+		<>
+			<TextareaControl
+				label={ __( 'Text', 'blablablocks-formats' ) }
+				value={ infotipText }
+				onChange={ ( newValue ) => {
+					setInfotipText( newValue );
+					onChange(
+						applyFormat( value, {
+							type: name,
+							attributes: {
+								content: newValue,
+							},
+						} )
+					);
+				} }
+				help={ __(
+					'Enter the text to display.',
+					'blablablocks-formats'
+				) }
+				__nextHasNoMarginBottom={ true }
+			/>
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					onClick={ () => {
+						onChange( removeFormat( value, name ) );
+						if ( onClose ) onClose();
+					} }
+					variant="tertiary"
+				>
+					{ __( 'Clear', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
+	);
+}
+
+/**
+ * IconTabContent Renders the content for the text tab.
+ *
+ * @return {JSX.Element} - The rendered text tab content.
+ */
+function IconTabContent() {
+	return <>Icon tab content goes here</>;
+}
 
 /**
  * InlineUI Renders an inline UI component with a popover.
@@ -16,7 +78,14 @@ import { __ } from '@wordpress/i18n';
  * @param {Function} props.onClose - Callback function triggered when the popover is closed.
  * @return {JSX.Element}           - The rendered InlineUI component.
  */
-export function InlineUI( { onClose, contentRef, isActive } ) {
+export function InlineUI( {
+	name,
+	value,
+	onChange,
+	onClose,
+	contentRef,
+	isActive,
+} ) {
 	const anchor = useAnchor( {
 		editableContentElement: contentRef,
 		settings: { isActive },
@@ -37,7 +106,14 @@ export function InlineUI( { onClose, contentRef, isActive } ) {
 					{
 						name: 'text',
 						title: __( 'Text', 'blablablocks-formats' ),
-						content: 'Content for Tab 1',
+						content: (
+							<TextTabContent
+								name={ name }
+								value={ value }
+								onChange={ onChange }
+								onClose={ onClose }
+							/>
+						),
 					},
 					{
 						name: 'icon',
