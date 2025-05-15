@@ -28,22 +28,6 @@ function EditButton( props ) {
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
-	function onToggle() {
-		onChange(
-			toggleFormat( value, {
-				type: name,
-				attributes: {
-					content: 'Welcome to Gutenberg!',
-				},
-			} )
-		);
-	}
-
-	function onClick() {
-		onToggle();
-		onFocus();
-	}
-
 	return (
 		<>
 			<RichTextToolbarButton
