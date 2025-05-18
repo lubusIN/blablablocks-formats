@@ -24,7 +24,8 @@ const title = __( 'Infotip', 'blablablocks-formats' );
  * @return {JSX.Element} - The rendered infotip button.
  */
 function EditButton( props ) {
-	const { value, onChange, onFocus, isActive, contentRef } = props;
+	const { value, onChange, onFocus, isActive, contentRef, activeAttributes } =
+		props;
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
@@ -38,12 +39,14 @@ function EditButton( props ) {
 			/>
 			{ isSettingOpen && (
 				<InlineUI
+					activeAttributes={ activeAttributes }
 					onClose={ () => setIsSettingOpen( false ) }
 					contentRef={ contentRef.current }
 					isActive={ isActive }
 					value={ value }
 					name={ name }
 					onChange={ onChange }
+					onFocus={ onFocus }
 				/>
 			) }
 		</>
