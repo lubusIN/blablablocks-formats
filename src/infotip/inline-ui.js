@@ -8,10 +8,8 @@ import {
 	TabPanel,
 	TextareaControl,
 } from '@wordpress/components';
-import { remove, useAnchor } from '@wordpress/rich-text';
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
-import { applyFormat, removeFormat } from '@wordpress/rich-text';
+import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
@@ -20,6 +18,12 @@ import { applyFormat, removeFormat } from '@wordpress/rich-text';
 /**
  * TextTabContent Renders the content for the text tab.
  *
+ * @param  root0
+ * @param  root0.content
+ * @param  root0.name
+ * @param  root0.value
+ * @param  root0.onChange
+ * @param  root0.onClose
  * @return {JSX.Element} - The rendered text tab content.
  */
 function TextTabContent( { content, name, value, onChange, onClose } ) {
@@ -72,8 +76,14 @@ function IconTabContent() {
 /**
  * InlineUI Renders an inline UI component with a popover.
  *
- * @param {Object}   props         - The properties passed to the component.
- * @param {Function} props.onClose - Callback function triggered when the popover is closed.
+ * @param {Object}   props                  - The properties passed to the component.
+ * @param {Function} props.onClose          - Callback function triggered when the popover is closed.
+ * @param            props.activeAttributes
+ * @param            props.name
+ * @param            props.value
+ * @param            props.onChange
+ * @param            props.contentRef
+ * @param            props.isActive
  * @return {JSX.Element}           - The rendered InlineUI component.
  */
 export function InlineUI( {
@@ -119,7 +129,7 @@ export function InlineUI( {
 					{
 						name: 'icon',
 						title: __( 'Icon', 'blablablocks-formats' ),
-						content: 'Content for Tab 2',
+						content: <IconTabContent />,
 					},
 				] }
 			>
