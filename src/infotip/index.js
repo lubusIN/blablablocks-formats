@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { info } from '@wordpress/icons';
-import { toggleFormat } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
