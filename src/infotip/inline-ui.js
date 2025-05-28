@@ -92,7 +92,6 @@ export function InlineUI( {
 	value,
 	onChange,
 	onClose,
-
 	contentRef,
 	isActive,
 } ) {
