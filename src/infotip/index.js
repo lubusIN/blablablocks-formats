@@ -30,7 +30,6 @@ function EditButton( props ) {
 				type: name,
 				attributes: {
 					content: 'Welcome to Gutenberg!',
-					allowHtml: 'true',
 				},
 			} )
 		);

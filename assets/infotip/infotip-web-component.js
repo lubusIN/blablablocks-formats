@@ -30,8 +30,9 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		floatingUIDOM
 			.computePosition( anchorText, infotip, {
 				placement: 'top',
+				strategy: 'fixed',
 				middleware: [
-					floatingUIDOM.offset( 10 ),
+					floatingUIDOM.offset( 6 ),
 					floatingUIDOM.flip(),
 					floatingUIDOM.shift( { padding: 5 } ),
 					floatingUIDOM.arrow( { element: arrow } ),
@@ -68,7 +69,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	hideTooltip() {
-		this.shadowRoot.querySelector( '.infotip' ).style.display = '';
+		this.shadowRoot.querySelector( '.infotip' ).style.display = 'none';
 	}
 
 	initializeEventListeners() {
@@ -97,7 +98,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				.infotip {
 					display: none;
 					width: max-content;
-					position: absolute;
+					position: fixed;
 					top: 0px;
 					left: 0px;
 					background: #222;

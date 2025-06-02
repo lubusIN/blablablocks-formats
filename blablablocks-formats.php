@@ -32,15 +32,6 @@ function blablablocks_formats_init() {
 		array( 'in_footer' => true )
 	);
 
-	// Register infotip format custom element script.
-	wp_register_script(
-		'blablablocks-infotip-format-asset',
-		plugins_url( 'assets/infotip/infotip-web-component.js', __FILE__ ),
-		array(),
-		$asset_file['version'],
-		array( 'in_footer' => true )
-	);
-
 	// Register Floating UI script for infotip.
 	wp_register_script(
 		'blablablocks-floating-ui-asset',
@@ -56,6 +47,15 @@ function blablablocks_formats_init() {
 		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
 		array( 'blablablocks-floating-ui-asset' ),
 		'1.7.0',
+		array( 'in_footer' => true )
+	);
+
+	// Register infotip format custom element script.
+	wp_register_script(
+		'blablablocks-infotip-format-asset',
+		plugins_url( 'assets/infotip/infotip-web-component.js', __FILE__ ),
+		array( 'blablablocks-floating-ui-dom-asset' ),
+		$asset_file['version'],
 		array( 'in_footer' => true )
 	);
 
