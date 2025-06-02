@@ -115,10 +115,10 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				}
 			</style>
 			<span class="wrapper">
-				<span class="text">
+				<span class="text" tabindex="0" role="button" aria-describedby="infotip-content">
 					<slot></slot>
 				</span>
-				<div class="infotip">
+				<div class="infotip" id="infotip-content">
 					${ content }
 					<div class="arrow"></div>
 				</div>
