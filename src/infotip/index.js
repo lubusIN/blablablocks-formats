@@ -59,6 +59,5 @@ export const infotip = {
 	edit: EditButton,
 	attributes: {
 		content: 'content',
-		allowHtml: 'allowHtml',
 	},
 };
