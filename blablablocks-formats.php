@@ -41,11 +41,34 @@ function blablablocks_formats_init() {
 		array( 'in_footer' => true )
 	);
 
-	// Add marker format custom element as dependency.
-	$asset_file['dependencies'][] = 'blablablocks-marker-format-asset';
+	// Register Floating UI script for infotip.
+	wp_register_script(
+		'blablablocks-floating-ui-asset',
+		'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.0',
+		array(),
+		'1.7.0',
+		array( 'in_footer' => true )
+	);
 
-	// Add infotip format custom element as dependency.
-	$asset_file['dependencies'][] = 'blablablocks-infotip-format-asset';
+	// Register Floating UI DOM script for infotip.
+	wp_register_script(
+		'blablablocks-floating-ui-dom-asset',
+		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
+		array( 'blablablocks-floating-ui-asset' ),
+		'1.7.0',
+		array( 'in_footer' => true )
+	);
+
+	// Add dependencies.
+	$asset_file['dependencies'] = array_merge(
+		$asset_file['dependencies'],
+		array(
+			'blablablocks-marker-format-asset',
+			'blablablocks-infotip-format-asset',
+			'blablablocks-floating-ui-asset',
+			'blablablocks-floating-ui-dom-asset',
+		)
+	);
 
 	// Register main formats script.
 	wp_register_script(
