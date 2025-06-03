@@ -1,7 +1,6 @@
 /**
  * BlaBlaBlocks: Marker text formats
  */
-/* global HTMLElement */
 class BlaBlaBlocksMarker extends HTMLElement {
 	static get observedAttributes() {
 		return [

@@ -29,8 +29,7 @@ function EditButton( props ) {
 			toggleFormat( value, {
 				type: name,
 				attributes: {
-					content: 'Welcome to <strong>Gutenberg</strong>!',
-					allowHtml: 'true',
+					content: 'Welcome to Gutenberg!',
 				},
 			} )
 		);
@@ -54,11 +53,10 @@ function EditButton( props ) {
 export const infotip = {
 	name,
 	title,
-	tagName: 'span',
+	tagName: 'blablablocks-infotip',
 	className: 'has-infotip',
 	edit: EditButton,
 	attributes: {
-		content: 'data-tippy-content',
-		allowHtml: 'data-tippy-allowHTML',
+		content: 'content',
 	},
 };

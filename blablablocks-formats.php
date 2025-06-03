@@ -32,32 +32,43 @@ function blablablocks_formats_init() {
 		array( 'in_footer' => true )
 	);
 
-	// Register infotip dependencies.
+	// Register Floating UI script for infotip.
 	wp_register_script(
-		'blablablocks-infotip-popperjs',
-		'https://unpkg.com/@popperjs/core@2',
+		'blablablocks-floating-ui-asset',
+		'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.0',
 		array(),
-		'2',
+		'1.7.0',
 		array( 'in_footer' => true )
 	);
 
+	// Register Floating UI DOM script for infotip.
 	wp_register_script(
-		'blablablocks-infotip-tippy',
-		'https://unpkg.com/tippy.js@6',
-		array( 'blablablocks-infotip-popperjs' ),
-		'6',
+		'blablablocks-floating-ui-dom-asset',
+		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
+		array( 'blablablocks-floating-ui-asset' ),
+		'1.7.0',
 		array( 'in_footer' => true )
 	);
 
-	wp_add_inline_script(
-		'blablablocks-infotip-tippy',
-		"tippy('[data-tippy-content]');"
+	// Register infotip format custom element script.
+	wp_register_script(
+		'blablablocks-infotip-format-asset',
+		plugins_url( 'assets/infotip/infotip-web-component.js', __FILE__ ),
+		array( 'blablablocks-floating-ui-dom-asset' ),
+		$asset_file['version'],
+		array( 'in_footer' => true )
 	);
 
-	$asset_file['dependencies'][] = 'blablablocks-infotip-tippy';
-
-	// Add marker format custom element as dependency.
-	$asset_file['dependencies'][] = 'blablablocks-marker-format-asset';
+	// Add dependencies.
+	$asset_file['dependencies'] = array_merge(
+		$asset_file['dependencies'],
+		array(
+			'blablablocks-marker-format-asset',
+			'blablablocks-infotip-format-asset',
+			'blablablocks-floating-ui-asset',
+			'blablablocks-floating-ui-dom-asset',
+		)
+	);
 
 	// Register main formats script.
 	wp_register_script(
