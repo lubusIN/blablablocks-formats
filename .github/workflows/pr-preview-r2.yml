@@ -1,0 +1,166 @@
+name: Playground Preview via Cloudflare R2
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+
+permissions:
+  pull-requests: write
+
+env:
+  PR_BUILD: pr-build-${{ github.event.pull_request.number }}.zip
+  CLOUDFLARE_R2_BUCKET_PUBLIC_URL: ${{ secrets.CLOUDFLARE_R2_BUCKET_PUBLIC_URL }}
+
+jobs:
+  build-and-upload:
+    if: github.event.action != 'closed'
+    name: Build and generate playground demo for PR
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Install Dependencies
+      run: |
+        composer install --no-dev --optimize-autoloader
+        npm ci
+
+    - name: Build Files
+      run: npm run build
+
+    - name: Create ZIP Archive
+      run: |
+        zip -r $PR_BUILD . -x "node_modules/*" ".git/*" ".github/*"
+
+    - name: Configure AWS CLI for Cloudflare R2
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.R2_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        aws configure set default.region auto
+        aws configure set default.output json
+      env:
+        AWS_EC2_METADATA_DISABLED: true
+
+    - name: Check and Delete Existing R2 ZIP
+      run: |
+        ENDPOINT="https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+        BUCKET="${{ secrets.CLOUDFLARE_R2_BUCKET }}"
+        FILE="$PR_BUILD"
+        if aws s3api head-object --bucket "$BUCKET" --key "$FILE" --endpoint-url "$ENDPOINT"; then
+          echo "File exists. Deleting..."
+          aws s3 rm s3://$BUCKET/$FILE --endpoint-url "$ENDPOINT"
+        else
+          echo "File does not exist. Continuing..."
+        fi
+
+    - name: Upload ZIP to Cloudflare R2
+      run: |
+        ENDPOINT="https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+        aws s3 cp "$PR_BUILD" s3://${{ secrets.CLOUDFLARE_R2_BUCKET }}/$PR_BUILD --endpoint-url "$ENDPOINT"
+
+    - name: Post preview comment (create or update)
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const prNumber = context.payload.pull_request.number;
+          const bucketPublicUrl = process.env.CLOUDFLARE_R2_BUCKET_PUBLIC_URL;
+          const zipFile = `pr-build-${prNumber}.zip`;
+          const zipUrl = `${bucketPublicUrl}/${zipFile}`;
+
+          const blueprint = {
+            "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+            "landingPage": "/wp-admin/post-new.php?post_type=blueprint",
+            "login": true,
+            "features": { "networking": true },
+            "steps": [
+              {
+                "step": "updateUserMeta",
+                "meta": {
+                  "admin_color": "modern",
+                  "show_welcome_panel": 0
+                },
+                "userId": 1
+              },
+              {
+                "step": "setSiteOptions",
+                "options": { "blogname": `${owner}/${repo} - PR ${prNumber}` }
+              },
+              {
+                "step": "installPlugin",
+                "pluginData": {
+                  "resource": "url",
+                  "url": zipUrl
+                }
+              }
+            ]
+          };
+
+          const encoded = Buffer.from(JSON.stringify(blueprint)).toString('base64');
+          const previewUrl = `https://playground.wordpress.net/#${encoded}`;
+          const commentBody = `
+            <!-- WordPress Playground PR Preview - Cloudflare R2 -->
+            ### Preview via Cloudflare R2 Storage
+
+            ⚡️WordPress Playground [Preview](${previewUrl})
+            🚀 Build zip file [Download](${zipUrl})
+
+            I will update this comment with the latest preview links as you push more changes to this PR.
+
+            > [!NOTE]
+            > The preview sites are created using [WordPress Playground](https://wordpress.org/playground/). You can add content, edit settings, and test the pull request as you would on a real site, but please note that changes are not saved between sessions.
+          `;
+
+          const comments = await github.rest.issues.listComments({
+            owner,
+            repo,
+            issue_number: prNumber,
+          });
+
+          const existing = comments.data.find(c => c.body.includes("<!-- WordPress Playground PR Preview - Cloudflare R2 -->"));
+
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner,
+              repo,
+              comment_id: existing.id,
+              body: commentBody,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: commentBody,
+            });
+          }
+
+  remove-build:
+    if: github.event.action == 'closed'
+    name: Delete build from R2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS CLI for Cloudflare R2
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          aws configure set default.region auto
+          aws configure set default.output json
+        env:
+          AWS_EC2_METADATA_DISABLED: true
+
+      - name: Check and Delete Existing R2 ZIP
+        run: |
+          ENDPOINT="https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          BUCKET="${{ secrets.CLOUDFLARE_R2_BUCKET }}"
+          FILE="$PR_BUILD"
+          if aws s3api head-object --bucket "$BUCKET" --key "$FILE" --endpoint-url "$ENDPOINT"; then
+            echo "File exists. Deleting..."
+            aws s3 rm s3://$BUCKET/$FILE --endpoint-url "$ENDPOINT"
+          else
+            echo "File does not exist. Continuing..."
+          fi
