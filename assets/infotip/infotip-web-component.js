@@ -83,37 +83,43 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		} );
 	}
 
+	renderStyle() {
+		return `
+			.wrapper {
+				position: relative;
+			}
+			.text {
+				text-decoration:  dotted underline;
+				cursor: pointer;
+			}
+			.infotip {
+				display: none;
+				width: max-content;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				background: #222;
+				color: white;
+				padding: 5px;
+				border-radius: 4px;
+				font-size: 90%;
+			}
+			.infotip .arrow {
+				position: absolute;
+				background: #222;
+				width: 8px;
+				height: 8px;
+				transform: rotate(45deg);
+			}
+		`;
+	}
+
 	renderElement() {
 		const content = this.getAttribute( 'content' );
 		const template = document.createElement( 'template' );
 		template.innerHTML = `
 			<style>
-				.wrapper {
-					position: relative;
-				}
-				.text {
-					text-decoration:  dotted underline;
-					cursor: pointer;
-				}
-				.infotip {
-					display: none;
-					width: max-content;
-					position: fixed;
-					top: 0px;
-					left: 0px;
-					background: #222;
-					color: white;
-					padding: 5px;
-					border-radius: 4px;
-					font-size: 90%;
-				}
-				.infotip .arrow {
-					position: absolute;
-					background: #222;
-					width: 8px;
-					height: 8px;
-					transform: rotate(45deg);
-				}
+				${ this.renderStyle() }
 			</style>
 			<span class="wrapper">
 				<span class="text" tabindex="0" role="button" aria-describedby="infotip-content">
