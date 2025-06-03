@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, closed]
 
 permissions:
+  contents: read
   pull-requests: write
 
 env:
