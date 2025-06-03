@@ -25,9 +25,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Install Dependencies
-      run: |
-        composer install --no-dev --optimize-autoloader
-        npm ci
+      run: npm ci
 
     - name: Build Files
       run: npm run build
