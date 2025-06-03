@@ -72,7 +72,7 @@ jobs:
 
           const blueprint = {
             "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-            "landingPage": "/wp-admin/post-new.php?post_type=blueprint",
+            "landingPage": "/wp-admin/post.php?post=1&action=edit",
             "login": true,
             "features": { "networking": true },
             "steps": [
