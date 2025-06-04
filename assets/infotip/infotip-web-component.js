@@ -134,6 +134,19 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 
 		return template;
 	}
+
+	attributeChangedCallback( name, oldValue, newValue ) {
+		const shadow = this.shadowRoot;
+		if ( ! shadow ) {
+			return;
+		}
+
+		if ( name === 'content' ) {
+			shadow.querySelector( '.infotip' ).innerHTML = newValue;
+			this.updatePosition();
+			this.showTooltip();
+		}
+	}
 }
 
 window.BlaBlaBlocksInfotip = BlaBlaBlocksInfotip;
