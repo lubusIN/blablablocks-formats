@@ -94,7 +94,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			}
 			.infotip {
 				display: none;
-				width: max-content;
+				max-width: 300px;
 				position: fixed;
 				top: 0px;
 				left: 0px;
@@ -142,7 +142,15 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		}
 
 		if ( name === 'content' ) {
-			shadow.querySelector( '.infotip' ).innerHTML = newValue;
+			const infotip = shadow.querySelector( '.infotip' );
+			infotip.innerHTML = newValue;
+
+			if ( ! infotip.querySelector( '.arrow' ) ) {
+				infotip
+					.appendChild( document.createElement( 'div' ) )
+					.classList.add( 'arrow' );
+			}
+
 			this.updatePosition();
 			this.showTooltip();
 		}
