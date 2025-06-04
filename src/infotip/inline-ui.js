@@ -10,6 +10,7 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
+import { safeHTML } from '@wordpress/dom';
 
 /**
  * Internal dependencies
@@ -33,11 +34,12 @@ function TextTabContent( { content, name, value, onChange, onClose } ) {
 				label={ __( 'Text', 'blablablocks-formats' ) }
 				value={ content }
 				onChange={ ( newValue ) => {
+					const sanitizedValue = safeHTML( newValue );
 					onChange(
 						applyFormat( value, {
 							type: name,
 							attributes: {
-								content: newValue,
+								content: sanitizedValue,
 							},
 						} )
 					);
