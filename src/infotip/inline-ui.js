@@ -27,6 +27,7 @@ import { safeHTML } from '@wordpress/dom';
  * @param {string}   props.value            - The value of the infotip.
  * @param {Function} props.onChange         - The function to call when the text tab is changed.
  * @param {Function} props.onClose          - The function to call when the text tab is closed.
+ * @param {Function} props.removeAttributes - The function to call when the text tab is removed.
  * @param {Function} props.updateAttributes - The function to call when the text tab is updated.
  * @return {JSX.Element} - The rendered text tab content.
  */
@@ -35,9 +36,11 @@ function TextTabContent( {
 	name,
 	onChange,
 	onClose,
+	removeAttributes,
 	updateAttributes,
 	value,
 } ) {
+	const isUnderlined = activeAttributes.underline !== 'false';
 	return (
 		<VStack>
 			<TextareaControl
@@ -58,14 +61,13 @@ function TextTabContent( {
 			<Flex>
 				<ToggleControl
 					label={ __( 'Underline', 'blablablocks-formats' ) }
-					checked={ activeAttributes.underline !== 'false' }
+					checked={ isUnderlined }
 					onChange={ () => {
-						updateAttributes( {
-							underline:
-								activeAttributes.underline === 'false'
-									? 'true'
-									: 'false',
-						} );
+						if ( isUnderlined ) {
+							updateAttributes( { underline: 'false' } );
+						} else {
+							removeAttributes( [ 'underline' ] );
+						}
 					} }
 					__nextHasNoMarginBottom={ true }
 				/>
@@ -133,6 +135,13 @@ export function InlineUI( {
 		onChange( updatedFormat );
 	};
 
+	const removeAttributes = ( attributes ) => {
+		attributes.forEach( ( attribute ) => {
+			delete activeAttributes[ attribute ];
+		} );
+		updateAttributes( activeAttributes );
+	};
+
 	return (
 		<Popover
 			anchor={ anchor }
@@ -154,6 +163,7 @@ export function InlineUI( {
 								name={ name }
 								onChange={ onChange }
 								onClose={ onClose }
+								removeAttributes={ removeAttributes }
 								updateAttributes={ updateAttributes }
 								value={ value }
 							/>
