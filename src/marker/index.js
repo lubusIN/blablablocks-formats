@@ -194,7 +194,6 @@ function AnimationTabContent( {
 						}
 					} }
 					label={ __( 'Enable Animation', 'blablablocks-formats' ) }
-					hideLabelFromVision={ true }
 				/>
 
 				{ /* row 2 - Animation duration  */ }

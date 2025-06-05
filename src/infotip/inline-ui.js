@@ -4,10 +4,10 @@
 import {
 	Button,
 	Flex,
+	FormToggle,
 	Popover,
 	TabPanel,
 	TextareaControl,
-	ToggleControl,
 	__experimentalVStack as VStack, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -59,7 +59,7 @@ function TextTabContent( {
 				__nextHasNoMarginBottom={ true }
 			/>
 			<Flex>
-				<ToggleControl
+				<FormToggle
 					label={ __( 'Underline', 'blablablocks-formats' ) }
 					checked={ isUnderlined }
 					onChange={ () => {
@@ -69,7 +69,6 @@ function TextTabContent( {
 							removeAttributes( [ 'underline' ] );
 						}
 					} }
-					__nextHasNoMarginBottom={ true }
 				/>
 			</Flex>
 			<Flex justify="flex-end">
