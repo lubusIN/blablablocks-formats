@@ -60,5 +60,6 @@ export const infotip = {
 	edit: EditButton,
 	attributes: {
 		content: 'content',
+		underline: 'underline',
 	},
 };

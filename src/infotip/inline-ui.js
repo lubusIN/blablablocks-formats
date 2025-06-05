@@ -19,30 +19,33 @@ import { safeHTML } from '@wordpress/dom';
 /**
  * TextTabContent Renders the content for the text tab.
  *
- * @param {Object}   props          - The properties passed to the component.
- * @param {string}   props.content  - The content of the text.
- * @param {string}   props.name     - The name of the text.
- * @param {string}   props.value    - The value of the text.
- * @param {Function} props.onChange - The function to call when the text changes.
- * @param {Function} props.onClose  - The function to call when the text is closed.
+ * @param {Object}   props                  - The properties passed to the component.
+ * @param {Object}   props.activeAttributes - The active attributes of the infotip.
+ * @param {string}   props.name             - The name of the infotip.
+ * @param {string}   props.value            - The value of the infotip.
+ * @param {Function} props.onChange         - The function to call when the text tab is changed.
+ * @param {Function} props.onClose          - The function to call when the text tab is closed.
+ * @param {Function} props.updateAttributes - The function to call when the text tab is updated.
  * @return {JSX.Element} - The rendered text tab content.
  */
-function TextTabContent( { content, name, value, onChange, onClose } ) {
+function TextTabContent( {
+	activeAttributes,
+	name,
+	onChange,
+	onClose,
+	updateAttributes,
+	value,
+} ) {
 	return (
 		<>
 			<TextareaControl
 				label={ __( 'Text', 'blablablocks-formats' ) }
-				value={ content }
+				value={ activeAttributes.content }
 				onChange={ ( newValue ) => {
 					const sanitizedValue = safeHTML( newValue );
-					onChange(
-						applyFormat( value, {
-							type: name,
-							attributes: {
-								content: sanitizedValue,
-							},
-						} )
-					);
+					updateAttributes( {
+						content: sanitizedValue,
+					} );
 				} }
 				help={ __(
 					'Enter the text to display.',
@@ -102,6 +105,17 @@ export function InlineUI( {
 		settings: { isActive },
 	} );
 
+	const updateAttributes = ( newAttributes ) => {
+		const updatedFormat = applyFormat( value, {
+			type: name,
+			attributes: {
+				...activeAttributes,
+				...newAttributes,
+			},
+		} );
+		onChange( updatedFormat );
+	};
+
 	return (
 		<Popover
 			anchor={ anchor }
@@ -119,11 +133,12 @@ export function InlineUI( {
 						title: __( 'Text', 'blablablocks-formats' ),
 						content: (
 							<TextTabContent
-								content={ activeAttributes.content }
+								activeAttributes={ activeAttributes }
 								name={ name }
-								value={ value }
 								onChange={ onChange }
 								onClose={ onClose }
+								updateAttributes={ updateAttributes }
+								value={ value }
 							/>
 						),
 					},
