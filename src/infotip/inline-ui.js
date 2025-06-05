@@ -19,12 +19,12 @@ import { safeHTML } from '@wordpress/dom';
 /**
  * TextTabContent Renders the content for the text tab.
  *
- * @param  root0
- * @param  root0.content
- * @param  root0.name
- * @param  root0.value
- * @param  root0.onChange
- * @param  root0.onClose
+ * @param {Object}   props          - The properties passed to the component.
+ * @param {string}   props.content  - The content of the text.
+ * @param {string}   props.name     - The name of the text.
+ * @param {string}   props.value    - The value of the text.
+ * @param {Function} props.onChange - The function to call when the text changes.
+ * @param {Function} props.onClose  - The function to call when the text is closed.
  * @return {JSX.Element} - The rendered text tab content.
  */
 function TextTabContent( { content, name, value, onChange, onClose } ) {
