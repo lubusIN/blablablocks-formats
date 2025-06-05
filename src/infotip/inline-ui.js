@@ -7,6 +7,8 @@ import {
 	Popover,
 	TabPanel,
 	TextareaControl,
+	ToggleControl,
+	__experimentalVStack as VStack, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
@@ -37,7 +39,7 @@ function TextTabContent( {
 	value,
 } ) {
 	return (
-		<>
+		<VStack>
 			<TextareaControl
 				label={ __( 'Text', 'blablablocks-formats' ) }
 				value={ activeAttributes.content }
@@ -53,6 +55,21 @@ function TextTabContent( {
 				) }
 				__nextHasNoMarginBottom={ true }
 			/>
+			<Flex>
+				<ToggleControl
+					label={ __( 'Underline', 'blablablocks-formats' ) }
+					checked={ activeAttributes.underline !== 'false' }
+					onChange={ () => {
+						updateAttributes( {
+							underline:
+								activeAttributes.underline === 'false'
+									? 'true'
+									: 'false',
+						} );
+					} }
+					__nextHasNoMarginBottom={ true }
+				/>
+			</Flex>
 			<Flex justify="flex-end">
 				<Button
 					className="reset-button"
@@ -65,7 +82,7 @@ function TextTabContent( {
 					{ __( 'Clear', 'blablablocks-formats' ) }
 				</Button>
 			</Flex>
-		</>
+		</VStack>
 	);
 }
 

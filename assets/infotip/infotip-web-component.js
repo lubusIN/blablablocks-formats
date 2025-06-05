@@ -3,7 +3,7 @@
  */
 class BlaBlaBlocksInfotip extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'content' ];
+		return [ 'content', 'underline' ];
 	}
 
 	connectedCallback() {
@@ -84,12 +84,19 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	renderStyle() {
-		return `
+		const isAdmin = document.body.classList.contains(
+			'block-editor-iframe__body'
+		);
+
+		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
+
+		const style = `
 			.wrapper {
 				position: relative;
 			}
 			.text {
-				text-decoration:  dotted underline;
+				text-decoration: ${ showUnderline ? 'dotted underline' : 'none' };
+				background-color: ${ isAdmin ? '#f0f0f0' : 'transparent' };
 				cursor: pointer;
 			}
 			.infotip {
@@ -112,6 +119,8 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				transform: rotate(45deg);
 			}
 		`;
+
+		return style;
 	}
 
 	renderElement() {
@@ -154,6 +163,9 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			this.updatePosition();
 			this.showTooltip();
 		}
+
+		const style = shadow.querySelector( 'style' );
+		style.textContent = this.renderStyle();
 	}
 }
 
