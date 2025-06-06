@@ -87,9 +87,9 @@ function TextTabContent( {
 }
 
 /**
- * IconTabContent Renders the content for the text tab.
+ * IconTabContent Renders the content for the icon tab.
  *
- * @return {JSX.Element} - The rendered text tab content.
+ * @return {JSX.Element} - The rendered icon tab content.
  */
 function IconTabContent() {
 	return <>Icon tab content goes here</>;

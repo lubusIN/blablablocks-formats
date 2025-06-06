@@ -84,10 +84,6 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	renderStyle() {
-		const isAdmin = document.body.classList.contains(
-			'block-editor-iframe__body'
-		);
-
 		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
 
 		const style = `
@@ -96,7 +92,6 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			}
 			.text {
 				text-decoration: ${ showUnderline ? 'dotted underline' : 'none' };
-				background-color: ${ isAdmin ? '#f0f0f0' : 'transparent' };
 				cursor: pointer;
 			}
 			.infotip {
