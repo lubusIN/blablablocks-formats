@@ -194,7 +194,6 @@ function AnimationTabContent( {
 						}
 					} }
 					label={ __( 'Enable Animation', 'blablablocks-formats' ) }
-					hideLabelFromVision={ true }
 				/>
 
 				{ /* row 2 - Animation duration  */ }
@@ -293,6 +292,68 @@ function AnimationTabContent( {
 }
 
 /**
+ * StyleTabContent component for managing marker style selection.
+ *
+ * @param {Object}   props                  - The component properties.
+ * @param {Object}   props.activeAttributes - The currently active format attributes.
+ * @param {Function} props.onChange         - Callback to update the marker format.
+ * @param {Function} props.onClose          - Callback to close the UI.
+ * @param {Function} props.updateAttributes - Function to update the attributes.
+ * @param {Object}   props.value            - The current rich text value.
+ * @return {JSX.Element}                   - The rendered component.
+ */
+function StyleTabContent( {
+	activeAttributes,
+	onChange,
+	onClose,
+	updateAttributes,
+	value,
+} ) {
+	return (
+		<>
+			<Grid
+				templateColumns="repeat( 3, minmax( 0, 1fr ) )"
+				templateRows="repeat( 3, minmax( 0, 1fr ) )"
+			>
+				{ presets.map( ( preset ) => (
+					<Button
+						key={ preset.id }
+						id={ preset.id }
+						onClick={ () => {
+							updateAttributes( {
+								type: preset.id,
+							} );
+						} }
+						isPressed={ activeAttributes.type === preset.id }
+						className="block-editor-format-toolbar__blablablocks-marker-button"
+					>
+						<blablablocks-marker
+							{ ...activeAttributes }
+							type={ preset.id }
+						>
+							{ preset.label }
+						</blablablocks-marker>
+					</Button>
+				) ) }
+			</Grid>
+			<Flex justify="flex-end">
+				<Button
+					className="reset-button"
+					disabled={ ! activeAttributes.type }
+					onClick={ () => {
+						onChange( removeFormat( value, name ) );
+						onClose();
+					} }
+					variant="tertiary"
+				>
+					{ __( 'Clear', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
+	);
+}
+
+/**
  * InlineUI component for handling Marker text formatting options.
  *
  * @param {Object}   props                  - The component properties.
@@ -337,49 +398,6 @@ function InlineUI( {
 		updateAttributes( activeAttributes );
 	};
 
-	const StyleTabContent = () => (
-		<>
-			<Grid
-				templateColumns="repeat( 3, minmax( 0, 1fr ) )"
-				templateRows="repeat( 3, minmax( 0, 1fr ) )"
-			>
-				{ presets.map( ( preset ) => (
-					<Button
-						key={ preset.id }
-						id={ preset.id }
-						onClick={ () => {
-							updateAttributes( {
-								type: preset.id,
-							} );
-						} }
-						isPressed={ activeAttributes.type === preset.id }
-						className="block-editor-format-toolbar__blablablocks-marker-button"
-					>
-						<blablablocks-marker
-							{ ...activeAttributes }
-							type={ preset.id }
-						>
-							{ preset.label }
-						</blablablocks-marker>
-					</Button>
-				) ) }
-			</Grid>
-			<Flex justify="flex-end">
-				<Button
-					className="reset-button"
-					disabled={ ! activeAttributes.type }
-					onClick={ () => {
-						onChange( removeFormat( value, name ) );
-						onClose();
-					} }
-					variant="tertiary"
-				>
-					{ __( 'Clear', 'blablablocks-formats' ) }
-				</Button>
-			</Flex>
-		</>
-	);
-
 	return (
 		<Popover
 			anchor={ anchor }
@@ -394,7 +412,15 @@ function InlineUI( {
 					{
 						name: 'style',
 						title: __( 'Style', 'blablablocks-formats' ),
-						content: <StyleTabContent />,
+						content: (
+							<StyleTabContent
+								activeAttributes={ activeAttributes }
+								onChange={ onChange }
+								onClose={ onClose }
+								updateAttributes={ updateAttributes }
+								value={ value }
+							/>
+						),
 					},
 					{
 						name: 'color',

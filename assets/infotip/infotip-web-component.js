@@ -3,7 +3,7 @@
  */
 class BlaBlaBlocksInfotip extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'content' ];
+		return [ 'content', 'underline' ];
 	}
 
 	connectedCallback() {
@@ -84,17 +84,19 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	renderStyle() {
-		return `
+		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
+
+		const style = `
 			.wrapper {
 				position: relative;
 			}
 			.text {
-				text-decoration:  dotted underline;
+				text-decoration: ${ showUnderline ? 'dotted underline' : 'none' };
 				cursor: pointer;
 			}
 			.infotip {
 				display: none;
-				width: max-content;
+				max-width: 300px;
 				position: fixed;
 				top: 0px;
 				left: 0px;
@@ -112,6 +114,8 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				transform: rotate(45deg);
 			}
 		`;
+
+		return style;
 	}
 
 	renderElement() {
@@ -133,6 +137,30 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		`;
 
 		return template;
+	}
+
+	attributeChangedCallback( name, oldValue, newValue ) {
+		const shadow = this.shadowRoot;
+		if ( ! shadow ) {
+			return;
+		}
+
+		if ( name === 'content' ) {
+			const infotip = shadow.querySelector( '.infotip' );
+			infotip.innerHTML = newValue;
+
+			if ( ! infotip.querySelector( '.arrow' ) ) {
+				infotip
+					.appendChild( document.createElement( 'div' ) )
+					.classList.add( 'arrow' );
+			}
+
+			this.updatePosition();
+			this.showTooltip();
+		}
+
+		const style = shadow.querySelector( 'style' );
+		style.textContent = this.renderStyle();
 	}
 }
 

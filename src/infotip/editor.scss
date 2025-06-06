@@ -5,3 +5,14 @@
 blablablocks-infotip {
 	white-space: normal;
 }
+
+.block-editor-format-toolbar__blablablocks-infotip-popover {
+
+	.components-popover__content {
+		min-width: 20.625rem;
+	}
+
+	.components-tab-panel__tab-content {
+		padding: 1rem;
+	}
+}
