@@ -4,7 +4,7 @@
 import {
 	Button,
 	Flex,
-	FormToggle,
+	ToggleControl,
 	Popover,
 	TabPanel,
 	TextareaControl,
@@ -42,7 +42,7 @@ function TextTabContent( {
 } ) {
 	const isUnderlined = activeAttributes.underline !== 'false';
 	return (
-		<VStack>
+		<VStack spacing={ 6 }>
 			<TextareaControl
 				label={ __( 'Text', 'blablablocks-formats' ) }
 				value={ activeAttributes.content }
@@ -58,19 +58,18 @@ function TextTabContent( {
 				) }
 				__nextHasNoMarginBottom={ true }
 			/>
-			<Flex>
-				<FormToggle
-					label={ __( 'Underline', 'blablablocks-formats' ) }
-					checked={ isUnderlined }
-					onChange={ () => {
-						if ( isUnderlined ) {
-							updateAttributes( { underline: 'false' } );
-						} else {
-							removeAttributes( [ 'underline' ] );
-						}
-					} }
-				/>
-			</Flex>
+			<ToggleControl
+				id="underline-toggle"
+				label={ __( 'Underline anchor text', 'blablablocks-formats' ) }
+				checked={ isUnderlined }
+				onChange={ () => {
+					if ( isUnderlined ) {
+						updateAttributes( { underline: 'false' } );
+					} else {
+						removeAttributes( [ 'underline' ] );
+					}
+				} }
+			/>
 			<Flex justify="flex-end">
 				<Button
 					className="reset-button"
