@@ -4,11 +4,13 @@
 import {
 	Button,
 	Flex,
+	FormToggle,
 	ToggleControl,
 	Popover,
 	TabPanel,
 	TextareaControl,
 	__experimentalVStack as VStack, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+	__experimentalGrid as Grid, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
@@ -92,7 +94,28 @@ function TextTabContent( {
  * @return {JSX.Element} - The rendered icon tab content.
  */
 function IconTabContent() {
-	return <>Icon tab content goes here</>;
+	return (
+		<Grid
+			columns={ 2 }
+			rows={ 4 }
+			templateColumns="3fr 7fr"
+			alignment="center"
+		>
+			<div className="icon-tab-label">Enable icon</div>
+			<div>
+				<FormToggle checked={ true } onChange={ () => {} } />
+			</div>
+
+			<div className="icon-tab-label">Icon</div>
+			<div></div>
+
+			<div className="icon-tab-label">Position</div>
+			<div></div>
+
+			<div className="icon-tab-label">Color</div>
+			<div></div>
+		</Grid>
+	);
 }
 
 /**
