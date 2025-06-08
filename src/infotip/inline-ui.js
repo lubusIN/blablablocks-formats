@@ -15,6 +15,14 @@ import {
 import { __ } from '@wordpress/i18n';
 import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 import { safeHTML } from '@wordpress/dom';
+import {
+	caution,
+	error,
+	help,
+	info,
+	notAllowed,
+	starEmpty,
+} from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -91,9 +99,44 @@ function TextTabContent( {
 /**
  * IconTabContent Renders the content for the icon tab.
  *
+ * @param {Object}   props                  - The properties passed to the component.
+ * @param {Object}   props.activeAttributes - The active attributes of the infotip.
+ * @param {Function} props.updateAttributes - The function to call when the icon tab is updated.
+ * @param {Function} props.removeAttributes - The function to call when the icon tab is removed.
  * @return {JSX.Element} - The rendered icon tab content.
  */
-function IconTabContent() {
+function IconTabContent( {
+	activeAttributes,
+	updateAttributes,
+	removeAttributes,
+} ) {
+	const icons = [
+		{
+			label: __( 'Caution', 'blablablocks-formats' ),
+			icon: caution,
+		},
+		{
+			label: __( 'Error', 'blablablocks-formats' ),
+			icon: error,
+		},
+		{
+			label: __( 'Help', 'blablablocks-formats' ),
+			icon: help,
+		},
+		{
+			label: __( 'Info', 'blablablocks-formats' ),
+			icon: info,
+		},
+		{
+			label: __( 'Not allowed', 'blablablocks-formats' ),
+			icon: notAllowed,
+		},
+		{
+			label: __( 'Star', 'blablablocks-formats' ),
+			icon: starEmpty,
+		},
+	];
+
 	return (
 		<Grid
 			columns={ 2 }
@@ -107,7 +150,12 @@ function IconTabContent() {
 			</div>
 
 			<div className="icon-tab-label">Icon</div>
-			<div></div>
+			<div>
+				{ /* show six icons as a single row of buttons */ }
+				{ icons.map( ( icon ) => (
+					<Button key={ icon.label } icon={ icon.icon } />
+				) ) }
+			</div>
 
 			<div className="icon-tab-label">Position</div>
 			<div></div>
@@ -193,7 +241,13 @@ export function InlineUI( {
 					{
 						name: 'icon',
 						title: __( 'Icon', 'blablablocks-formats' ),
-						content: <IconTabContent />,
+						content: (
+							<IconTabContent
+								activeAttributes={ activeAttributes }
+								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
+							/>
+						),
 					},
 				] }
 			>
