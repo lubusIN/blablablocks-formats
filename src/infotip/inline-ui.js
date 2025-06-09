@@ -6,6 +6,8 @@ import {
 	Flex,
 	FormToggle,
 	ToggleControl,
+	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	Popover,
 	TabPanel,
 	TextareaControl,
@@ -23,10 +25,7 @@ import {
 	notAllowed,
 	starEmpty,
 } from '@wordpress/icons';
-
-/**
- * Internal dependencies
- */
+import { PanelColorSettings } from '@wordpress/block-editor';
 
 /**
  * TextTabContent Renders the content for the text tab.
@@ -79,6 +78,7 @@ function TextTabContent( {
 						removeAttributes( [ 'underline' ] );
 					}
 				} }
+				__nextHasNoMarginBottom={ true }
 			/>
 			<Flex justify="flex-end">
 				<Button
@@ -138,12 +138,7 @@ function IconTabContent( {
 	];
 
 	return (
-		<Grid
-			columns={ 2 }
-			rows={ 4 }
-			templateColumns="3fr 7fr"
-			alignment="center"
-		>
+		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
 			<div className="icon-tab-label">Enable icon</div>
 			<div>
 				<FormToggle checked={ true } onChange={ () => {} } />
@@ -158,10 +153,54 @@ function IconTabContent( {
 			</div>
 
 			<div className="icon-tab-label">Position</div>
-			<div></div>
+
+			<ToggleGroupControl
+				__nextHasNoMarginBottom={ true }
+				__next40pxDefaultSize={ true }
+				hideLabelFromVision={ true }
+				label={ __( 'Position', 'blablablocks-formats' ) }
+				isBlock={ true }
+			>
+				<ToggleGroupControlOption
+					aria-label={ __(
+						'Left icon position',
+						'blablablocks-formats'
+					) }
+					label={ __( 'Left', 'blablablocks-formats' ) }
+					value="left"
+				/>
+				<ToggleGroupControlOption
+					aria-label={ __(
+						'Right icon position',
+						'blablablocks-formats'
+					) }
+					label={ __( 'Right', 'blablablocks-formats' ) }
+					value="right"
+				/>
+			</ToggleGroupControl>
 
 			<div className="icon-tab-label">Color</div>
-			<div></div>
+			<div>
+				{ /* <ColorControlDropdown
+					label={ __( 'Color', 'blablablocks-formats' ) }
+					colorValue={ {
+						default: '#000000',
+						hover: '#000000',
+					} }
+					onChangeColor={ () => {} }
+				/> */ }
+				<PanelColorSettings
+					label={ __( 'Color', 'blablablocks-formats' ) }
+					className="icon-color-settings"
+					colorSettings={ [
+						{
+							label: __( 'Icon color', 'blablablocks-formats' ),
+							value: '#000077',
+							onChange: () => {},
+						},
+					] }
+				/>
+			</div>
 		</Grid>
 	);
 }
