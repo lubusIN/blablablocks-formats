@@ -146,7 +146,6 @@ function IconTabContent( {
 
 			<div className="icon-tab-label">Icon</div>
 			<div>
-				{ /* show six icons as a single row of buttons */ }
 				{ icons.map( ( icon ) => (
 					<Button key={ icon.label } icon={ icon.icon } />
 				) ) }
@@ -181,14 +180,6 @@ function IconTabContent( {
 
 			<div className="icon-tab-label">Color</div>
 			<div>
-				{ /* <ColorControlDropdown
-					label={ __( 'Color', 'blablablocks-formats' ) }
-					colorValue={ {
-						default: '#000000',
-						hover: '#000000',
-					} }
-					onChangeColor={ () => {} }
-				/> */ }
 				<PanelColorSettings
 					label={ __( 'Color', 'blablablocks-formats' ) }
 					className="icon-color-settings"
