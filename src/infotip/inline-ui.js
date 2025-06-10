@@ -7,7 +7,7 @@ import {
 	FormToggle,
 	ToggleControl,
 	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption, // eslint-disable-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	Popover,
 	TabPanel,
 	TextareaControl,
@@ -20,6 +20,8 @@ import { safeHTML } from '@wordpress/dom';
 import {
 	caution,
 	error,
+	justifyLeft,
+	justifyRight,
 	help,
 	info,
 	notAllowed,
@@ -137,11 +139,22 @@ function IconTabContent( {
 		},
 	];
 
+	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
+
 	return (
 		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
-			<div className="icon-tab-label">Enable icon</div>
+			<div className="icon-tab-label">Enable</div>
 			<div>
-				<FormToggle checked={ true } onChange={ () => {} } />
+				<FormToggle
+					checked={ iconEnabled }
+					onChange={ () => {
+						if ( iconEnabled ) {
+							removeAttributes( [ 'icon-enabled' ] );
+						} else {
+							updateAttributes( { 'icon-enabled': 'true' } );
+						}
+					} }
+				/>
 			</div>
 
 			<div className="icon-tab-label">Icon</div>
@@ -158,22 +171,24 @@ function IconTabContent( {
 				__next40pxDefaultSize={ true }
 				hideLabelFromVision={ true }
 				label={ __( 'Position', 'blablablocks-formats' ) }
-				isBlock={ true }
+				value="left"
 			>
-				<ToggleGroupControlOption
+				<ToggleGroupControlOptionIcon
 					aria-label={ __(
 						'Left icon position',
 						'blablablocks-formats'
 					) }
 					label={ __( 'Left', 'blablablocks-formats' ) }
+					icon={ justifyLeft }
 					value="left"
 				/>
-				<ToggleGroupControlOption
+				<ToggleGroupControlOptionIcon
 					aria-label={ __(
 						'Right icon position',
 						'blablablocks-formats'
 					) }
 					label={ __( 'Right', 'blablablocks-formats' ) }
+					icon={ justifyRight }
 					value="right"
 				/>
 			</ToggleGroupControl>
@@ -185,7 +200,7 @@ function IconTabContent( {
 					className="icon-color-settings"
 					colorSettings={ [
 						{
-							label: __( 'Icon color', 'blablablocks-formats' ),
+							label: __( 'Icon', 'blablablocks-formats' ),
 							value: '#000077',
 							onChange: () => {},
 						},
@@ -278,6 +293,7 @@ export function InlineUI( {
 								removeAttributes={ removeAttributes }
 							/>
 						),
+						disabled: ! activeAttributes.content,
 					},
 				] }
 			>

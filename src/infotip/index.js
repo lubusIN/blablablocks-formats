@@ -61,5 +61,6 @@ export const infotip = {
 	attributes: {
 		content: 'content',
 		underline: 'underline',
+		'icon-enabled': 'icon-enabled',
 	},
 };
