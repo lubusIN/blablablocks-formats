@@ -85,6 +85,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 
 	renderStyle() {
 		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
+		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
 
 		const style = `
 			.wrapper {
@@ -119,7 +120,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				gap: 8px;
 			}
 			.infotip-popover-content-wrapper svg {
-				display: none;
+				display: ${ this.getAttribute( 'content' ) && iconEnabled ? 'block' : 'none' };
 				width: 24px;
 				height: 24px;
 				flex-shrink: 0;
@@ -174,22 +175,11 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			infotip.innerHTML = newValue;
 
 			this.updatePosition();
-			this.showTooltip();
-		}
-
-		if ( name === 'icon-enabled' ) {
-			const icon = shadow.querySelector(
-				'.infotip-popover-content-wrapper svg'
-			);
-			if ( newValue === 'true' ) {
-				icon.style.display = 'block';
-			} else {
-				icon.style.display = 'none';
-			}
 		}
 
 		const style = shadow.querySelector( 'style' );
 		style.textContent = this.renderStyle();
+		this.showTooltip();
 	}
 }
 
