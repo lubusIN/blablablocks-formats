@@ -10,6 +10,13 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const template = this.renderElement();
 		this.attachShadow( { mode: 'open' } );
 		this.shadowRoot.appendChild( template.content.cloneNode( true ) );
+
+		// Add this section to handle initial icon state
+		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
+		if ( iconEnabled ) {
+			const icon = this.shadowRoot.querySelector( '.icon' );
+			icon.innerHTML = this.renderIcon();
+		}
 		requestAnimationFrame( () => {
 			// Wait for the element to be attached to the DOM.
 			this.initializeFloatingUI();
@@ -87,13 +94,16 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
 		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
 
-		const style = `
+		let style = `
 			.wrapper {
 				position: relative;
 			}
 			.text {
 				text-decoration: ${ showUnderline ? 'dotted underline' : 'none' };
 				cursor: pointer;
+				display: inline-flex;
+				align-items: flex-end;
+				gap: 4px;
 			}
 			.infotip {
 				display: none;
@@ -114,20 +124,21 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				height: 8px;
 				transform: rotate(45deg);
 			}
-			.infotip-popover-content-wrapper {
-				display: flex;
-				align-items: flex-start;
-				gap: 8px;
-			}
-			.infotip-popover-content-wrapper svg {
-				display: ${ this.getAttribute( 'content' ) && iconEnabled ? 'block' : 'none' };
-				width: 24px;
-				height: 24px;
-				flex-shrink: 0;
-				padding-top: 2px;
-				fill: #ffffff;
-			}
 		`;
+
+		if ( iconEnabled ) {
+			style += `
+				.icon {
+					display: inline-flex;
+					align-items: center;
+				}
+				.icon svg {
+					width: 24px;
+					height: 24px;
+					fill: currentColor;
+				}
+			`;
+		}
 
 		return style;
 	}
@@ -146,15 +157,13 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				${ this.renderStyle() }
 			</style>
 			<span class="wrapper">
-				<span class="text" tabindex="0" aria-describedby="infotip">
-					<slot></slot>
+			<span class="text" tabindex="0" aria-describedby="infotip">
+			<span class="icon"></span>
+			<slot></slot>
 				</span>
 				<div class="infotip" id="infotip-popover">
-					<div class="infotip-popover-content-wrapper">
-						${ this.renderIcon() }
-						<div class="infotip-popover-content">
-							${ content }
-						</div>
+					<div class="infotip-popover-content">
+						${ content }
 					</div>
 					<div class="arrow"></div>
 				</div>
@@ -173,6 +182,18 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		if ( name === 'content' ) {
 			const infotip = shadow.querySelector( '.infotip-popover-content' );
 			infotip.innerHTML = newValue;
+
+			this.updatePosition();
+		}
+
+		if ( name === 'icon-enabled' ) {
+			const icon = shadow.querySelector( '.icon' );
+
+			if ( newValue === 'true' ) {
+				icon.innerHTML = this.renderIcon();
+			} else {
+				icon.innerHTML = '';
+			}
 
 			this.updatePosition();
 		}
