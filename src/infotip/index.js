@@ -62,5 +62,7 @@ export const infotip = {
 		content: 'content',
 		underline: 'underline',
 		'icon-enabled': 'icon-enabled',
+		'icon-position': 'icon-position',
+		'icon-color': 'icon-color',
 	},
 };

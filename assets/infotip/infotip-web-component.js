@@ -3,7 +3,13 @@
  */
 class BlaBlaBlocksInfotip extends HTMLElement {
 	static get observedAttributes() {
-		return [ 'content', 'underline', 'icon-enabled' ];
+		return [
+			'content',
+			'underline',
+			'icon-enabled',
+			'icon-position',
+			'icon-color',
+		];
 	}
 
 	connectedCallback() {
@@ -93,6 +99,8 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	renderStyle() {
 		const showUnderline = this.getAttribute( 'underline' ) !== 'false';
 		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
+		const iconPosition = this.getAttribute( 'icon-position' );
+		const iconColor = this.getAttribute( 'icon-color' ) ?? 'currentColor';
 
 		let style = `
 			.wrapper {
@@ -104,6 +112,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				display: inline-flex;
 				align-items: flex-end;
 				gap: 4px;
+				flex-direction: ${ iconPosition === 'right' ? 'row-reverse' : 'row' };
 			}
 			.infotip {
 				display: none;
@@ -135,7 +144,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				.icon svg {
 					width: 24px;
 					height: 24px;
-					fill: currentColor;
+					fill: ${ iconColor };
 				}
 			`;
 		}

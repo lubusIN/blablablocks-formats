@@ -149,7 +149,10 @@ function IconTabContent( {
 					checked={ iconEnabled }
 					onChange={ () => {
 						if ( iconEnabled ) {
-							removeAttributes( [ 'icon-enabled' ] );
+							removeAttributes( [
+								'icon-enabled',
+								'icon-position',
+							] );
 						} else {
 							updateAttributes( { 'icon-enabled': 'true' } );
 						}
@@ -171,7 +174,11 @@ function IconTabContent( {
 				__next40pxDefaultSize={ true }
 				hideLabelFromVision={ true }
 				label={ __( 'Position', 'blablablocks-formats' ) }
-				value="left"
+				value={ activeAttributes[ 'icon-position' ] || 'left' }
+				onChange={ ( newValue ) => {
+					updateAttributes( { 'icon-position': newValue } );
+				} }
+				disabled={ activeAttributes[ 'icon-enabled' ] !== 'true' }
 			>
 				<ToggleGroupControlOptionIcon
 					aria-label={ __(
@@ -201,8 +208,14 @@ function IconTabContent( {
 					colorSettings={ [
 						{
 							label: __( 'Icon', 'blablablocks-formats' ),
-							value: '#000077',
-							onChange: () => {},
+							value:
+								activeAttributes[ 'icon-color' ] ??
+								'currentColor',
+							onChange: ( newColor ) => {
+								updateAttributes( {
+									'icon-color': newColor,
+								} );
+							},
 						},
 					] }
 				/>
