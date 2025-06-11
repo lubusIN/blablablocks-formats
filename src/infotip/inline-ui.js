@@ -178,7 +178,7 @@ function IconTabContent( {
 				onChange={ ( newValue ) => {
 					updateAttributes( { 'icon-position': newValue } );
 				} }
-				disabled={ activeAttributes[ 'icon-enabled' ] !== 'true' }
+				disabled={ ! iconEnabled }
 			>
 				<ToggleGroupControlOptionIcon
 					aria-label={ __(
@@ -188,6 +188,7 @@ function IconTabContent( {
 					label={ __( 'Left', 'blablablocks-formats' ) }
 					icon={ justifyLeft }
 					value="left"
+					disabled={ ! iconEnabled }
 				/>
 				<ToggleGroupControlOptionIcon
 					aria-label={ __(
@@ -197,29 +198,28 @@ function IconTabContent( {
 					label={ __( 'Right', 'blablablocks-formats' ) }
 					icon={ justifyRight }
 					value="right"
+					disabled={ ! iconEnabled }
 				/>
 			</ToggleGroupControl>
 
 			<div className="icon-tab-label">Color</div>
-			<div>
-				<PanelColorSettings
-					label={ __( 'Color', 'blablablocks-formats' ) }
-					className="icon-color-settings"
-					colorSettings={ [
-						{
-							label: __( 'Icon', 'blablablocks-formats' ),
-							value:
-								activeAttributes[ 'icon-color' ] ??
-								'currentColor',
-							onChange: ( newColor ) => {
-								updateAttributes( {
-									'icon-color': newColor,
-								} );
-							},
+			<PanelColorSettings
+				label={ __( 'Color', 'blablablocks-formats' ) }
+				className="icon-color-settings"
+				colorSettings={ [
+					{
+						label: __( 'Icon', 'blablablocks-formats' ),
+						value:
+							activeAttributes[ 'icon-color' ] ?? 'currentColor',
+						onChange: ( newColor ) => {
+							updateAttributes( {
+								'icon-color': newColor,
+							} );
 						},
-					] }
-				/>
-			</div>
+					},
+				] }
+				disabled={ ! iconEnabled }
+			/>
 		</Grid>
 	);
 }
