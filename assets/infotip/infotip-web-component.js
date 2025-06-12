@@ -111,6 +111,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				cursor: pointer;
 				display: inline-flex;
 				align-items: flex-end;
+				vertical-align: bottom;
 				gap: 4px;
 				flex-direction: ${ iconPosition === 'right' ? 'row-reverse' : 'row' };
 			}
