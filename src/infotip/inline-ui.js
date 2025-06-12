@@ -114,20 +114,20 @@ function IconTabContent( {
 } ) {
 	const icons = [
 		{
-			label: __( 'Caution', 'blablablocks-formats' ),
-			icon: caution,
-		},
-		{
-			label: __( 'Error', 'blablablocks-formats' ),
-			icon: error,
+			label: __( 'Info', 'blablablocks-formats' ),
+			icon: info,
 		},
 		{
 			label: __( 'Help', 'blablablocks-formats' ),
 			icon: help,
 		},
 		{
-			label: __( 'Info', 'blablablocks-formats' ),
-			icon: info,
+			label: __( 'Caution', 'blablablocks-formats' ),
+			icon: caution,
+		},
+		{
+			label: __( 'Error', 'blablablocks-formats' ),
+			icon: error,
 		},
 		{
 			label: __( 'Not allowed', 'blablablocks-formats' ),

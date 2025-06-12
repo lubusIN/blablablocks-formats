@@ -9,6 +9,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			'icon-enabled',
 			'icon-position',
 			'icon-color',
+			'icon-type',
 		];
 	}
 
@@ -154,9 +155,22 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	renderIcon() {
+		const iconType = this.getAttribute( 'icon-type' ) ?? 'info';
+		const iconPaths = {
+			info: `<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M5.5 12a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0ZM12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm.75 4v1.5h-1.5V8h1.5Zm0 8v-5h-1.5v5h1.5Z"
+					/>`,
+			help: ``,
+			caution: ``,
+			error: ``,
+			notAllowed: ``,
+			starEmpty: ``,
+		};
 		return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-			<path d="M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z" />
-		</svg>`;
+				${ iconPaths[ iconType ] }
+				</svg>`;
 	}
 
 	renderElement() {
