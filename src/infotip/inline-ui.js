@@ -152,6 +152,7 @@ function IconTabContent( {
 							removeAttributes( [
 								'icon-enabled',
 								'icon-position',
+								'icon-color',
 							] );
 						} else {
 							updateAttributes( { 'icon-enabled': 'true' } );
