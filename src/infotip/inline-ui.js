@@ -151,100 +151,121 @@ function IconTabContent( {
 	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
 
 	return (
-		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
-			<div className="icon-tab-label">Enable</div>
-			<div>
-				<FormToggle
-					checked={ iconEnabled }
-					onChange={ () => {
-						if ( iconEnabled ) {
-							removeAttributes( [
-								'icon-enabled',
-								'icon-position',
-								'icon-color',
-							] );
-						} else {
-							updateAttributes( { 'icon-enabled': 'true' } );
-						}
-					} }
-				/>
-			</div>
-
-			<div className="icon-tab-label">Type</div>
-			<div>
-				{ icons.map( ( icon ) => (
-					<Button
-						aria-label={ icon.label }
-						disabled={ ! iconEnabled }
-						key={ icon.label }
-						icon={ icon.graphic }
-						onClick={ () => {
-							updateAttributes( {
-								'icon-type': icon.id,
-							} );
+		<>
+			<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
+				<div className="icon-tab-label">Enable</div>
+				<div>
+					<FormToggle
+						checked={ iconEnabled }
+						onChange={ () => {
+							if ( iconEnabled ) {
+								removeAttributes( [
+									'icon-enabled',
+									'icon-position',
+									'icon-color',
+									'icon-type',
+								] );
+							} else {
+								updateAttributes( { 'icon-enabled': 'true' } );
+							}
 						} }
 					/>
-				) ) }
-			</div>
+				</div>
 
-			<div className="icon-tab-label">Position</div>
-
-			<ToggleGroupControl
-				__nextHasNoMarginBottom={ true }
-				__next40pxDefaultSize={ true }
-				hideLabelFromVision={ true }
-				label={ __( 'Position', 'blablablocks-formats' ) }
-				value={ activeAttributes[ 'icon-position' ] || 'left' }
-				onChange={ ( newValue ) => {
-					updateAttributes( { 'icon-position': newValue } );
-				} }
-				disabled={ ! iconEnabled }
-			>
-				<ToggleGroupControlOptionIcon
-					aria-label={ __(
-						'Left icon position',
-						'blablablocks-formats'
-					) }
-					label={ __( 'Left', 'blablablocks-formats' ) }
-					icon={ justifyLeft }
-					value="left"
-					disabled={ ! iconEnabled }
-				/>
-				<ToggleGroupControlOptionIcon
-					aria-label={ __(
-						'Right icon position',
-						'blablablocks-formats'
-					) }
-					label={ __( 'Right', 'blablablocks-formats' ) }
-					icon={ justifyRight }
-					value="right"
-					disabled={ ! iconEnabled }
-				/>
-			</ToggleGroupControl>
-
-			<div className="icon-tab-label">Color</div>
-
-			<Disabled isDisabled={ ! iconEnabled }>
-				<PanelColorSettings
-					label={ __( 'Color', 'blablablocks-formats' ) }
-					className="icon-color-settings"
-					colorSettings={ [
-						{
-							label: __( 'Icon', 'blablablocks-formats' ),
-							value:
-								activeAttributes[ 'icon-color' ] ??
-								'currentColor',
-							onChange: ( newColor ) => {
+				<div className="icon-tab-label">Type</div>
+				<div>
+					{ icons.map( ( icon ) => (
+						<Button
+							accessibleWhenDisabled={ true }
+							disabled={ ! iconEnabled }
+							key={ icon.label }
+							icon={ icon.graphic }
+							onClick={ () => {
 								updateAttributes( {
-									'icon-color': newColor,
+									'icon-type': icon.id,
 								} );
-							},
-						},
-					] }
+							} }
+						/>
+					) ) }
+				</div>
+
+				<div className="icon-tab-label">Position</div>
+
+				<ToggleGroupControl
+					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
+					hideLabelFromVision={ true }
+					label={ __( 'Position', 'blablablocks-formats' ) }
+					value={ activeAttributes[ 'icon-position' ] || 'left' }
+					onChange={ ( newValue ) => {
+						updateAttributes( { 'icon-position': newValue } );
+					} }
 					disabled={ ! iconEnabled }
-				/>
-			</Disabled>
-		</Grid>
+				>
+					<ToggleGroupControlOptionIcon
+						aria-label={ __(
+							'Left icon position',
+							'blablablocks-formats'
+						) }
+						label={ __( 'Left', 'blablablocks-formats' ) }
+						icon={ justifyLeft }
+						value="left"
+						disabled={ ! iconEnabled }
+					/>
+					<ToggleGroupControlOptionIcon
+						aria-label={ __(
+							'Right icon position',
+							'blablablocks-formats'
+						) }
+						label={ __( 'Right', 'blablablocks-formats' ) }
+						icon={ justifyRight }
+						value="right"
+						disabled={ ! iconEnabled }
+					/>
+				</ToggleGroupControl>
+
+				<div className="icon-tab-label">Color</div>
+
+				<Disabled isDisabled={ ! iconEnabled }>
+					<PanelColorSettings
+						label={ __( 'Color', 'blablablocks-formats' ) }
+						className="icon-color-settings"
+						colorSettings={ [
+							{
+								label: __( 'Icon', 'blablablocks-formats' ),
+								value:
+									activeAttributes[ 'icon-color' ] ??
+									'currentColor',
+								onChange: ( newColor ) => {
+									updateAttributes( {
+										'icon-color': newColor,
+									} );
+								},
+							},
+						] }
+						disabled={ ! iconEnabled }
+					/>
+				</Disabled>
+			</Grid>
+			<Flex justify="flex-end" style={ { marginTop: '1rem' } }>
+				<Button
+					accessibleWhenDisabled={ true }
+					className="reset-button"
+					onClick={ () => {
+						removeAttributes( [
+							'icon-enabled',
+							'icon-position',
+							'icon-color',
+							'icon-type',
+						] );
+					} }
+					variant="tertiary"
+					__next40pxDefaultSize={ true }
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
 	);
 }
 
