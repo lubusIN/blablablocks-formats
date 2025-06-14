@@ -204,7 +204,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				${ this.renderStyle() }
 			</style>
 			<span class="wrapper">
-			<span class="text" tabindex="0" aria-describedby="infotip">
+			<span class="text" tabindex="0" aria-describedby="infotip-popover">
 			<span class="icon"></span>
 			<slot></slot>
 				</span>
@@ -251,7 +251,6 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		if ( name === 'icon-type' ) {
 			const icon = shadow.querySelector( '.icon' );
 			if ( this.getAttribute( 'icon-enabled' ) === 'true' ) {
-				console.log( 'Updating icon type:', newValue );
 				icon.innerHTML = this.renderIcon( newValue );
 			}
 			this.updatePosition();
