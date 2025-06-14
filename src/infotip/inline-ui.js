@@ -175,6 +175,7 @@ function IconTabContent( {
 				{ icons.map( ( icon ) => (
 					<Button
 						aria-label={ icon.label }
+						disabled={ ! iconEnabled }
 						key={ icon.label }
 						icon={ icon.graphic }
 						onClick={ () => {
@@ -188,58 +189,61 @@ function IconTabContent( {
 
 			<div className="icon-tab-label">Position</div>
 
-			<Disabled isDisabled={ ! iconEnabled }>
-				<ToggleGroupControl
-					__nextHasNoMarginBottom={ true }
-					__next40pxDefaultSize={ true }
-					hideLabelFromVision={ true }
-					label={ __( 'Position', 'blablablocks-formats' ) }
-					value={ activeAttributes[ 'icon-position' ] || 'left' }
-					onChange={ ( newValue ) => {
-						updateAttributes( { 'icon-position': newValue } );
-					} }
-					disabled={ ! iconEnabled }
-				>
-					<ToggleGroupControlOptionIcon
-						aria-label={ __(
-							'Left icon position',
-							'blablablocks-formats'
-						) }
-						label={ __( 'Left', 'blablablocks-formats' ) }
-						icon={ justifyLeft }
-						value="left"
-						disabled={ ! iconEnabled }
-					/>
-					<ToggleGroupControlOptionIcon
-						aria-label={ __(
-							'Right icon position',
-							'blablablocks-formats'
-						) }
-						label={ __( 'Right', 'blablablocks-formats' ) }
-						icon={ justifyRight }
-						value="right"
-						disabled={ ! iconEnabled }
-					/>
-				</ToggleGroupControl>
-			</Disabled>
-			<div className="icon-tab-label">Color</div>
-			<PanelColorSettings
-				label={ __( 'Color', 'blablablocks-formats' ) }
-				className="icon-color-settings"
-				colorSettings={ [
-					{
-						label: __( 'Icon', 'blablablocks-formats' ),
-						value:
-							activeAttributes[ 'icon-color' ] ?? 'currentColor',
-						onChange: ( newColor ) => {
-							updateAttributes( {
-								'icon-color': newColor,
-							} );
-						},
-					},
-				] }
+			<ToggleGroupControl
+				__nextHasNoMarginBottom={ true }
+				__next40pxDefaultSize={ true }
+				hideLabelFromVision={ true }
+				label={ __( 'Position', 'blablablocks-formats' ) }
+				value={ activeAttributes[ 'icon-position' ] || 'left' }
+				onChange={ ( newValue ) => {
+					updateAttributes( { 'icon-position': newValue } );
+				} }
 				disabled={ ! iconEnabled }
-			/>
+			>
+				<ToggleGroupControlOptionIcon
+					aria-label={ __(
+						'Left icon position',
+						'blablablocks-formats'
+					) }
+					label={ __( 'Left', 'blablablocks-formats' ) }
+					icon={ justifyLeft }
+					value="left"
+					disabled={ ! iconEnabled }
+				/>
+				<ToggleGroupControlOptionIcon
+					aria-label={ __(
+						'Right icon position',
+						'blablablocks-formats'
+					) }
+					label={ __( 'Right', 'blablablocks-formats' ) }
+					icon={ justifyRight }
+					value="right"
+					disabled={ ! iconEnabled }
+				/>
+			</ToggleGroupControl>
+
+			<div className="icon-tab-label">Color</div>
+
+			<Disabled isDisabled={ ! iconEnabled }>
+				<PanelColorSettings
+					label={ __( 'Color', 'blablablocks-formats' ) }
+					className="icon-color-settings"
+					colorSettings={ [
+						{
+							label: __( 'Icon', 'blablablocks-formats' ),
+							value:
+								activeAttributes[ 'icon-color' ] ??
+								'currentColor',
+							onChange: ( newColor ) => {
+								updateAttributes( {
+									'icon-color': newColor,
+								} );
+							},
+						},
+					] }
+					disabled={ ! iconEnabled }
+				/>
+			</Disabled>
 		</Grid>
 	);
 }
