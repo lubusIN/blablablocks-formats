@@ -3,6 +3,7 @@
  */
 import {
 	Button,
+	Disabled,
 	Flex,
 	FormToggle,
 	ToggleControl,
@@ -64,7 +65,7 @@ function TextTabContent( {
 					} );
 				} }
 				help={ __(
-					'Enter the text to display.',
+					'Enter the text to display within tooltip.',
 					'blablablocks-formats'
 				) }
 				__nextHasNoMarginBottom={ true }
@@ -84,12 +85,14 @@ function TextTabContent( {
 			/>
 			<Flex justify="flex-end">
 				<Button
+					accessibleWhenDisabled={ true }
 					className="reset-button"
 					onClick={ () => {
 						onChange( removeFormat( value, name ) );
 						if ( onClose ) onClose();
 					} }
 					variant="tertiary"
+					__next40pxDefaultSize={ true }
 				>
 					{ __( 'Clear', 'blablablocks-formats' ) }
 				</Button>
@@ -115,27 +118,33 @@ function IconTabContent( {
 	const icons = [
 		{
 			label: __( 'Info', 'blablablocks-formats' ),
-			icon: info,
+			graphic: info,
+			id: 'info',
 		},
 		{
 			label: __( 'Help', 'blablablocks-formats' ),
-			icon: help,
+			graphic: help,
+			id: 'help',
 		},
 		{
 			label: __( 'Caution', 'blablablocks-formats' ),
-			icon: caution,
+			graphic: caution,
+			id: 'caution',
 		},
 		{
 			label: __( 'Error', 'blablablocks-formats' ),
-			icon: error,
+			graphic: error,
+			id: 'error',
 		},
 		{
 			label: __( 'Not allowed', 'blablablocks-formats' ),
-			icon: notAllowed,
+			graphic: notAllowed,
+			id: 'notAllowed',
 		},
 		{
 			label: __( 'Star', 'blablablocks-formats' ),
-			icon: starEmpty,
+			graphic: starEmpty,
+			id: 'starEmpty',
 		},
 	];
 
@@ -161,48 +170,58 @@ function IconTabContent( {
 				/>
 			</div>
 
-			<div className="icon-tab-label">Icon</div>
+			<div className="icon-tab-label">Type</div>
 			<div>
 				{ icons.map( ( icon ) => (
-					<Button key={ icon.label } icon={ icon.icon } />
+					<Button
+						aria-label={ icon.label }
+						key={ icon.label }
+						icon={ icon.graphic }
+						onClick={ () => {
+							updateAttributes( {
+								'icon-type': icon.id,
+							} );
+						} }
+					/>
 				) ) }
 			</div>
 
 			<div className="icon-tab-label">Position</div>
 
-			<ToggleGroupControl
-				__nextHasNoMarginBottom={ true }
-				__next40pxDefaultSize={ true }
-				hideLabelFromVision={ true }
-				label={ __( 'Position', 'blablablocks-formats' ) }
-				value={ activeAttributes[ 'icon-position' ] || 'left' }
-				onChange={ ( newValue ) => {
-					updateAttributes( { 'icon-position': newValue } );
-				} }
-				disabled={ ! iconEnabled }
-			>
-				<ToggleGroupControlOptionIcon
-					aria-label={ __(
-						'Left icon position',
-						'blablablocks-formats'
-					) }
-					label={ __( 'Left', 'blablablocks-formats' ) }
-					icon={ justifyLeft }
-					value="left"
+			<Disabled isDisabled={ ! iconEnabled }>
+				<ToggleGroupControl
+					__nextHasNoMarginBottom={ true }
+					__next40pxDefaultSize={ true }
+					hideLabelFromVision={ true }
+					label={ __( 'Position', 'blablablocks-formats' ) }
+					value={ activeAttributes[ 'icon-position' ] || 'left' }
+					onChange={ ( newValue ) => {
+						updateAttributes( { 'icon-position': newValue } );
+					} }
 					disabled={ ! iconEnabled }
-				/>
-				<ToggleGroupControlOptionIcon
-					aria-label={ __(
-						'Right icon position',
-						'blablablocks-formats'
-					) }
-					label={ __( 'Right', 'blablablocks-formats' ) }
-					icon={ justifyRight }
-					value="right"
-					disabled={ ! iconEnabled }
-				/>
-			</ToggleGroupControl>
-
+				>
+					<ToggleGroupControlOptionIcon
+						aria-label={ __(
+							'Left icon position',
+							'blablablocks-formats'
+						) }
+						label={ __( 'Left', 'blablablocks-formats' ) }
+						icon={ justifyLeft }
+						value="left"
+						disabled={ ! iconEnabled }
+					/>
+					<ToggleGroupControlOptionIcon
+						aria-label={ __(
+							'Right icon position',
+							'blablablocks-formats'
+						) }
+						label={ __( 'Right', 'blablablocks-formats' ) }
+						icon={ justifyRight }
+						value="right"
+						disabled={ ! iconEnabled }
+					/>
+				</ToggleGroupControl>
+			</Disabled>
 			<div className="icon-tab-label">Color</div>
 			<PanelColorSettings
 				label={ __( 'Color', 'blablablocks-formats' ) }
