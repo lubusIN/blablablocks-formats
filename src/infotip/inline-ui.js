@@ -180,6 +180,9 @@ function IconTabContent( {
 							disabled={ ! iconEnabled }
 							key={ icon.label }
 							icon={ icon.graphic }
+							isPressed={
+								activeAttributes[ 'icon-type' ] === icon.id
+							}
 							onClick={ () => {
 								updateAttributes( {
 									'icon-type': icon.id,
