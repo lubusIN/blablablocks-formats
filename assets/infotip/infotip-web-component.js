@@ -28,13 +28,9 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		}
 		requestAnimationFrame( () => {
 			// Wait for the element to be attached to the DOM.
-			this.initializeFloatingUI();
+			this.updatePosition();
 			this.initializeEventListeners();
 		} );
-	}
-
-	initializeFloatingUI() {
-		this.updatePosition();
 	}
 
 	updatePosition() {
