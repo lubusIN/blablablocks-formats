@@ -149,6 +149,9 @@ function IconTabContent( {
 	];
 
 	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
+	if ( iconEnabled && ! activeAttributes[ 'icon-type' ] ) {
+		activeAttributes[ 'icon-type' ] = 'info';
+	}
 
 	return (
 		<>
