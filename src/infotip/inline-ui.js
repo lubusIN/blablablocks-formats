@@ -149,6 +149,8 @@ function IconTabContent( {
 	];
 
 	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
+
+	// Show the info icon enabled as a default when no icon type is set, and icons are just enabled.
 	if ( iconEnabled && ! activeAttributes[ 'icon-type' ] ) {
 		activeAttributes[ 'icon-type' ] = 'info';
 	}
@@ -230,7 +232,7 @@ function IconTabContent( {
 					/>
 				</ToggleGroupControl>
 
-				<div className="icon-tab-label">Color</div>
+				<div className="icon-tab-label">Custom color</div>
 
 				<Disabled isDisabled={ ! iconEnabled }>
 					<PanelColorSettings
@@ -239,9 +241,7 @@ function IconTabContent( {
 						colorSettings={ [
 							{
 								label: __( 'Icon', 'blablablocks-formats' ),
-								value:
-									activeAttributes[ 'icon-color' ] ??
-									'currentColor',
+								value: activeAttributes[ 'icon-color' ],
 								onChange: ( newColor ) => {
 									updateAttributes( {
 										'icon-color': newColor,
