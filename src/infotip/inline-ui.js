@@ -29,6 +29,7 @@ import {
 	starEmpty,
 } from '@wordpress/icons';
 import { PanelColorSettings } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
 
 /**
  * TextTabContent Renders the content for the text tab.
@@ -114,29 +115,28 @@ function IconTabContent( {
 	activeAttributes,
 	updateAttributes,
 	removeAttributes,
-}) {
-
+} ) {
 	// Get the selected block
 	const selectedBlock = useSelect(
-		(select) => select('core/block-editor').getSelectedBlock(),
+		( select ) => select( 'core/block-editor' ).getSelectedBlock(),
 		[]
 	);
 
 	// Get editor colors array
 	const { colors = [] } = useSelect(
-		(select) => select('core/block-editor').getSettings() || {},
+		( select ) => select( 'core/block-editor' ).getSettings() || {},
 		[]
 	);
 
 	// Compute the paragraph text color from block attributes:
-	const blockStyle        = selectedBlock?.attributes?.style || {};
+	const blockStyle = selectedBlock?.attributes?.style || {};
 	const explicitTextColor = blockStyle?.color?.text;
-	const textColorSlug     = selectedBlock?.attributes?.textColor;
+	const textColorSlug = selectedBlock?.attributes?.textColor;
 
 	// Resolve a fallback from the themes colors if slug is used
 	const slugColor =
 		textColorSlug &&
-		colors.find((c) => c.slug === textColorSlug)?.color;
+		colors.find( ( c ) => c.slug === textColorSlug )?.color;
 
 	// Pick whichever color we have (explicit > slug > undefined)
 	const defaultIconColor = explicitTextColor || slugColor;
@@ -174,21 +174,22 @@ function IconTabContent( {
 		},
 	];
 
-	const iconEnabled      = activeAttributes['icon-enabled'] === 'true';
-	const currentIconColor = activeAttributes['icon-color'] || defaultIconColor;
+	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
+	const currentIconColor =
+		activeAttributes[ 'icon-color' ] || defaultIconColor;
 
 	const onToggleIcon = () => {
-		if (iconEnabled) {
-			removeAttributes([
+		if ( iconEnabled ) {
+			removeAttributes( [
 				'icon-enabled',
 				'icon-position',
 				'icon-color',
 				'icon-type',
-			]);
+			] );
 		} else {
-			updateAttributes({
+			updateAttributes( {
 				'icon-enabled': 'true',
-			});
+			} );
 		}
 	};
 
@@ -203,8 +204,8 @@ function IconTabContent( {
 				<div className="icon-tab-label">Enable</div>
 				<div>
 					<FormToggle
-						checked={iconEnabled}
-						onChange={onToggleIcon}
+						checked={ iconEnabled }
+						onChange={ onToggleIcon }
 					/>
 				</div>
 
@@ -271,12 +272,13 @@ function IconTabContent( {
 						className="icon-color-settings"
 						colorSettings={ [
 							{
-								label: __('Icon', 'blablablocks-formats'),
+								label: __( 'Icon', 'blablablocks-formats' ),
 								value: currentIconColor,
-								onChange: (newColor) => {
-									updateAttributes({
-										'icon-color': newColor || defaultIconColor,
-									});
+								onChange: ( newColor ) => {
+									updateAttributes( {
+										'icon-color':
+											newColor || defaultIconColor,
+									} );
 								},
 							},
 						] }
