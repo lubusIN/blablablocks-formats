@@ -114,7 +114,33 @@ function IconTabContent( {
 	activeAttributes,
 	updateAttributes,
 	removeAttributes,
-} ) {
+}) {
+
+	// Get the selected block
+	const selectedBlock = useSelect(
+		(select) => select('core/block-editor').getSelectedBlock(),
+		[]
+	);
+
+	// Get editor colors array
+	const { colors = [] } = useSelect(
+		(select) => select('core/block-editor').getSettings() || {},
+		[]
+	);
+
+	// Compute the paragraph text color from block attributes:
+	const blockStyle        = selectedBlock?.attributes?.style || {};
+	const explicitTextColor = blockStyle?.color?.text;
+	const textColorSlug     = selectedBlock?.attributes?.textColor;
+
+	// Resolve a fallback from the themes colors if slug is used
+	const slugColor =
+		textColorSlug &&
+		colors.find((c) => c.slug === textColorSlug)?.color;
+
+	// Pick whichever color we have (explicit > slug > undefined)
+	const defaultIconColor = explicitTextColor || slugColor;
+
 	const icons = [
 		{
 			label: __( 'Info', 'blablablocks-formats' ),
@@ -148,7 +174,23 @@ function IconTabContent( {
 		},
 	];
 
-	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
+	const iconEnabled      = activeAttributes['icon-enabled'] === 'true';
+	const currentIconColor = activeAttributes['icon-color'] || defaultIconColor;
+
+	const onToggleIcon = () => {
+		if (iconEnabled) {
+			removeAttributes([
+				'icon-enabled',
+				'icon-position',
+				'icon-color',
+				'icon-type',
+			]);
+		} else {
+			updateAttributes({
+				'icon-enabled': 'true',
+			});
+		}
+	};
 
 	// Show the info icon enabled as a default when no icon type is set, and icons are just enabled.
 	if ( iconEnabled && ! activeAttributes[ 'icon-type' ] ) {
@@ -161,19 +203,8 @@ function IconTabContent( {
 				<div className="icon-tab-label">Enable</div>
 				<div>
 					<FormToggle
-						checked={ iconEnabled }
-						onChange={ () => {
-							if ( iconEnabled ) {
-								removeAttributes( [
-									'icon-enabled',
-									'icon-position',
-									'icon-color',
-									'icon-type',
-								] );
-							} else {
-								updateAttributes( { 'icon-enabled': 'true' } );
-							}
-						} }
+						checked={iconEnabled}
+						onChange={onToggleIcon}
 					/>
 				</div>
 
@@ -240,12 +271,12 @@ function IconTabContent( {
 						className="icon-color-settings"
 						colorSettings={ [
 							{
-								label: __( 'Icon', 'blablablocks-formats' ),
-								value: activeAttributes[ 'icon-color' ],
-								onChange: ( newColor ) => {
-									updateAttributes( {
-										'icon-color': newColor,
-									} );
+								label: __('Icon', 'blablablocks-formats'),
+								value: currentIconColor,
+								onChange: (newColor) => {
+									updateAttributes({
+										'icon-color': newColor || defaultIconColor,
+									});
 								},
 							},
 						] }
