@@ -290,6 +290,7 @@ function IconTabContent( {
 				<Button
 					accessibleWhenDisabled={ true }
 					className="reset-button"
+					disabled={ ! iconEnabled }
 					onClick={ () => {
 						removeAttributes( [
 							'icon-enabled',
