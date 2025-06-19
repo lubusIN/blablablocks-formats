@@ -61,6 +61,13 @@ function TextTabContent( {
 				value={ activeAttributes.content }
 				onChange={ ( newValue ) => {
 					const sanitizedValue = safeHTML( newValue );
+
+					//  if the value is empty remove the format
+					if ( ! sanitizedValue ) {
+						onChange( removeFormat( value, name ) );
+						return;
+					}
+
 					updateAttributes( {
 						content: sanitizedValue,
 					} );

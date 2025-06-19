@@ -34,6 +34,12 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 
 	updatePosition() {
+		// Prevent the infotip overlay from showing when content is blank.
+		if ( this.getAttribute( 'content' ) === '' ) {
+			this.hideTooltip();
+			return;
+		}
+
 		const floatingUIDOM = window.FloatingUIDOM;
 		const anchorText = this.shadowRoot.querySelector( '.text' );
 		const infotip = this.shadowRoot.querySelector( '.infotip' );
