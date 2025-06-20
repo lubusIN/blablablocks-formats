@@ -271,7 +271,7 @@ function IconTabContent( {
 					/>
 				</ToggleGroupControl>
 
-				<div className="icon-tab-label">Custom color</div>
+				<div className="icon-tab-label">Color</div>
 
 				<Disabled isDisabled={ ! iconEnabled }>
 					<PanelColorSettings
