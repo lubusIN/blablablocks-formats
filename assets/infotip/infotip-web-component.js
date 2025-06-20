@@ -193,7 +193,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 							clip-rule="evenodd"
 						/>`,
 		};
-		return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+		return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" role="img">
 				${ iconPaths[ iconType ] }
 				</svg>`;
 	}
@@ -206,7 +206,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				${ this.renderStyle() }
 			</style>
 			<span class="wrapper">
-			<span class="text" tabindex="0" aria-describedby="infotip-popover">
+			<span class="text" tabindex="0" role="button" aria-describedby="infotip-popover">
 			<span class="icon"></span>
 			<slot></slot>
 				</span>

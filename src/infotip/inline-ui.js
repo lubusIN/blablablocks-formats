@@ -27,6 +27,7 @@ import {
 	info,
 	notAllowed,
 	starEmpty,
+	update,
 } from '@wordpress/icons';
 import { PanelColorSettings } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
@@ -202,7 +203,9 @@ function IconTabContent( {
 
 	// Show the info icon enabled as a default when no icon type is set, and icons are just enabled.
 	if ( iconEnabled && ! activeAttributes[ 'icon-type' ] ) {
-		activeAttributes[ 'icon-type' ] = 'info';
+		updateAttributes( {
+			'icon-type': 'info',
+		} );
 	}
 
 	return (
@@ -222,7 +225,7 @@ function IconTabContent( {
 						<Button
 							accessibleWhenDisabled={ true }
 							disabled={ ! iconEnabled }
-							key={ icon.label }
+							key={ icon.id }
 							icon={ icon.graphic }
 							isPressed={
 								activeAttributes[ 'icon-type' ] === icon.id
