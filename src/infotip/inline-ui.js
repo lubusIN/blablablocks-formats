@@ -27,7 +27,6 @@ import {
 	info,
 	notAllowed,
 	starEmpty,
-	update,
 } from '@wordpress/icons';
 import { PanelColorSettings } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
