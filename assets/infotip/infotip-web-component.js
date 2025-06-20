@@ -222,50 +222,9 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		return template;
 	}
 
-	/**
-	 * Waits for shadow DOM to be available.
-	 *
-	 * @return {Promise<ShadowRoot|null>} Promise that resolves to shadow root or null if timeout.
-	 */
-	async waitForShadowDOM() {
-		return new Promise( ( resolve ) => {
-			if ( this.shadowRoot ) {
-				resolve( this.shadowRoot );
-				return;
-			}
-
-			// If shadow DOM isn't ready, check every 10ms
-			const checkInterval = setInterval( () => {
-				if ( this.shadowRoot ) {
-					clearInterval( checkInterval );
-					resolve( this.shadowRoot );
-				}
-			}, 10 );
-
-			// Safety timeout after 2 seconds
-			setTimeout( () => {
-				clearInterval( checkInterval );
-				if ( this.shadowRoot ) {
-					resolve( this.shadowRoot );
-				} else {
-					// Silently resolve with null if shadow DOM isn't available after timeout
-					resolve( null );
-				}
-			}, 2000 );
-		} );
-	}
-
-	/**
-	 * Called when an observed attribute is changed.
-	 *
-	 * @param {string} name     - The name of the attribute that changed.
-	 * @param {string} oldValue - The previous value of the attribute.
-	 * @param {string} newValue - The new value of the attribute.
-	 */
-	async attributeChangedCallback( name, oldValue, newValue ) {
-		const shadow = await this.waitForShadowDOM();
+	attributeChangedCallback( name, oldValue, newValue ) {
+		const shadow = this.shadowRoot;
 		if ( ! shadow ) {
-			// Shadow DOM not available, skip attribute handling
 			return;
 		}
 
