@@ -10,6 +10,10 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			'icon-position',
 			'icon-color',
 			'icon-type',
+			'offset',
+			'placement',
+			'overlay-text-color',
+			'overlay-background-color',
 		];
 	}
 
@@ -106,6 +110,10 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
 		const iconPosition = this.getAttribute( 'icon-position' ) ?? 'left';
 		const iconColor = this.getAttribute( 'icon-color' ) ?? 'currentColor';
+		const overlayTextColor =
+			this.getAttribute( 'overlay-text-color' ) ?? '#FFFFFF';
+		const overlayBackgroundColor =
+			this.getAttribute( 'overlay-background-color' ) ?? '#222';
 
 		let style = `
 			.wrapper {
@@ -125,15 +133,15 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				position: fixed;
 				top: 0px;
 				left: 0px;
-				background: #222;
-				color: white;
+				background: ${ overlayBackgroundColor };
+				color: ${ overlayTextColor };
 				padding: 10px;
 				border-radius: 4px;
 				font-size: 90%;
 			}
 			.infotip .arrow {
 				position: absolute;
-				background: #222;
+				background: ${ overlayBackgroundColor };
 				width: 8px;
 				height: 8px;
 				transform: rotate(45deg);
@@ -256,6 +264,13 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				icon.innerHTML = this.renderIcon( newValue );
 			}
 			this.updatePosition();
+		}
+
+		if (
+			name === 'overlay-text-color' ||
+			name === 'overlay-background-color'
+		) {
+			this.showTooltip();
 		}
 
 		const style = shadow.querySelector( 'style' );

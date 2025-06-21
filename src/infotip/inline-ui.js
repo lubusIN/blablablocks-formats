@@ -110,23 +110,31 @@ function TextTabContent( {
  *
  * @return {JSX.Element} - The rendered overlay tab content.
  */
-function OverlayTabContent() {
+function OverlayTabContent( {
+	activeAttributes,
+	updateAttributes,
+	removeAttributes,
+} ) {
 	return (
 		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
-			{ /* row 1 - Offset */ }
 			<div className="overlay-tab-label">
 				{ __( 'Offset', 'blablablocks-formats' ) }
 			</div>
 			<NumberControl
 				hideLabelFromVision={ true }
 				label={ __( 'Offset', 'blablablocks-formats' ) }
-				value={ 0 }
+				value={ 6 }
 				__next40pxDefaultSize={ true }
 				onChange={ () => {} }
+				style={ { width: '5rem' } }
+				min={ 6 }
+				max={ 20 }
 			/>
 
-			{ /* row 2 - Position */ }
-			<div className="overlay-tab-label">
+			<div
+				className="overlay-tab-label"
+				style={ { alignSelf: 'flex-start', paddingTop: '0.5rem' } }
+			>
 				{ __( 'Position', 'blablablocks-formats' ) }
 			</div>
 			<AlignmentMatrixControl
@@ -134,8 +142,10 @@ function OverlayTabContent() {
 				label={ __( 'Position', 'blablablocks-formats' ) }
 			/>
 
-			{ /* row 3 - Colors */ }
-			<div className="overlay-tab-label">
+			<div
+				className="overlay-tab-label"
+				style={ { alignSelf: 'flex-start' } }
+			>
 				{ __( 'Colors', 'blablablocks-formats' ) }
 			</div>
 			<PanelColorSettings
@@ -144,13 +154,25 @@ function OverlayTabContent() {
 				colorSettings={ [
 					{
 						label: __( 'Background', 'blablablocks-formats' ),
-						value: '#000000',
-						onChange: () => {},
+						value:
+							activeAttributes[ 'overlay-background-color' ] ||
+							'#222',
+						onChange: ( newValue ) => {
+							updateAttributes( {
+								'overlay-background-color': newValue,
+							} );
+						},
 					},
 					{
 						label: __( 'Text', 'blablablocks-formats' ),
-						value: '#FFFFFF',
-						onChange: () => {},
+						value:
+							activeAttributes[ 'overlay-text-color' ] ||
+							'#FFFFFF',
+						onChange: ( newValue ) => {
+							updateAttributes( {
+								'overlay-text-color': newValue,
+							} );
+						},
 					},
 				] }
 			/>
@@ -450,7 +472,13 @@ export function InlineUI( {
 					{
 						name: 'overlay',
 						title: __( 'Overlay', 'blablablocks-formats' ),
-						content: <OverlayTabContent />,
+						content: (
+							<OverlayTabContent
+								activeAttributes={ activeAttributes }
+								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
+							/>
+						),
 						disabled: ! activeAttributes.content,
 					},
 					{

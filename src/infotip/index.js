@@ -65,5 +65,9 @@ export const infotip = {
 		'icon-position': 'icon-position',
 		'icon-color': 'icon-color',
 		'icon-type': 'icon-type',
+		offset: 'offset',
+		placement: 'placement',
+		'overlay-text-color': 'overlay-text-color',
+		'overlay-background-color': 'overlay-background-color',
 	},
 };
