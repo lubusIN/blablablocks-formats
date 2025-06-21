@@ -62,12 +62,6 @@ function TextTabContent( {
 				onChange={ ( newValue ) => {
 					const sanitizedValue = safeHTML( newValue );
 
-					//  if the value is empty remove the format
-					if ( ! sanitizedValue ) {
-						onChange( removeFormat( value, name ) );
-						return;
-					}
-
 					updateAttributes( {
 						content: sanitizedValue,
 					} );
@@ -400,7 +394,9 @@ export function InlineUI( {
 								removeAttributes={ removeAttributes }
 							/>
 						),
-						disabled: ! activeAttributes.content,
+						disabled:
+							! activeAttributes.content &&
+							! activeAttributes[ 'icon-enabled' ],
 					},
 				] }
 			>
