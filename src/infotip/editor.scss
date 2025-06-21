@@ -9,10 +9,26 @@ blablablocks-infotip {
 .block-editor-format-toolbar__blablablocks-infotip-popover {
 
 	.components-popover__content {
-		min-width: 20.625rem;
+		min-width: 23rem;
 	}
 
 	.components-tab-panel__tab-content {
 		padding: 1rem;
+
+		.icon-tab-label {
+			font-weight: 500;
+			text-transform: uppercase;
+			font-size: 0.6875rem;
+		}
+
+		.icon-color-settings {
+			border-top: none;
+			padding: 0;
+
+			.block-editor-tools-panel-color-gradient-settings__item:first-child {
+				margin-top: 0;
+			}
+		}
 	}
 }
+
