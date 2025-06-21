@@ -57,8 +57,11 @@ function TextTabContent( {
 	return (
 		<VStack spacing={ 6 }>
 			<TextareaControl
+				help={ __(
+					'Enter the text to display within tooltip.',
+					'blablablocks-formats'
+				) }
 				label={ __( 'Text', 'blablablocks-formats' ) }
-				value={ activeAttributes.content }
 				onChange={ ( newValue ) => {
 					const sanitizedValue = safeHTML( newValue );
 
@@ -66,10 +69,11 @@ function TextTabContent( {
 						content: sanitizedValue,
 					} );
 				} }
-				help={ __(
-					'Enter the text to display within tooltip.',
+				placeholder={ __(
+					'Enter the text to display, or click clear to remove the format.',
 					'blablablocks-formats'
 				) }
+				value={ activeAttributes.content }
 				__nextHasNoMarginBottom={ true }
 			/>
 			<ToggleControl
