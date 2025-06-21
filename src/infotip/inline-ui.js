@@ -2,11 +2,13 @@
  * WordPress dependencies
  */
 import {
+	AlignmentMatrixControl,
 	Button,
 	Disabled,
 	Flex,
 	FormToggle,
 	ToggleControl,
+	__experimentalNumberControl as NumberControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	Popover,
@@ -57,10 +59,6 @@ function TextTabContent( {
 	return (
 		<VStack spacing={ 6 }>
 			<TextareaControl
-				help={ __(
-					'Enter the text to display within tooltip.',
-					'blablablocks-formats'
-				) }
 				label={ __( 'Text', 'blablablocks-formats' ) }
 				onChange={ ( newValue ) => {
 					const sanitizedValue = safeHTML( newValue );
@@ -104,6 +102,59 @@ function TextTabContent( {
 				</Button>
 			</Flex>
 		</VStack>
+	);
+}
+
+/**
+ * OverlayTabContent Renders the content for the overlay tab.
+ *
+ * @return {JSX.Element} - The rendered overlay tab content.
+ */
+function OverlayTabContent() {
+	return (
+		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
+			{ /* row 1 - Offset */ }
+			<div className="overlay-tab-label">
+				{ __( 'Offset', 'blablablocks-formats' ) }
+			</div>
+			<NumberControl
+				hideLabelFromVision={ true }
+				label={ __( 'Offset', 'blablablocks-formats' ) }
+				value={ 0 }
+				__next40pxDefaultSize={ true }
+				onChange={ () => {} }
+			/>
+
+			{ /* row 2 - Position */ }
+			<div className="overlay-tab-label">
+				{ __( 'Position', 'blablablocks-formats' ) }
+			</div>
+			<AlignmentMatrixControl
+				hideLabelFromVision={ true }
+				label={ __( 'Position', 'blablablocks-formats' ) }
+			/>
+
+			{ /* row 3 - Colors */ }
+			<div className="overlay-tab-label">
+				{ __( 'Colors', 'blablablocks-formats' ) }
+			</div>
+			<PanelColorSettings
+				className="overlay-color-settings"
+				label={ __( 'Colors', 'blablablocks-formats' ) }
+				colorSettings={ [
+					{
+						label: __( 'Background', 'blablablocks-formats' ),
+						value: '#000000',
+						onChange: () => {},
+					},
+					{
+						label: __( 'Text', 'blablablocks-formats' ),
+						value: '#FFFFFF',
+						onChange: () => {},
+					},
+				] }
+			/>
+		</Grid>
 	);
 }
 
@@ -208,7 +259,9 @@ function IconTabContent( {
 	return (
 		<>
 			<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
-				<div className="icon-tab-label">Enable</div>
+				<div className="icon-tab-label">
+					{ __( 'Enable', 'blablablocks-formats' ) }
+				</div>
 				<div>
 					<FormToggle
 						checked={ iconEnabled }
@@ -216,7 +269,9 @@ function IconTabContent( {
 					/>
 				</div>
 
-				<div className="icon-tab-label">Type</div>
+				<div className="icon-tab-label">
+					{ __( 'Type', 'blablablocks-formats' ) }
+				</div>
 				<div>
 					{ icons.map( ( icon ) => (
 						<Button
@@ -236,7 +291,9 @@ function IconTabContent( {
 					) ) }
 				</div>
 
-				<div className="icon-tab-label">Position</div>
+				<div className="icon-tab-label">
+					{ __( 'Position', 'blablablocks-formats' ) }
+				</div>
 
 				<ToggleGroupControl
 					__nextHasNoMarginBottom={ true }
@@ -271,7 +328,9 @@ function IconTabContent( {
 					/>
 				</ToggleGroupControl>
 
-				<div className="icon-tab-label">Color</div>
+				<div className="icon-tab-label">
+					{ __( 'Color', 'blablablocks-formats' ) }
+				</div>
 
 				<Disabled isDisabled={ ! iconEnabled }>
 					<PanelColorSettings
@@ -387,6 +446,12 @@ export function InlineUI( {
 								value={ value }
 							/>
 						),
+					},
+					{
+						name: 'overlay',
+						title: __( 'Overlay', 'blablablocks-formats' ),
+						content: <OverlayTabContent />,
+						disabled: ! activeAttributes.content,
 					},
 					{
 						name: 'icon',
