@@ -156,10 +156,11 @@ function OverlayTabContent( {
 						label: __( 'Background', 'blablablocks-formats' ),
 						value:
 							activeAttributes[ 'overlay-background-color' ] ||
-							'#222',
+							'#222222',
 						onChange: ( newValue ) => {
 							updateAttributes( {
-								'overlay-background-color': newValue,
+								'overlay-background-color':
+									newValue || '#222222',
 							} );
 						},
 					},
@@ -170,7 +171,7 @@ function OverlayTabContent( {
 							'#FFFFFF',
 						onChange: ( newValue ) => {
 							updateAttributes( {
-								'overlay-text-color': newValue,
+								'overlay-text-color': newValue || '#FFFFFF',
 							} );
 						},
 					},
