@@ -2,8 +2,8 @@
  * WordPress dependencies
  */
 import {
-	AlignmentMatrixControl,
 	Button,
+	CustomSelectControl,
 	Disabled,
 	Flex,
 	FormToggle,
@@ -110,11 +110,58 @@ function TextTabContent( {
  *
  * @return {JSX.Element} - The rendered overlay tab content.
  */
-function OverlayTabContent( {
-	activeAttributes,
-	updateAttributes,
-	removeAttributes,
-} ) {
+function OverlayTabContent( { activeAttributes, updateAttributes } ) {
+	const placementOptions = [
+		{
+			name: __( 'Top', 'blablablocks-formats' ),
+			key: 'top',
+		},
+		{
+			name: __( 'Top-start', 'blablablocks-formats' ),
+			key: 'top-start',
+		},
+		{
+			name: __( 'Top-end', 'blablablocks-formats' ),
+			key: 'top-end',
+		},
+		{
+			name: __( 'Right', 'blablablocks-formats' ),
+			key: 'right',
+		},
+		{
+			name: __( 'Right-start', 'blablablocks-formats' ),
+			key: 'right-start',
+		},
+		{
+			name: __( 'Right-end', 'blablablocks-formats' ),
+			key: 'right-end',
+		},
+		{
+			name: __( 'Bottom', 'blablablocks-formats' ),
+			key: 'bottom',
+		},
+		{
+			name: __( 'Bottom-start', 'blablablocks-formats' ),
+			key: 'bottom-start',
+		},
+		{
+			name: __( 'Bottom-end', 'blablablocks-formats' ),
+			key: 'bottom-end',
+		},
+		{
+			name: __( 'Left', 'blablablocks-formats' ),
+			key: 'left',
+		},
+		{
+			name: __( 'Left-start', 'blablablocks-formats' ),
+			key: 'left-start',
+		},
+		{
+			name: __( 'Left-end', 'blablablocks-formats' ),
+			key: 'left-end',
+		},
+	];
+
 	return (
 		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
 			<div className="overlay-tab-label">
@@ -141,11 +188,31 @@ function OverlayTabContent( {
 			>
 				{ __( 'Placement', 'blablablocks-formats' ) }
 			</div>
-			<AlignmentMatrixControl
-				hideLabelFromVision={ true }
+			<CustomSelectControl
 				label={ __( 'Placement', 'blablablocks-formats' ) }
-				value={ activeAttributes[ 'overlay-placement' ] || 'top' }
-				onChange={ () => {} }
+				hideLabelFromVision={ true }
+				__next40pxDefaultSize={ true }
+				value={
+					activeAttributes[ 'overlay-placement' ]
+						? {
+								name: placementOptions.find(
+									( option ) =>
+										option.key ===
+										activeAttributes[ 'overlay-placement' ]
+								).name,
+								key: activeAttributes[ 'overlay-placement' ],
+						  }
+						: {
+								name: __( 'Top', 'blablablocks-formats' ),
+								key: 'top',
+						  }
+				}
+				options={ placementOptions }
+				onChange={ ( selectedOption ) => {
+					updateAttributes( {
+						'overlay-placement': selectedOption.selectedItem.key,
+					} );
+				} }
 			/>
 
 			<div
@@ -483,7 +550,6 @@ export function InlineUI( {
 							<OverlayTabContent
 								activeAttributes={ activeAttributes }
 								updateAttributes={ updateAttributes }
-								removeAttributes={ removeAttributes }
 							/>
 						),
 						disabled: ! activeAttributes.content,

@@ -276,7 +276,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			this.showTooltip();
 		}
 
-		if ( name === 'offset' ) {
+		if ( name === 'offset' || name === 'overlay-placement' ) {
 			this.updatePosition();
 			this.showTooltip();
 		}
