@@ -11,7 +11,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			'icon-color',
 			'icon-type',
 			'offset',
-			'placement',
+			'overlay-placement',
 			'overlay-text-color',
 			'overlay-background-color',
 		];
@@ -48,13 +48,16 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const anchorText = this.shadowRoot.querySelector( '.text' );
 		const infotip = this.shadowRoot.querySelector( '.infotip' );
 		const arrow = infotip.querySelector( '.arrow' );
+		const overlayPlacement =
+			this.getAttribute( 'overlay-placement' ) ?? 'top';
+		const offset = this.getAttribute( 'offset' ) ?? 6;
 
 		floatingUIDOM
 			.computePosition( anchorText, infotip, {
-				placement: 'top',
+				placement: overlayPlacement,
 				strategy: 'fixed',
 				middleware: [
-					floatingUIDOM.offset( 6 ),
+					floatingUIDOM.offset( parseInt( offset ) ),
 					floatingUIDOM.flip(),
 					floatingUIDOM.shift( { padding: 5 } ),
 					floatingUIDOM.arrow( { element: arrow } ),
@@ -270,6 +273,11 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			name === 'overlay-text-color' ||
 			name === 'overlay-background-color'
 		) {
+			this.showTooltip();
+		}
+
+		if ( name === 'offset' ) {
+			this.updatePosition();
 			this.showTooltip();
 		}
 

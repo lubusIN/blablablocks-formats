@@ -123,9 +123,13 @@ function OverlayTabContent( {
 			<NumberControl
 				hideLabelFromVision={ true }
 				label={ __( 'Offset', 'blablablocks-formats' ) }
-				value={ 6 }
+				value={ activeAttributes.offset || 6 }
 				__next40pxDefaultSize={ true }
-				onChange={ () => {} }
+				onChange={ ( newValue ) => {
+					updateAttributes( {
+						offset: newValue || 6,
+					} );
+				} }
 				style={ { width: '5rem' } }
 				min={ 6 }
 				max={ 20 }
@@ -135,11 +139,13 @@ function OverlayTabContent( {
 				className="overlay-tab-label"
 				style={ { alignSelf: 'flex-start', paddingTop: '0.5rem' } }
 			>
-				{ __( 'Position', 'blablablocks-formats' ) }
+				{ __( 'Placement', 'blablablocks-formats' ) }
 			</div>
 			<AlignmentMatrixControl
 				hideLabelFromVision={ true }
-				label={ __( 'Position', 'blablablocks-formats' ) }
+				label={ __( 'Placement', 'blablablocks-formats' ) }
+				value={ activeAttributes[ 'overlay-placement' ] || 'top' }
+				onChange={ () => {} }
 			/>
 
 			<div
@@ -157,10 +163,10 @@ function OverlayTabContent( {
 						value:
 							activeAttributes[ 'overlay-background-color' ] ||
 							'#222222',
-						onChange: ( newValue ) => {
+						onChange: ( newColor ) => {
 							updateAttributes( {
 								'overlay-background-color':
-									newValue || '#222222',
+									newColor || '#222222',
 							} );
 						},
 					},
@@ -169,9 +175,9 @@ function OverlayTabContent( {
 						value:
 							activeAttributes[ 'overlay-text-color' ] ||
 							'#FFFFFF',
-						onChange: ( newValue ) => {
+						onChange: ( newColor ) => {
 							updateAttributes( {
-								'overlay-text-color': newValue || '#FFFFFF',
+								'overlay-text-color': newColor || '#FFFFFF',
 							} );
 						},
 					},

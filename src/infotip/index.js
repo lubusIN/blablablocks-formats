@@ -66,7 +66,7 @@ export const infotip = {
 		'icon-color': 'icon-color',
 		'icon-type': 'icon-type',
 		offset: 'offset',
-		placement: 'placement',
+		'overlay-placement': 'overlay-placement',
 		'overlay-text-color': 'overlay-text-color',
 		'overlay-background-color': 'overlay-background-color',
 	},
