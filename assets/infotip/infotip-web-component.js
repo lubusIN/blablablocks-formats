@@ -57,7 +57,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				placement: overlayPlacement,
 				strategy: 'fixed',
 				middleware: [
-					floatingUIDOM.offset( parseInt( offset ) ),
+					floatingUIDOM.offset( parseInt( offset, 10 ) ),
 					floatingUIDOM.flip( {
 						fallbackPlacements: [
 							'top',
