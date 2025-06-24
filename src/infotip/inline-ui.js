@@ -3,10 +3,10 @@
  */
 import {
 	Button,
-	CustomSelectControl,
 	Disabled,
 	Flex,
 	FormToggle,
+	SelectControl,
 	ToggleControl,
 	__experimentalNumberControl as NumberControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line @wordpress/no-unsafe-wp-apis
@@ -113,52 +113,52 @@ function TextTabContent( {
 function OverlayTabContent( { activeAttributes, updateAttributes } ) {
 	const placementOptions = [
 		{
-			name: __( 'Top', 'blablablocks-formats' ),
-			key: 'top',
+			label: __( 'Top', 'blablablocks-formats' ),
+			value: 'top',
 		},
 		{
-			name: __( 'Top-start', 'blablablocks-formats' ),
-			key: 'top-start',
+			label: __( 'Top-start', 'blablablocks-formats' ),
+			value: 'top-start',
 		},
 		{
-			name: __( 'Top-end', 'blablablocks-formats' ),
-			key: 'top-end',
+			label: __( 'Top-end', 'blablablocks-formats' ),
+			value: 'top-end',
 		},
 		{
-			name: __( 'Right', 'blablablocks-formats' ),
-			key: 'right',
+			label: __( 'Right', 'blablablocks-formats' ),
+			value: 'right',
 		},
 		{
-			name: __( 'Right-start', 'blablablocks-formats' ),
-			key: 'right-start',
+			label: __( 'Right-start', 'blablablocks-formats' ),
+			value: 'right-start',
 		},
 		{
-			name: __( 'Right-end', 'blablablocks-formats' ),
-			key: 'right-end',
+			label: __( 'Right-end', 'blablablocks-formats' ),
+			value: 'right-end',
 		},
 		{
-			name: __( 'Bottom', 'blablablocks-formats' ),
-			key: 'bottom',
+			label: __( 'Bottom', 'blablablocks-formats' ),
+			value: 'bottom',
 		},
 		{
-			name: __( 'Bottom-start', 'blablablocks-formats' ),
-			key: 'bottom-start',
+			label: __( 'Bottom-start', 'blablablocks-formats' ),
+			value: 'bottom-start',
 		},
 		{
-			name: __( 'Bottom-end', 'blablablocks-formats' ),
-			key: 'bottom-end',
+			label: __( 'Bottom-end', 'blablablocks-formats' ),
+			value: 'bottom-end',
 		},
 		{
-			name: __( 'Left', 'blablablocks-formats' ),
-			key: 'left',
+			label: __( 'Left', 'blablablocks-formats' ),
+			value: 'left',
 		},
 		{
-			name: __( 'Left-start', 'blablablocks-formats' ),
-			key: 'left-start',
+			label: __( 'Left-start', 'blablablocks-formats' ),
+			value: 'left-start',
 		},
 		{
-			name: __( 'Left-end', 'blablablocks-formats' ),
-			key: 'left-end',
+			label: __( 'Left-end', 'blablablocks-formats' ),
+			value: 'left-end',
 		},
 	];
 
@@ -188,30 +188,21 @@ function OverlayTabContent( { activeAttributes, updateAttributes } ) {
 			>
 				{ __( 'Placement', 'blablablocks-formats' ) }
 			</div>
-			<CustomSelectControl
+			<SelectControl
 				label={ __( 'Placement', 'blablablocks-formats' ) }
 				hideLabelFromVision={ true }
 				__next40pxDefaultSize={ true }
-				value={
-					activeAttributes[ 'overlay-placement' ]
-						? {
-								name: placementOptions.find(
-									( option ) =>
-										option.key ===
-										activeAttributes[ 'overlay-placement' ]
-								).name,
-								key: activeAttributes[ 'overlay-placement' ],
-						  }
-						: {
-								name: __( 'Top', 'blablablocks-formats' ),
-								key: 'top',
-						  }
-				}
+				__nextHasNoMarginBottom={ true }
+				value={ activeAttributes[ 'overlay-placement' ] || 'top' }
 				options={ placementOptions }
 				onChange={ ( selectedOption ) => {
 					updateAttributes( {
-						'overlay-placement': selectedOption.selectedItem.key,
+						'overlay-placement': selectedOption,
 					} );
+				} }
+				onClick={ ( event ) => {
+					// Prevent the popover from closing when clicking the select control.
+					event.stopPropagation();
 				} }
 			/>
 
@@ -524,6 +515,19 @@ export function InlineUI( {
 			onClose={ onClose }
 			offset={ 30 }
 			shift={ true }
+			__unstableSlotName="__unstable-block-tools-after"
+			onFocusOutside={ ( event ) => {
+				// Prevent closing on focus events inside the popover's UI components
+				if (
+					event.target.closest(
+						'.block-editor-format-toolbar__blablablocks-infotip-popover'
+					)
+				) {
+					event.preventDefault();
+					event.stopPropagation();
+					return false;
+				}
+			} }
 		>
 			<TabPanel
 				className="block-editor-format-toolbar__blablablocks-infotip-tab-panel"
