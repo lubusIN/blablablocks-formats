@@ -58,9 +58,16 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				strategy: 'fixed',
 				middleware: [
 					floatingUIDOM.offset( parseInt( offset ) ),
-					floatingUIDOM.flip(),
+					floatingUIDOM.flip( {
+						fallbackPlacements: [
+							'top',
+							'right',
+							'bottom',
+							'left',
+						],
+					} ),
 					floatingUIDOM.shift( { padding: 5 } ),
-					floatingUIDOM.arrow( { element: arrow } ),
+					floatingUIDOM.arrow( { element: arrow, padding: 5 } ),
 				],
 			} )
 			.then( ( { x, y, placement, middlewareData } ) => {
@@ -69,22 +76,34 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 					top: `${ y }px`,
 				} );
 
-				const { x: arrowX, y: arrowY } = middlewareData.arrow;
+				// Extract the base placement (first part before any hyphen)
+				const basePlacement = placement.split( '-' )[ 0 ];
 
-				const staticSide = {
-					top: 'bottom',
-					right: 'left',
-					bottom: 'top',
-					left: 'right',
-				}[ placement.split( '-' )[ 0 ] ];
+				// Arrow positioning
+				if ( middlewareData.arrow ) {
+					const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
-				Object.assign( arrow.style, {
-					left: arrowX !== null ? `${ arrowX }px` : '',
-					top: arrowY !== null ? `${ arrowY }px` : '',
-					right: '',
-					bottom: '',
-					[ staticSide ]: '-4px',
-				} );
+					// Reset all positions first
+					arrow.style.left = '';
+					arrow.style.top = '';
+					arrow.style.right = '';
+					arrow.style.bottom = '';
+
+					// Set the arrow position based on the base placement
+					if ( basePlacement === 'top' ) {
+						arrow.style.bottom = '-4px';
+						arrow.style.left = arrowX ? `${ arrowX }px` : '';
+					} else if ( basePlacement === 'bottom' ) {
+						arrow.style.top = '-4px';
+						arrow.style.left = arrowX ? `${ arrowX }px` : '';
+					} else if ( basePlacement === 'left' ) {
+						arrow.style.right = '-4px';
+						arrow.style.top = arrowY ? `${ arrowY }px` : '';
+					} else if ( basePlacement === 'right' ) {
+						arrow.style.left = '-4px';
+						arrow.style.top = arrowY ? `${ arrowY }px` : '';
+					}
+				}
 			} );
 	}
 
