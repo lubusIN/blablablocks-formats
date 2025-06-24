@@ -110,7 +110,11 @@ function TextTabContent( {
  *
  * @return {JSX.Element} - The rendered overlay tab content.
  */
-function OverlayTabContent( { activeAttributes, updateAttributes } ) {
+function OverlayTabContent( {
+	activeAttributes,
+	updateAttributes,
+	removeAttributes,
+} ) {
 	const placementOptions = [
 		{
 			label: __( 'Top', 'blablablocks-formats' ),
@@ -162,86 +166,114 @@ function OverlayTabContent( { activeAttributes, updateAttributes } ) {
 		},
 	];
 
+	const overLaySettingsEnabled =
+		activeAttributes[ 'overlay-placement' ] ||
+		activeAttributes[ 'overlay-background-color' ] ||
+		activeAttributes[ 'overlay-text-color' ] ||
+		activeAttributes.offset;
+
 	return (
-		<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
-			<div className="overlay-tab-label">
-				{ __( 'Offset', 'blablablocks-formats' ) }
-			</div>
-			<NumberControl
-				hideLabelFromVision={ true }
-				label={ __( 'Offset', 'blablablocks-formats' ) }
-				value={ activeAttributes.offset || 6 }
-				__next40pxDefaultSize={ true }
-				onChange={ ( newValue ) => {
-					updateAttributes( {
-						offset: newValue || 6,
-					} );
-				} }
-				style={ { width: '5rem' } }
-				min={ 6 }
-				max={ 20 }
-			/>
+		<>
+			<Grid columns={ 2 } templateColumns="3fr 7fr" alignment="center">
+				<div className="overlay-tab-label">
+					{ __( 'Offset', 'blablablocks-formats' ) }
+				</div>
+				<NumberControl
+					hideLabelFromVision={ true }
+					label={ __( 'Offset', 'blablablocks-formats' ) }
+					value={ activeAttributes.offset || 6 }
+					__next40pxDefaultSize={ true }
+					onChange={ ( newValue ) => {
+						updateAttributes( {
+							offset: newValue || 6,
+						} );
+					} }
+					style={ { width: '5rem' } }
+					min={ 6 }
+					max={ 20 }
+				/>
 
-			<div
-				className="overlay-tab-label"
-				style={ { alignSelf: 'flex-start', paddingTop: '0.5rem' } }
-			>
-				{ __( 'Placement', 'blablablocks-formats' ) }
-			</div>
-			<SelectControl
-				label={ __( 'Placement', 'blablablocks-formats' ) }
-				hideLabelFromVision={ true }
-				__next40pxDefaultSize={ true }
-				__nextHasNoMarginBottom={ true }
-				value={ activeAttributes[ 'overlay-placement' ] || 'top' }
-				options={ placementOptions }
-				onChange={ ( selectedOption ) => {
-					updateAttributes( {
-						'overlay-placement': selectedOption,
-					} );
-				} }
-				onClick={ ( event ) => {
-					// Prevent the popover from closing when clicking the select control.
-					event.stopPropagation();
-				} }
-			/>
+				<div
+					className="overlay-tab-label"
+					style={ { alignSelf: 'flex-start', paddingTop: '0.5rem' } }
+				>
+					{ __( 'Placement', 'blablablocks-formats' ) }
+				</div>
+				<SelectControl
+					label={ __( 'Placement', 'blablablocks-formats' ) }
+					hideLabelFromVision={ true }
+					__next40pxDefaultSize={ true }
+					__nextHasNoMarginBottom={ true }
+					value={ activeAttributes[ 'overlay-placement' ] || 'top' }
+					options={ placementOptions }
+					onChange={ ( selectedOption ) => {
+						updateAttributes( {
+							'overlay-placement': selectedOption,
+						} );
+					} }
+					onClick={ ( event ) => {
+						// Prevent the popover from closing when clicking the select control.
+						event.stopPropagation();
+					} }
+				/>
 
-			<div
-				className="overlay-tab-label"
-				style={ { alignSelf: 'flex-start' } }
-			>
-				{ __( 'Colors', 'blablablocks-formats' ) }
-			</div>
-			<PanelColorSettings
-				className="overlay-color-settings"
-				label={ __( 'Colors', 'blablablocks-formats' ) }
-				colorSettings={ [
-					{
-						label: __( 'Background', 'blablablocks-formats' ),
-						value:
-							activeAttributes[ 'overlay-background-color' ] ||
-							'#222222',
-						onChange: ( newColor ) => {
-							updateAttributes( {
-								'overlay-background-color':
-									newColor || '#222222',
-							} );
+				<div
+					className="overlay-tab-label"
+					style={ { alignSelf: 'flex-start' } }
+				>
+					{ __( 'Colors', 'blablablocks-formats' ) }
+				</div>
+				<PanelColorSettings
+					className="overlay-color-settings"
+					label={ __( 'Colors', 'blablablocks-formats' ) }
+					colorSettings={ [
+						{
+							label: __( 'Background', 'blablablocks-formats' ),
+							value:
+								activeAttributes[
+									'overlay-background-color'
+								] || '#222222',
+							onChange: ( newColor ) => {
+								updateAttributes( {
+									'overlay-background-color':
+										newColor || '#222222',
+								} );
+							},
 						},
-					},
-					{
-						label: __( 'Text', 'blablablocks-formats' ),
-						value:
-							activeAttributes[ 'overlay-text-color' ] ||
-							'#FFFFFF',
-						onChange: ( newColor ) => {
-							updateAttributes( {
-								'overlay-text-color': newColor || '#FFFFFF',
-							} );
+						{
+							label: __( 'Text', 'blablablocks-formats' ),
+							value:
+								activeAttributes[ 'overlay-text-color' ] ||
+								'#FFFFFF',
+							onChange: ( newColor ) => {
+								updateAttributes( {
+									'overlay-text-color': newColor || '#FFFFFF',
+								} );
+							},
 						},
-					},
-				] }
-			/>
-		</Grid>
+					] }
+				/>
+			</Grid>
+			<Flex justify="flex-end" style={ { marginTop: '1rem' } }>
+				<Button
+					accessibleWhenDisabled={ true }
+					className="reset-button"
+					disabled={ ! overLaySettingsEnabled }
+					onClick={ () => {
+						removeAttributes( [
+							'overlay-placement',
+							'overlay-background-color',
+							'overlay-text-color',
+							'offset',
+						] );
+					} }
+					variant="tertiary"
+					__next40pxDefaultSize={ true }
+				>
+					{ __( 'Reset', 'blablablocks-formats' ) }
+				</Button>
+			</Flex>
+		</>
 	);
 }
 
@@ -554,6 +586,7 @@ export function InlineUI( {
 							<OverlayTabContent
 								activeAttributes={ activeAttributes }
 								updateAttributes={ updateAttributes }
+								removeAttributes={ removeAttributes }
 							/>
 						),
 						disabled: ! activeAttributes.content,
