@@ -221,11 +221,11 @@ function OverlayTabContent( {
 					className="overlay-tab-label"
 					style={ { alignSelf: 'flex-start' } }
 				>
-					{ __( 'Colors', 'blablablocks-formats' ) }
+					{ __( 'Color', 'blablablocks-formats' ) }
 				</div>
 				<PanelColorSettings
 					className="overlay-color-settings"
-					label={ __( 'Colors', 'blablablocks-formats' ) }
+					label={ __( 'Color', 'blablablocks-formats' ) }
 					colorSettings={ [
 						{
 							label: __( 'Background', 'blablablocks-formats' ),
