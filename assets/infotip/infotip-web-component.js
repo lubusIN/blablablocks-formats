@@ -10,6 +10,10 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			'icon-position',
 			'icon-color',
 			'icon-type',
+			'offset',
+			'overlay-placement',
+			'overlay-text-color',
+			'overlay-background-color',
 		];
 	}
 
@@ -44,16 +48,26 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const anchorText = this.shadowRoot.querySelector( '.text' );
 		const infotip = this.shadowRoot.querySelector( '.infotip' );
 		const arrow = infotip.querySelector( '.arrow' );
+		const overlayPlacement =
+			this.getAttribute( 'overlay-placement' ) ?? 'top';
+		const offset = this.getAttribute( 'offset' ) ?? 6;
 
 		floatingUIDOM
 			.computePosition( anchorText, infotip, {
-				placement: 'top',
+				placement: overlayPlacement,
 				strategy: 'fixed',
 				middleware: [
-					floatingUIDOM.offset( 6 ),
-					floatingUIDOM.flip(),
+					floatingUIDOM.offset( parseInt( offset, 10 ) ),
+					floatingUIDOM.flip( {
+						fallbackPlacements: [
+							'top',
+							'right',
+							'bottom',
+							'left',
+						],
+					} ),
 					floatingUIDOM.shift( { padding: 5 } ),
-					floatingUIDOM.arrow( { element: arrow } ),
+					floatingUIDOM.arrow( { element: arrow, padding: 5 } ),
 				],
 			} )
 			.then( ( { x, y, placement, middlewareData } ) => {
@@ -62,22 +76,34 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 					top: `${ y }px`,
 				} );
 
-				const { x: arrowX, y: arrowY } = middlewareData.arrow;
+				// Extract the base placement (first part before any hyphen)
+				const basePlacement = placement.split( '-' )[ 0 ];
 
-				const staticSide = {
-					top: 'bottom',
-					right: 'left',
-					bottom: 'top',
-					left: 'right',
-				}[ placement.split( '-' )[ 0 ] ];
+				// Arrow positioning
+				if ( middlewareData.arrow ) {
+					const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
-				Object.assign( arrow.style, {
-					left: arrowX !== null ? `${ arrowX }px` : '',
-					top: arrowY !== null ? `${ arrowY }px` : '',
-					right: '',
-					bottom: '',
-					[ staticSide ]: '-4px',
-				} );
+					// Reset all positions first
+					arrow.style.left = '';
+					arrow.style.top = '';
+					arrow.style.right = '';
+					arrow.style.bottom = '';
+
+					// Set the arrow position based on the base placement
+					if ( basePlacement === 'top' ) {
+						arrow.style.bottom = '-4px';
+						arrow.style.left = arrowX ? `${ arrowX }px` : '';
+					} else if ( basePlacement === 'bottom' ) {
+						arrow.style.top = '-4px';
+						arrow.style.left = arrowX ? `${ arrowX }px` : '';
+					} else if ( basePlacement === 'left' ) {
+						arrow.style.right = '-4px';
+						arrow.style.top = arrowY ? `${ arrowY }px` : '';
+					} else if ( basePlacement === 'right' ) {
+						arrow.style.left = '-4px';
+						arrow.style.top = arrowY ? `${ arrowY }px` : '';
+					}
+				}
 			} );
 	}
 
@@ -106,6 +132,10 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
 		const iconPosition = this.getAttribute( 'icon-position' ) ?? 'left';
 		const iconColor = this.getAttribute( 'icon-color' ) ?? 'currentColor';
+		const overlayTextColor =
+			this.getAttribute( 'overlay-text-color' ) ?? '#FFFFFF';
+		const overlayBackgroundColor =
+			this.getAttribute( 'overlay-background-color' ) ?? '#222';
 
 		let style = `
 			.wrapper {
@@ -125,15 +155,15 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				position: fixed;
 				top: 0px;
 				left: 0px;
-				background: #222;
-				color: white;
+				background: ${ overlayBackgroundColor };
+				color: ${ overlayTextColor };
 				padding: 10px;
 				border-radius: 4px;
 				font-size: 90%;
 			}
 			.infotip .arrow {
 				position: absolute;
-				background: #222;
+				background: ${ overlayBackgroundColor };
 				width: 8px;
 				height: 8px;
 				transform: rotate(45deg);
@@ -256,6 +286,18 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 				icon.innerHTML = this.renderIcon( newValue );
 			}
 			this.updatePosition();
+		}
+
+		if (
+			name === 'overlay-text-color' ||
+			name === 'overlay-background-color'
+		) {
+			this.showTooltip();
+		}
+
+		if ( name === 'offset' || name === 'overlay-placement' ) {
+			this.updatePosition();
+			this.showTooltip();
 		}
 
 		const style = shadow.querySelector( 'style' );
