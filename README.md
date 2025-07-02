@@ -1,6 +1,9 @@
 # BlaBlaBlocks Formats
+<!-- TODO add graphics -->
+<!-- TODO add playground demo link -->
 
-A collection of rich text formats for WordPress that enhance the block editor with interactive elements including InfoTip tooltips and Marker highlights.
+## Overview
+A collection of rich text formats for WordPress that enhance the block editor with interactive elements, starting with InfoTip tooltips and Marker highlights. More in the future!
 
 ## Features
 
@@ -19,7 +22,7 @@ A collection of rich text formats for WordPress that enhance the block editor wi
 
 ## Installation
 
-1. Download the plugin files
+1. Download the latest release zip file from GitHub  <!--TODO - GH link to be added for release -->
 2. Upload to your WordPress `/wp-content/plugins/` directory
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Start using the new formats in your block editor
