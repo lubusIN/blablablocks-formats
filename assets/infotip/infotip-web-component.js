@@ -26,6 +26,7 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		requestAnimationFrame( () => {
 			this.updatePosition();
 			this.initializeEventListeners();
+			this.hideTooltip();
 		} );
 	}
 
