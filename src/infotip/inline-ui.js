@@ -33,18 +33,62 @@ import {
 import { PanelColorSettings } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 
+// =====================
+// Constants
+// =====================
+
+const PLACEMENT_OPTIONS = [
+	{ label: __( 'Top', 'blablablocks-formats' ), value: 'top' },
+	{ label: __( 'Top-start', 'blablablocks-formats' ), value: 'top-start' },
+	{ label: __( 'Top-end', 'blablablocks-formats' ), value: 'top-end' },
+	{ label: __( 'Right', 'blablablocks-formats' ), value: 'right' },
+	{
+		label: __( 'Right-start', 'blablablocks-formats' ),
+		value: 'right-start',
+	},
+	{ label: __( 'Right-end', 'blablablocks-formats' ), value: 'right-end' },
+	{ label: __( 'Bottom', 'blablablocks-formats' ), value: 'bottom' },
+	{
+		label: __( 'Bottom-start', 'blablablocks-formats' ),
+		value: 'bottom-start',
+	},
+	{ label: __( 'Bottom-end', 'blablablocks-formats' ), value: 'bottom-end' },
+	{ label: __( 'Left', 'blablablocks-formats' ), value: 'left' },
+	{ label: __( 'Left-start', 'blablablocks-formats' ), value: 'left-start' },
+	{ label: __( 'Left-end', 'blablablocks-formats' ), value: 'left-end' },
+];
+
+const ICONS = [
+	{ label: __( 'Info', 'blablablocks-formats' ), graphic: info, id: 'info' },
+	{ label: __( 'Help', 'blablablocks-formats' ), graphic: help, id: 'help' },
+	{
+		label: __( 'Caution', 'blablablocks-formats' ),
+		graphic: caution,
+		id: 'caution',
+	},
+	{
+		label: __( 'Error', 'blablablocks-formats' ),
+		graphic: error,
+		id: 'error',
+	},
+	{
+		label: __( 'Not allowed', 'blablablocks-formats' ),
+		graphic: notAllowed,
+		id: 'notAllowed',
+	},
+	{
+		label: __( 'Star', 'blablablocks-formats' ),
+		graphic: starEmpty,
+		id: 'starEmpty',
+	},
+];
+
+// =====================
+// Tab Components
+// =====================
+
 /**
- * TextTabContent Renders the content for the text tab.
- *
- * @param {Object}   props                  - The properties passed to the component.
- * @param {Object}   props.activeAttributes - The active attributes of the infotip.
- * @param {string}   props.name             - The name of the infotip.
- * @param {string}   props.value            - The value of the infotip.
- * @param {Function} props.onChange         - The function to call when the text tab is changed.
- * @param {Function} props.onClose          - The function to call when the text tab is closed.
- * @param {Function} props.removeAttributes - The function to call when the text tab is removed.
- * @param {Function} props.updateAttributes - The function to call when the text tab is updated.
- * @return {JSX.Element} - The rendered text tab content.
+ * TextTabContent
  */
 function TextTabContent( {
 	activeAttributes,
@@ -56,17 +100,30 @@ function TextTabContent( {
 	value,
 } ) {
 	const isUnderlined = activeAttributes.underline !== 'false';
+
+	const handleTextChange = ( newValue ) => {
+		const sanitizedValue = safeHTML( newValue );
+		updateAttributes( { content: sanitizedValue } );
+	};
+
+	const handleUnderlineToggle = () => {
+		if ( isUnderlined ) {
+			updateAttributes( { underline: 'false' } );
+		} else {
+			removeAttributes( [ 'underline' ] );
+		}
+	};
+
+	const handleClear = () => {
+		onChange( removeFormat( value, name ) );
+		if ( onClose ) onClose();
+	};
+
 	return (
 		<VStack spacing={ 6 }>
 			<TextareaControl
 				label={ __( 'Text', 'blablablocks-formats' ) }
-				onChange={ ( newValue ) => {
-					const sanitizedValue = safeHTML( newValue );
-
-					updateAttributes( {
-						content: sanitizedValue,
-					} );
-				} }
+				onChange={ handleTextChange }
 				placeholder={ __(
 					'Enter the text to display, or click clear to remove the format.',
 					'blablablocks-formats'
@@ -78,23 +135,14 @@ function TextTabContent( {
 				id="underline-toggle"
 				label={ __( 'Underline anchor text', 'blablablocks-formats' ) }
 				checked={ isUnderlined }
-				onChange={ () => {
-					if ( isUnderlined ) {
-						updateAttributes( { underline: 'false' } );
-					} else {
-						removeAttributes( [ 'underline' ] );
-					}
-				} }
+				onChange={ handleUnderlineToggle }
 				__nextHasNoMarginBottom={ true }
 			/>
 			<Flex justify="flex-end">
 				<Button
 					accessibleWhenDisabled={ true }
 					className="reset-button"
-					onClick={ () => {
-						onChange( removeFormat( value, name ) );
-						if ( onClose ) onClose();
-					} }
+					onClick={ handleClear }
 					variant="tertiary"
 					__next40pxDefaultSize={ true }
 				>
@@ -106,71 +154,43 @@ function TextTabContent( {
 }
 
 /**
- * OverlayTabContent Renders the content for the overlay tab.
- *
- * @return {JSX.Element} - The rendered overlay tab content.
+ * OverlayTabContent
  */
 function OverlayTabContent( {
 	activeAttributes,
 	updateAttributes,
 	removeAttributes,
 } ) {
-	const placementOptions = [
-		{
-			label: __( 'Top', 'blablablocks-formats' ),
-			value: 'top',
-		},
-		{
-			label: __( 'Top-start', 'blablablocks-formats' ),
-			value: 'top-start',
-		},
-		{
-			label: __( 'Top-end', 'blablablocks-formats' ),
-			value: 'top-end',
-		},
-		{
-			label: __( 'Right', 'blablablocks-formats' ),
-			value: 'right',
-		},
-		{
-			label: __( 'Right-start', 'blablablocks-formats' ),
-			value: 'right-start',
-		},
-		{
-			label: __( 'Right-end', 'blablablocks-formats' ),
-			value: 'right-end',
-		},
-		{
-			label: __( 'Bottom', 'blablablocks-formats' ),
-			value: 'bottom',
-		},
-		{
-			label: __( 'Bottom-start', 'blablablocks-formats' ),
-			value: 'bottom-start',
-		},
-		{
-			label: __( 'Bottom-end', 'blablablocks-formats' ),
-			value: 'bottom-end',
-		},
-		{
-			label: __( 'Left', 'blablablocks-formats' ),
-			value: 'left',
-		},
-		{
-			label: __( 'Left-start', 'blablablocks-formats' ),
-			value: 'left-start',
-		},
-		{
-			label: __( 'Left-end', 'blablablocks-formats' ),
-			value: 'left-end',
-		},
-	];
-
 	const overLaySettingsEnabled =
 		activeAttributes[ 'overlay-placement' ] ||
 		activeAttributes[ 'overlay-background-color' ] ||
 		activeAttributes[ 'overlay-text-color' ] ||
 		activeAttributes.offset;
+
+	const handleOffsetChange = ( newValue ) => {
+		updateAttributes( { offset: newValue || 6 } );
+	};
+
+	const handlePlacementChange = ( selectedOption ) => {
+		updateAttributes( { 'overlay-placement': selectedOption } );
+	};
+
+	const handleColorChange = ( type, newColor ) => {
+		updateAttributes( {
+			[ type ]:
+				newColor ||
+				( type === 'overlay-background-color' ? '#222222' : '#FFFFFF' ),
+		} );
+	};
+
+	const handleReset = () => {
+		removeAttributes( [
+			'overlay-placement',
+			'overlay-background-color',
+			'overlay-text-color',
+			'offset',
+		] );
+	};
 
 	return (
 		<>
@@ -183,11 +203,7 @@ function OverlayTabContent( {
 					label={ __( 'Offset', 'blablablocks-formats' ) }
 					value={ activeAttributes.offset || 6 }
 					__next40pxDefaultSize={ true }
-					onChange={ ( newValue ) => {
-						updateAttributes( {
-							offset: newValue || 6,
-						} );
-					} }
+					onChange={ handleOffsetChange }
 					style={ { width: '5rem' } }
 					min={ 6 }
 					max={ 20 }
@@ -205,16 +221,9 @@ function OverlayTabContent( {
 					__next40pxDefaultSize={ true }
 					__nextHasNoMarginBottom={ true }
 					value={ activeAttributes[ 'overlay-placement' ] || 'top' }
-					options={ placementOptions }
-					onChange={ ( selectedOption ) => {
-						updateAttributes( {
-							'overlay-placement': selectedOption,
-						} );
-					} }
-					onClick={ ( event ) => {
-						// Prevent the popover from closing when clicking the select control.
-						event.stopPropagation();
-					} }
+					options={ PLACEMENT_OPTIONS }
+					onChange={ handlePlacementChange }
+					onClick={ ( event ) => event.stopPropagation() }
 				/>
 
 				<div
@@ -233,23 +242,22 @@ function OverlayTabContent( {
 								activeAttributes[
 									'overlay-background-color'
 								] || '#222222',
-							onChange: ( newColor ) => {
-								updateAttributes( {
-									'overlay-background-color':
-										newColor || '#222222',
-								} );
-							},
+							onChange: ( newColor ) =>
+								handleColorChange(
+									'overlay-background-color',
+									newColor
+								),
 						},
 						{
 							label: __( 'Text', 'blablablocks-formats' ),
 							value:
 								activeAttributes[ 'overlay-text-color' ] ||
 								'#FFFFFF',
-							onChange: ( newColor ) => {
-								updateAttributes( {
-									'overlay-text-color': newColor || '#FFFFFF',
-								} );
-							},
+							onChange: ( newColor ) =>
+								handleColorChange(
+									'overlay-text-color',
+									newColor
+								),
 						},
 					] }
 				/>
@@ -259,14 +267,7 @@ function OverlayTabContent( {
 					accessibleWhenDisabled={ true }
 					className="reset-button"
 					disabled={ ! overLaySettingsEnabled }
-					onClick={ () => {
-						removeAttributes( [
-							'overlay-placement',
-							'overlay-background-color',
-							'overlay-text-color',
-							'offset',
-						] );
-					} }
+					onClick={ handleReset }
 					variant="tertiary"
 					__next40pxDefaultSize={ true }
 				>
@@ -278,82 +279,36 @@ function OverlayTabContent( {
 }
 
 /**
- * IconTabContent Renders the content for the icon tab.
- *
- * @param {Object}   props                  - The properties passed to the component.
- * @param {Object}   props.activeAttributes - The active attributes of the infotip.
- * @param {Function} props.updateAttributes - The function to call when the icon tab is updated.
- * @param {Function} props.removeAttributes - The function to call when the icon tab is removed.
- * @return {JSX.Element} - The rendered icon tab content.
+ * IconTabContent
  */
 function IconTabContent( {
 	activeAttributes,
 	updateAttributes,
 	removeAttributes,
 } ) {
-	// Get the selected block
 	const selectedBlock = useSelect(
 		( select ) => select( 'core/block-editor' ).getSelectedBlock(),
 		[]
 	);
 
-	// Get editor colors array
 	const { colors = [] } = useSelect(
 		( select ) => select( 'core/block-editor' ).getSettings() || {},
 		[]
 	);
 
-	// Compute the paragraph text color from block attributes:
 	const blockStyle = selectedBlock?.attributes?.style || {};
 	const explicitTextColor = blockStyle?.color?.text;
 	const textColorSlug = selectedBlock?.attributes?.textColor;
-
-	// Resolve a fallback from the themes colors if slug is used
 	const slugColor =
 		textColorSlug &&
 		colors.find( ( c ) => c.slug === textColorSlug )?.color;
-
-	// Pick whichever color we have (explicit > slug > undefined)
 	const defaultIconColor = explicitTextColor || slugColor;
-
-	const icons = [
-		{
-			label: __( 'Info', 'blablablocks-formats' ),
-			graphic: info,
-			id: 'info',
-		},
-		{
-			label: __( 'Help', 'blablablocks-formats' ),
-			graphic: help,
-			id: 'help',
-		},
-		{
-			label: __( 'Caution', 'blablablocks-formats' ),
-			graphic: caution,
-			id: 'caution',
-		},
-		{
-			label: __( 'Error', 'blablablocks-formats' ),
-			graphic: error,
-			id: 'error',
-		},
-		{
-			label: __( 'Not allowed', 'blablablocks-formats' ),
-			graphic: notAllowed,
-			id: 'notAllowed',
-		},
-		{
-			label: __( 'Star', 'blablablocks-formats' ),
-			graphic: starEmpty,
-			id: 'starEmpty',
-		},
-	];
 
 	const iconEnabled = activeAttributes[ 'icon-enabled' ] === 'true';
 	const currentIconColor =
 		activeAttributes[ 'icon-color' ] || defaultIconColor;
 
-	const onToggleIcon = () => {
+	const handleToggleIcon = () => {
 		if ( iconEnabled ) {
 			removeAttributes( [
 				'icon-enabled',
@@ -362,17 +317,34 @@ function IconTabContent( {
 				'icon-type',
 			] );
 		} else {
-			updateAttributes( {
-				'icon-enabled': 'true',
-			} );
+			updateAttributes( { 'icon-enabled': 'true' } );
 		}
+	};
+
+	const handleIconType = ( iconId ) => {
+		updateAttributes( { 'icon-type': iconId } );
+	};
+
+	const handlePositionChange = ( newValue ) => {
+		updateAttributes( { 'icon-position': newValue } );
+	};
+
+	const handleColorChange = ( newColor ) => {
+		updateAttributes( { 'icon-color': newColor || defaultIconColor } );
+	};
+
+	const handleReset = () => {
+		removeAttributes( [
+			'icon-enabled',
+			'icon-position',
+			'icon-color',
+			'icon-type',
+		] );
 	};
 
 	// Show the info icon enabled as a default when no icon type is set, and icons are just enabled.
 	if ( iconEnabled && ! activeAttributes[ 'icon-type' ] ) {
-		updateAttributes( {
-			'icon-type': 'info',
-		} );
+		updateAttributes( { 'icon-type': 'info' } );
 	}
 
 	return (
@@ -384,7 +356,7 @@ function IconTabContent( {
 				<div>
 					<FormToggle
 						checked={ iconEnabled }
-						onChange={ onToggleIcon }
+						onChange={ handleToggleIcon }
 					/>
 				</div>
 
@@ -392,7 +364,7 @@ function IconTabContent( {
 					{ __( 'Type', 'blablablocks-formats' ) }
 				</div>
 				<div>
-					{ icons.map( ( icon ) => (
+					{ ICONS.map( ( icon ) => (
 						<Button
 							accessibleWhenDisabled={ true }
 							disabled={ ! iconEnabled }
@@ -401,11 +373,7 @@ function IconTabContent( {
 							isPressed={
 								activeAttributes[ 'icon-type' ] === icon.id
 							}
-							onClick={ () => {
-								updateAttributes( {
-									'icon-type': icon.id,
-								} );
-							} }
+							onClick={ () => handleIconType( icon.id ) }
 						/>
 					) ) }
 				</div>
@@ -413,16 +381,13 @@ function IconTabContent( {
 				<div className="icon-tab-label">
 					{ __( 'Position', 'blablablocks-formats' ) }
 				</div>
-
 				<ToggleGroupControl
 					__nextHasNoMarginBottom={ true }
 					__next40pxDefaultSize={ true }
 					hideLabelFromVision={ true }
 					label={ __( 'Position', 'blablablocks-formats' ) }
 					value={ activeAttributes[ 'icon-position' ] || 'left' }
-					onChange={ ( newValue ) => {
-						updateAttributes( { 'icon-position': newValue } );
-					} }
+					onChange={ handlePositionChange }
 					disabled={ ! iconEnabled }
 				>
 					<ToggleGroupControlOptionIcon
@@ -450,7 +415,6 @@ function IconTabContent( {
 				<div className="icon-tab-label">
 					{ __( 'Color', 'blablablocks-formats' ) }
 				</div>
-
 				<Disabled isDisabled={ ! iconEnabled }>
 					<PanelColorSettings
 						label={ __( 'Color', 'blablablocks-formats' ) }
@@ -459,12 +423,7 @@ function IconTabContent( {
 							{
 								label: __( 'Icon', 'blablablocks-formats' ),
 								value: currentIconColor,
-								onChange: ( newColor ) => {
-									updateAttributes( {
-										'icon-color':
-											newColor || defaultIconColor,
-									} );
-								},
+								onChange: handleColorChange,
 							},
 						] }
 						disabled={ ! iconEnabled }
@@ -476,14 +435,7 @@ function IconTabContent( {
 					accessibleWhenDisabled={ true }
 					className="reset-button"
 					disabled={ ! iconEnabled }
-					onClick={ () => {
-						removeAttributes( [
-							'icon-enabled',
-							'icon-position',
-							'icon-color',
-							'icon-type',
-						] );
-					} }
+					onClick={ handleReset }
 					variant="tertiary"
 					__next40pxDefaultSize={ true }
 				>
@@ -494,19 +446,10 @@ function IconTabContent( {
 	);
 }
 
-/**
- * InlineUI Renders an inline UI component with a popover.
- *
- * @param {Object}   props                  - The properties passed to the component.
- * @param {Function} props.onClose          - Callback function triggered when the popover is closed.
- * @param            props.activeAttributes
- * @param            props.name
- * @param            props.value
- * @param            props.onChange
- * @param            props.contentRef
- * @param            props.isActive
- * @return {JSX.Element}           - The rendered InlineUI component.
- */
+// =====================
+// Main InlineUI Component
+// =====================
+
 export function InlineUI( {
 	activeAttributes,
 	name,
@@ -533,10 +476,11 @@ export function InlineUI( {
 	};
 
 	const removeAttributes = ( attributes ) => {
+		const updatedAttributes = { ...activeAttributes };
 		attributes.forEach( ( attribute ) => {
-			delete activeAttributes[ attribute ];
+			delete updatedAttributes[ attribute ];
 		} );
-		updateAttributes( activeAttributes );
+		updateAttributes( updatedAttributes );
 	};
 
 	return (
@@ -548,18 +492,6 @@ export function InlineUI( {
 			offset={ 30 }
 			shift={ true }
 			__unstableSlotName="__unstable-block-tools-after"
-			onFocusOutside={ ( event ) => {
-				// Prevent closing on focus events inside the popover's UI components
-				if (
-					event.target.closest(
-						'.block-editor-format-toolbar__blablablocks-infotip-popover'
-					)
-				) {
-					event.preventDefault();
-					event.stopPropagation();
-					return false;
-				}
-			} }
 		>
 			<TabPanel
 				className="block-editor-format-toolbar__blablablocks-infotip-tab-panel"
