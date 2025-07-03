@@ -490,12 +490,20 @@ export function InlineUI( {
 		onChange( updatedFormat );
 	};
 
+	const replaceAttributes = ( newAttributes ) => {
+		const updatedFormat = applyFormat( value, {
+			type: name,
+			attributes: newAttributes,
+		} );
+		onChange( updatedFormat );
+	};
+
 	const removeAttributes = ( attributes ) => {
 		const updatedAttributes = { ...activeAttributes };
 		attributes.forEach( ( attribute ) => {
 			delete updatedAttributes[ attribute ];
 		} );
-		updateAttributes( updatedAttributes );
+		replaceAttributes( updatedAttributes );
 	};
 
 	return (
