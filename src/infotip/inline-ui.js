@@ -32,6 +32,7 @@ import {
 } from '@wordpress/icons';
 import { PanelColorSettings } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 
 // =====================
 // Constants
@@ -463,6 +464,20 @@ export function InlineUI( {
 		editableContentElement: contentRef,
 		settings: { isActive },
 	} );
+
+	useEffect( () => {
+		return () => {
+			const { ownerDocument } = contentRef;
+			const infotips = ownerDocument.querySelectorAll(
+				'blablablocks-infotip'
+			);
+			infotips.forEach( ( infotip ) => {
+				if ( infotip && typeof infotip.hideTooltip === 'function' ) {
+					infotip.hideTooltip();
+				}
+			} );
+		};
+	}, [ contentRef ] );
 
 	const updateAttributes = ( newAttributes ) => {
 		const updatedFormat = applyFormat( value, {
