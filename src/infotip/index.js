@@ -3,7 +3,7 @@
  */
 import { info } from '@wordpress/icons';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -27,6 +27,12 @@ function EditButton( props ) {
 		props;
 
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
+
+	useEffect( () => {
+		if ( ! isActive ) {
+			setIsSettingOpen( false );
+		}
+	}, [ isActive ] );
 
 	return (
 		<>
