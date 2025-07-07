@@ -24,7 +24,6 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 		);
 		this.updateIcon();
 		requestAnimationFrame( () => {
-			this.updatePosition();
 			this.initializeEventListeners();
 			this.hideTooltip();
 		} );
@@ -135,7 +134,9 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 
 	showTooltip() {
 		this.shadowRoot.querySelector( '.infotip' ).style.display = 'block';
-		this.updatePosition();
+		requestAnimationFrame( () => {
+			this.updatePosition();
+		} );
 	}
 
 	hideTooltip() {
@@ -244,7 +245,6 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 			case 'content':
 				shadow.querySelector( '.infotip-popover-content' ).innerHTML =
 					newValue;
-				this.updatePosition();
 				this.showTooltip();
 				break;
 			case 'icon-enabled':
