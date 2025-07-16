@@ -1,112 +1,114 @@
 <?php
+
 /**
  * Plugin Name:       BlaBlaBlocks Formats
  * Description:       Rich text formats from BlaBlaBlocks.
- * Version:           0.1.0
+ * Version:           1.0.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Lubus
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           MIT
+ * License URI:       https://www.gnu.org/licenses/MIT
  * Text Domain:       blablablocks-formats
  *
  * @package Lubusin\BlaBlaBlocksFormats
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit; // Exit if accessed directly.
 }
 
 /**
  * Register BlaBlaBlocks formats scripts and styles.
  */
-function blablablocks_formats_init() {
-	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+function blablablocks_register_assets()
+{
+	$file          = plugin_dir_path(__FILE__) . 'build/index.asset.php';
+	$asset        = file_exists($file) ? include $file : ['dependencies' => [], 'version' => '1.0.0'];
+	$version      = $asset['version'];
+	$build_deps   = $asset['dependencies'];
 
-	// Register marker format custom element script.
+	// Register Marker format web component script
 	wp_register_script(
 		'blablablocks-marker-format-asset',
-		plugins_url( 'assets/marker/marker-web-component.js', __FILE__ ),
-		array(),
-		$asset_file['version'],
-		array( 'in_footer' => true )
+		plugins_url('assets/web-components/marker.js', __FILE__),
+		[],
+		$version,
+		true
 	);
 
-	// Register Floating UI script for infotip.
+	// Register Floating UI script
 	wp_register_script(
 		'blablablocks-floating-ui-asset',
 		'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.0',
-		array(),
+		[],
 		'1.7.0',
-		array( 'in_footer' => true )
+		true
 	);
 
-	// Register Floating UI DOM script for infotip.
+	// Register Floating UI DOM script
 	wp_register_script(
 		'blablablocks-floating-ui-dom-asset',
 		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
-		array( 'blablablocks-floating-ui-asset' ),
+		['blablablocks-floating-ui-asset'],
 		'1.7.0',
-		array( 'in_footer' => true )
+		true
 	);
 
-	// Register infotip format custom element script.
+	// Register infotip format web component script
 	wp_register_script(
 		'blablablocks-infotip-format-asset',
-		plugins_url( 'assets/infotip/infotip-web-component.js', __FILE__ ),
-		array( 'blablablocks-floating-ui-dom-asset' ),
-		$asset_file['version'],
-		array( 'in_footer' => true )
-	);
-
-	// Add dependencies.
-	$asset_file['dependencies'] = array_merge(
-		$asset_file['dependencies'],
-		array(
-			'blablablocks-marker-format-asset',
-			'blablablocks-infotip-format-asset',
-			'blablablocks-floating-ui-asset',
-			'blablablocks-floating-ui-dom-asset',
-		)
+		plugins_url('assets/web-components/infotip.js', __FILE__),
+		['blablablocks-floating-ui-dom-asset'],
+		$version,
+		true
 	);
 
 	// Register main formats script.
 	wp_register_script(
 		'blablablocks-formats',
-		plugins_url( 'build/index.js', __FILE__ ),
-		$asset_file['dependencies'],
-		$asset_file['version'],
-		array( 'in_footer' => true )
+		plugins_url('build/index.js', __FILE__),
+		array_merge(
+			$build_deps,
+			[
+				'blablablocks-marker-format',
+				'blablablocks-infotip-format',
+				'blablablocks-floating-ui-core',
+				'blablablocks-floating-ui-dom',
+			]
+		),
+		$version,
+		true
 	);
 
 	// Register styles.
 	wp_register_style(
 		'blablablocks-formats-editor',
-		plugins_url( 'build/index.css', __FILE__ ),
-		array(),
-		$asset_file['version']
+		plugins_url('build/index.css', __FILE__),
+		[],
+		$version
 	);
-
 	wp_register_style(
 		'blablablocks-formats-editor-styles',
-		plugins_url( 'build/style-index.css', __FILE__ ),
-		array(),
-		$asset_file['version']
+		plugins_url('build/style-index.css', __FILE__),
+		[],
+		$version
 	);
 }
-add_action( 'init', 'blablablocks_formats_init' );
+add_action('init', 'blablablocks_register_assets');
 
 /**
  * Enqueue scripts and styles for BlaBlaBlocks formats.
  */
-function blablablocks_formats_enqueue_assets() {
+function blablablocks_formats_enqueue_assets()
+{
 	// Enqueue main script and frontend styles.
-	wp_enqueue_script( 'blablablocks-formats' );
-	wp_enqueue_style( 'blablablocks-formats-editor-styles' );
+	wp_enqueue_script('blablablocks-formats');
+	wp_enqueue_style('blablablocks-formats-editor-styles');
 
 	// Enqueue editor styles in admin.
-	if ( is_admin() ) {
-		wp_enqueue_style( 'blablablocks-formats-editor' );
+	if (is_admin()) {
+		wp_enqueue_style('blablablocks-formats-editor');
 	}
 }
-add_action( 'enqueue_block_assets', 'blablablocks_formats_enqueue_assets' );
+add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
