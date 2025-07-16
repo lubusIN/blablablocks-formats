@@ -15,6 +15,7 @@
 		"start": "wp-scripts start --blocks-manifest",
 		"serve": "npx @wp-now/wp-now start"
 	},
+	"prettier": "@wordpress/prettier-config",
 	"devDependencies": {
 		"@wordpress/icons": "^10.22.0",
 		"@wordpress/prettier-config": "^4.22.0",
