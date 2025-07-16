@@ -469,7 +469,7 @@ export function InlineUI( {
 		return () => {
 			const { ownerDocument } = contentRef;
 			const infotips = ownerDocument.querySelectorAll(
-				'blablablocks-infotip'
+				'tatva-infotip'
 			);
 			infotips.forEach( ( infotip ) => {
 				if ( infotip && typeof infotip.hideTooltip === 'function' ) {
