@@ -1,7 +1,7 @@
 /**
- * BlaBlaBlocks: Marker text formats
+ * Tatva: Marker text formats
  */
-class BlaBlaBlocksMarker extends HTMLElement {
+class TatvaMarker extends HTMLElement {
 	static get observedAttributes() {
 		return [
 			'type',
@@ -14,26 +14,39 @@ class BlaBlaBlocksMarker extends HTMLElement {
 
 	connectedCallback() {
 		const template = this.renderElement();
-		this.attachShadow( { mode: 'open' } );
-		this.shadowRoot.appendChild( template.content.cloneNode( true ) );
+		this.attachShadow({ mode: 'open' });
+		this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+		const slot = this.shadowRoot.querySelector('slot');
+		slot.addEventListener('slotchange', () => {
+			// gather all assigned nodes
+			const nodes = slot.assignedNodes({ flatten: true });
+			// check if there’s any non‑empty text left
+			const hasText = nodes.some(node =>
+				node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''
+			);
+			if (!hasText) {
+				this.remove(); // drop the <tatva-marker> entirely
+			}
+		});
 	}
 
 	renderElement() {
-		const type = this.getAttribute( 'type' ) ?? 'circle';
+		const type = this.getAttribute('type') ?? 'circle';
 
-		const template = document.createElement( 'template' );
+		const template = document.createElement('template');
 		template.innerHTML = `
             <style>
-             ${ this.renderStyle() }
+             ${this.renderStyle()}
             </style>
 
             <span class="wrapper">
                 <span class="text">
                     <slot></slot>
                 </span>
-                <svg class="marker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150"
+                <svg part="marker" class="marker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150"
                     preserveAspectRatio="none">
-                        ${ this.renderPath( type ) }
+                        ${this.renderPath(type)}
                 </svg>
             </span>
         `;
@@ -41,10 +54,10 @@ class BlaBlaBlocksMarker extends HTMLElement {
 		return template;
 	}
 
-	renderPath( type ) {
+	renderPath(type) {
 		let path = '';
 
-		switch ( type ) {
+		switch (type) {
 			case 'curly':
 				path = `<path
                             d="M3,146.1c17.1-8.8,33.5-17.8,51.4-17.8c15.6,0,17.1,18.1,30.2,18.1c22.9,0,36-18.6,53.9-18.6 c17.1,0,21.3,18.5,37.5,18.5c21.3,0,31.8-18.6,49-18.6c22.1,0,18.8,18.8,36.8,18.8c18.8,0,37.5-18.6,49-18.6c20.4,0,17.1,19,36.8,19 c22.9,0,36.8-20.6,54.7-18.6c17.7,1.4,7.1,19.5,33.5,18.8c17.1,0,47.2-6.5,61.1-15.6">
@@ -95,15 +108,15 @@ class BlaBlaBlocksMarker extends HTMLElement {
 	}
 
 	renderStyle() {
-		const isAnimationEnabled = this.getAttribute( 'animation' ) ?? 'true';
+		const isAnimationEnabled = this.getAttribute('animation') ?? 'true';
 
 		const animationDuration =
-			this.getAttribute( 'animation-duration' ) ?? '5';
+			this.getAttribute('animation-duration') ?? '5';
 
 		const animationFunction =
-			this.getAttribute( 'animation-function' ) ?? 'ease-in';
+			this.getAttribute('animation-function') ?? 'ease-in';
 
-		const animationColor = this.getAttribute( 'color' ) ?? '#ff0000';
+		const animationColor = this.getAttribute('color') ?? '#ff0000';
 
 		let style = `
 			.wrapper {
@@ -131,19 +144,27 @@ class BlaBlaBlocksMarker extends HTMLElement {
             }
 
             .marker path {
-                stroke: ${ animationColor };
+                stroke: ${animationColor};
                 stroke-dasharray: 1500;
             }
 		`;
 
-		if ( isAnimationEnabled === 'true' ) {
+		if (['underline-zigzag', 'double-underline', 'underline', 'curly'].includes(this.getAttribute('type'))) {
+			style += `
+			.marker {
+				top: 0;
+				transform: translateX(-50%);
+			}`
+		}
+
+		if (isAnimationEnabled === 'true') {
 			style += `
 			.marker path {
 				stroke-dashoffset: 1500;
 				animation-name: acfb-hh-dash;
 				animation-iteration-count: infinite;
-				animation-duration: ${ animationDuration }s;
-				animation-timing-function: ${ animationFunction };
+				animation-duration: ${animationDuration}s;
+				animation-timing-function: ${animationFunction};
 			}
 
 			.marker path:nth-of-type(2) {
@@ -179,27 +200,27 @@ class BlaBlaBlocksMarker extends HTMLElement {
 		return style;
 	}
 
-	attributeChangedCallback( name, oldValue, newValue ) {
+	attributeChangedCallback(name, oldValue, newValue) {
 		const shadow = this.shadowRoot;
 
-		if ( ! shadow ) {
+		if (!shadow) {
 			return;
 		}
 
-		if ( name === 'type' ) {
+		if (name === 'type') {
 			// Update the path only if the type attribute changes.
-			const svg = shadow.querySelector( 'svg' );
-			svg.innerHTML = this.renderPath( newValue );
+			const svg = shadow.querySelector('svg');
+			svg.innerHTML = this.renderPath(newValue);
 		}
 		// Changes of all other attributes will require a re-render of the style.
-		const style = shadow.querySelector( 'style' );
+		const style = shadow.querySelector('style');
 		style.textContent = this.renderStyle();
 	}
 }
 
-window.BlaBlaBlocksMarker = BlaBlaBlocksMarker;
+window.TatvaMarker = TatvaMarker;
 
 // Register Element
-if ( ! window.customElements.get( 'blablablocks-marker' ) ) {
-	window.customElements.define( 'blablablocks-marker', BlaBlaBlocksMarker );
+if (!window.customElements.get('tatva-marker')) {
+	window.customElements.define('tatva-marker', TatvaMarker);
 }

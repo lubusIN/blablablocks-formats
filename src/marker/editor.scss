@@ -4,7 +4,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-blablablocks-marker {
+tatva-marker {
 	white-space: normal;
 	overflow-wrap: break-word;
 }
@@ -37,6 +37,8 @@ blablablocks-marker {
 
 	.reset-button {
 		margin-top: 1rem;
+		display: block;
+		margin-left: auto;
 	}
 }
 
@@ -49,7 +51,12 @@ blablablocks-marker {
 		background-color: #f0f0f1;
 	}
 
-	blablablocks-marker {
+	tatva-marker {
 		font-size: 0.875rem;
 	}
+}
+
+#underline-zigzag tatva-marker::part(marker),
+#double-underline tatva-marker::part(marker) {
+	top: 5px;
 }

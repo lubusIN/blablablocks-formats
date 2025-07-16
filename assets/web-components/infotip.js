@@ -1,7 +1,7 @@
 /**
- * BlaBlaBlocks: Infotip web component
+ * Tatva: Infotip web component
  */
-class BlaBlaBlocksInfotip extends HTMLElement {
+class TatvaInfotip extends HTMLElement {
 	static get observedAttributes() {
 		return [
 			'content',
@@ -267,8 +267,8 @@ class BlaBlaBlocksInfotip extends HTMLElement {
 	}
 }
 
-window.BlaBlaBlocksInfotip = BlaBlaBlocksInfotip;
+window.TatvaInfotip = TatvaInfotip;
 
-if ( ! window.customElements.get( 'blablablocks-infotip' ) ) {
-	window.customElements.define( 'blablablocks-infotip', BlaBlaBlocksInfotip );
+if ( ! window.customElements.get( 'tatva-infotip' ) ) {
+	window.customElements.define( 'tatva-infotip', TatvaInfotip );
 }
