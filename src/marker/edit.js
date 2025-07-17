@@ -8,7 +8,7 @@ import { RichTextToolbarButton } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { ReactComponent as MarkerLogo } from '../../assets/images/marker.svg';
+import MarkerIcon from '../../assets/images/marker';
 import InlineUI from './inline-ui';
 
 /**
@@ -24,7 +24,7 @@ export function Edit(props) {
     return (
         <>
             <RichTextToolbarButton
-                icon={<MarkerLogo />}
+                icon={<MarkerIcon />}
                 title={__('Marker', 'blablablocks-formats')}
                 onClick={() => setIsSettingOpen(true)}
                 isActive={isActive}
