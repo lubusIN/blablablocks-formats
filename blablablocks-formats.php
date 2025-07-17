@@ -37,12 +37,12 @@ function blablablocks_register_assets()
 		true
 	);
 
-	// Register infotip format web component script
+	// Register Floating UI script
 	wp_register_script(
-		'blablablocks-infotip-format-asset',
-		plugins_url('assets/web-components/infotip.js', __FILE__),
-		['blablablocks-floating-ui-dom-asset'],
-		$version,
+		'blablablocks-floating-ui-asset',
+		'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.0',
+		[],
+		'1.7.0',
 		true
 	);
 
@@ -50,8 +50,17 @@ function blablablocks_register_assets()
 	wp_register_script(
 		'blablablocks-floating-ui-dom-asset',
 		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
-		[],
+		['blablablocks-floating-ui-asset'],
 		'1.7.0',
+		true
+	);
+
+	// Register infotip format web component script
+	wp_register_script(
+		'blablablocks-infotip-format-asset',
+		plugins_url('assets/web-components/infotip.js', __FILE__),
+		['blablablocks-floating-ui-dom-asset'],
+		$version,
 		true
 	);
 
@@ -64,6 +73,7 @@ function blablablocks_register_assets()
 			[
 				'blablablocks-marker-format-asset',
 				'blablablocks-infotip-format-asset',
+				'blablablocks-floating-ui-asset',
 				'blablablocks-floating-ui-dom-asset',
 			]
 		),
