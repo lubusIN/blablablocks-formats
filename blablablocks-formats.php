@@ -71,10 +71,10 @@ function blablablocks_register_assets()
 		array_merge(
 			$build_deps,
 			[
-				'blablablocks-marker-format',
-				'blablablocks-infotip-format',
-				'blablablocks-floating-ui-core',
-				'blablablocks-floating-ui-dom',
+				'blablablocks-marker-format-asset',
+				'blablablocks-infotip-format-asset',
+				'blablablocks-floating-ui-asset',
+				'blablablocks-floating-ui-dom-asset',
 			]
 		),
 		$version,
