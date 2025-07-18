@@ -36,6 +36,17 @@ class TatvaInfotip extends HTMLElement {
 			this.initEvents();
 			this.hideTooltip();
 		});
+
+		const slot = this.shadowRoot.querySelector('slot');
+		slot.addEventListener('slotchange', () => {
+			// gather all assigned nodes
+			const nodes = slot.assignedNodes({ flatten: true });
+			// check if there’s any non‑empty text left
+			const hasText = nodes.some(node =>
+				node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''
+			);
+			if (!hasText) this.remove();
+		});
 	}
 
 	// Renders the main template for the component
