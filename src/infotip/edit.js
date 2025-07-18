@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { info } from '@wordpress/icons';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { useState, useEffect } from '@wordpress/element';
 
@@ -12,6 +11,7 @@ import { useState, useEffect } from '@wordpress/element';
 import './editor.scss';
 import './style.scss';
 import InlineUI from './inline-ui';
+import InfotipIcon from '../../assets/images/infotip';
 
 /**
  * Edit component for the Infotip format.
@@ -37,7 +37,7 @@ export function Edit({ value, onChange, onFocus, isActive, contentRef, activeAtt
     return (
         <>
             <RichTextToolbarButton
-                icon={info}
+                icon={<InfotipIcon />}
                 title={__('Infotip', 'blablablocks-formats')}
                 onClick={() => setIsSettingOpen(true)}
                 isActive={isActive}
