@@ -9,46 +9,9 @@ import {
 } from '@wordpress/components';
 
 /**
- * Marker style presets
+ * Internal dependencies
  */
-const MARKER_PRESETS = [
-    {
-        id: 'circle',
-        label: __('Circle', 'blablablocks-formats'),
-    },
-    {
-        id: 'curly',
-        label: __('Curly', 'blablablocks-formats'),
-    },
-    {
-        id: 'underline',
-        label: __('Underline', 'blablablocks-formats'),
-    },
-    {
-        id: 'double',
-        label: __('Double', 'blablablocks-formats'),
-    },
-    {
-        id: 'double-underline',
-        label: __('Double Underline', 'blablablocks-formats'),
-    },
-    {
-        id: 'underline-zigzag',
-        label: __('Underline Zigzag', 'blablablocks-formats'),
-    },
-    {
-        id: 'strikethrough',
-        label: __('Strikethrough', 'blablablocks-formats'),
-    },
-    {
-        id: 'cross',
-        label: __('Cross', 'blablablocks-formats'),
-    },
-    {
-        id: 'strike',
-        label: __('Strike', 'blablablocks-formats'),
-    },
-];
+import { MARKER_PRESETS } from '../../constant';
 
 /**
  * StyleTab component for managing marker style selection.

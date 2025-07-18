@@ -8,6 +8,12 @@ tatva-infotip {
 
 .block-editor-format-toolbar__blablablocks-infotip-popover {
 
+	.reset-button {
+		margin-top: 1rem;
+		display: block;
+		margin-left: auto;
+	}
+
 	.components-popover__content {
 		min-width: 23rem;
 	}
@@ -33,4 +39,3 @@ tatva-infotip {
 		}
 	}
 }
-
