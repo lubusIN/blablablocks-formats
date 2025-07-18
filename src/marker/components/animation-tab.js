@@ -11,6 +11,11 @@ import {
 } from '@wordpress/components';
 
 /**
+ * Internal dependencies
+ */
+import { ANIMATIONS } from '../../constant';
+
+/**
  * AnimationTab component for managing animation settings tab.
  *
  * @param {Object}   props                  - The component properties.
@@ -73,36 +78,7 @@ function AnimationTab({
                     disabled={!enabled}
                     label={__('Type', 'blablablocks-formats')}
                     value={activeAttributes['animation-function'] ?? 'linear'}
-                    options={[
-                        {
-                            label: __('Linear', 'blablablocks-formats'),
-                            value: 'linear',
-                        },
-                        {
-                            label: __('Ease', 'blablablocks-formats'),
-                            value: 'ease',
-                        },
-                        {
-                            label: __('Ease In', 'blablablocks-formats'),
-                            value: 'ease-in',
-                        },
-                        {
-                            label: __('Ease Out', 'blablablocks-formats'),
-                            value: 'ease-out',
-                        },
-                        {
-                            label: __('Ease In Out', 'blablablocks-formats'),
-                            value: 'ease-in-out',
-                        },
-                        {
-                            label: __('3 Steps', 'blablablocks-formats'),
-                            value: 'steps(3, start)',
-                        },
-                        {
-                            label: __('5 Steps', 'blablablocks-formats'),
-                            value: 'steps(5, end)',
-                        },
-                    ]}
+                    options={ANIMATIONS}
                     hideLabelFromVision
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
