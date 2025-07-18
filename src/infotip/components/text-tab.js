@@ -55,6 +55,7 @@ function TextTab({
         <VStack spacing={6}>
             <TextareaControl
                 label={__('Text', 'blablablocks-formats')}
+                hideLabelFromVision
                 onChange={handleTextChange}
                 placeholder={__(
                     'Enter the text to display, or click clear to remove the format.',
