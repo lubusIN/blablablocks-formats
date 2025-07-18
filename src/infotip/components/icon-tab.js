@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { ICONS } from '../../constant';
+import { ICONS } from '../../constants';
 import { justifyLeft, justifyRight } from '@wordpress/icons';
 
 /**

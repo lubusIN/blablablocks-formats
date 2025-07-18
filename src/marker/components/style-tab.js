@@ -11,7 +11,7 @@ import {
 /**
  * Internal dependencies
  */
-import { MARKER_PRESETS } from '../../constant';
+import { MARKER_PRESETS } from '../../constants';
 
 /**
  * StyleTab component for managing marker style selection.

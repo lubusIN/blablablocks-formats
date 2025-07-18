@@ -13,7 +13,7 @@ import {
 /**
  * Internal dependencies
  */
-import { PLACEMENT_OPTIONS } from '../../constant';
+import { PLACEMENT_OPTIONS } from '../../constants';
 
 /**
  * OverlayTab component for the Overlay tab in the Infotip format.

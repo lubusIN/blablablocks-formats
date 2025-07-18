@@ -13,7 +13,7 @@ import {
 /**
  * Internal dependencies
  */
-import { ANIMATIONS } from '../../constant';
+import { ANIMATIONS } from '../../constants';
 
 /**
  * AnimationTab component for managing animation settings tab.
