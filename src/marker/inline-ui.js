@@ -2,16 +2,17 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useAnchor } from '@wordpress/rich-text';
 import {
     Popover,
     TabPanel,
 } from '@wordpress/components';
-import { applyFormat, useAnchor } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
  */
 import { StyleTab, ColorTab, AnimationTab } from './components';
+import { createFormatHelpers } from '../utils';
 
 /**
  * InlineUI component for handling Marker text formatting options.
@@ -33,26 +34,12 @@ function InlineUI({
     contentRef,
     isActive,
 }) {
+    const { update, remove } = createFormatHelpers({ value, onChange, formatType: 'blablablocks/marker', activeAttributes });
+
     const anchor = useAnchor({
         editableContentElement: contentRef,
         settings: { isActive },
     });
-
-    const updateAttributes = (newAttributes) => {
-        const updatedFormat = applyFormat(value, {
-            type: 'blablablocks/marker',
-            attributes: {
-                ...activeAttributes,
-                ...newAttributes,
-            },
-        });
-        return onChange(updatedFormat);
-    };
-
-    const removeAttributes = (attributes) => {
-        attributes.forEach(attribute => delete activeAttributes[attribute]);
-        updateAttributes(activeAttributes);
-    };
 
     return (
         <Popover
@@ -73,7 +60,7 @@ function InlineUI({
                                 activeAttributes={activeAttributes}
                                 onChange={onChange}
                                 onClose={onClose}
-                                updateAttributes={updateAttributes}
+                                updateAttributes={update}
                                 value={value}
                             />
                         ),
@@ -84,8 +71,8 @@ function InlineUI({
                         content: (
                             <ColorTab
                                 currentColor={activeAttributes.color}
-                                updateAttributes={updateAttributes}
-                                removeAttributes={removeAttributes}
+                                updateAttributes={update}
+                                removeAttributes={remove}
                             />
                         ),
                         disabled: !activeAttributes.type,
@@ -96,8 +83,8 @@ function InlineUI({
                         content: (
                             <AnimationTab
                                 activeAttributes={activeAttributes}
-                                updateAttributes={updateAttributes}
-                                removeAttributes={removeAttributes}
+                                updateAttributes={update}
+                                removeAttributes={remove}
                             />
                         ),
                         disabled: !activeAttributes.type,

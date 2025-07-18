@@ -71,7 +71,7 @@ function IconTab({
                 <div className="icon-tab-label">
                     {__('Enable', 'blablablocks-formats')}
                 </div>
-                <ToggleControl checked={isIconEnabled} onChange={handleToggleIcon} />
+                <ToggleControl __nextHasNoMarginBottom checked={isIconEnabled} onChange={handleToggleIcon} />
 
                 {isIconEnabled && (
                     <>

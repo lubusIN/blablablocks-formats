@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { applyFormat, useAnchor } from '@wordpress/rich-text';
+import { useAnchor } from '@wordpress/rich-text';
 import { useEffect } from '@wordpress/element';
 import { Popover, TabPanel } from '@wordpress/components';
 
@@ -10,6 +10,7 @@ import { Popover, TabPanel } from '@wordpress/components';
  * Internal dependencies
  */
 import { IconTab, OverlayTab, TextTab } from './components';
+import { createFormatHelpers } from '../utils';
 
 /**
  * InlineUI component for handling Marker text formatting options.
@@ -26,13 +27,16 @@ import { IconTab, OverlayTab, TextTab } from './components';
  */
 function InlineUI({
 	activeAttributes,
-	name,
 	value,
 	onChange,
 	onClose,
 	contentRef,
 	isActive,
 }) {
+	const name = 'blablablocks/infotip'; // Format type name
+
+	const { update, remove } = createFormatHelpers({ value, onChange, formatType: name, activeAttributes });
+
 	const anchor = useAnchor({
 		editableContentElement: contentRef,
 		settings: { isActive },
@@ -51,33 +55,6 @@ function InlineUI({
 			});
 		};
 	}, [contentRef]);
-
-	const updateAttributes = (newAttributes) => {
-		const updatedFormat = applyFormat(value, {
-			type: name,
-			attributes: {
-				...activeAttributes,
-				...newAttributes,
-			},
-		});
-		onChange(updatedFormat);
-	};
-
-	const replaceAttributes = (newAttributes) => {
-		const updatedFormat = applyFormat(value, {
-			type: name,
-			attributes: newAttributes,
-		});
-		onChange(updatedFormat);
-	};
-
-	const removeAttributes = (attributes) => {
-		const updatedAttributes = { ...activeAttributes };
-		attributes.forEach((attribute) => {
-			delete updatedAttributes[attribute];
-		});
-		replaceAttributes(updatedAttributes);
-	};
 
 	return (
 		<Popover
@@ -101,8 +78,8 @@ function InlineUI({
 								name={name}
 								onChange={onChange}
 								onClose={onClose}
-								removeAttributes={removeAttributes}
-								updateAttributes={updateAttributes}
+								removeAttributes={remove}
+								updateAttributes={update}
 								value={value}
 							/>
 						),
@@ -113,8 +90,8 @@ function InlineUI({
 						content: (
 							<OverlayTab
 								activeAttributes={activeAttributes}
-								updateAttributes={updateAttributes}
-								removeAttributes={removeAttributes}
+								updateAttributes={update}
+								removeAttributes={remove}
 							/>
 						),
 						disabled: !activeAttributes.content,
@@ -125,8 +102,8 @@ function InlineUI({
 						content: (
 							<IconTab
 								activeAttributes={activeAttributes}
-								updateAttributes={updateAttributes}
-								removeAttributes={removeAttributes}
+								updateAttributes={update}
+								removeAttributes={remove}
 							/>
 						),
 						disabled:

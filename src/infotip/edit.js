@@ -13,9 +13,6 @@ import './editor.scss';
 import './style.scss';
 import InlineUI from './inline-ui';
 
-const name = 'blablablocks/infotip';
-const title = __('Infotip', 'blablablocks-formats');
-
 /**
  * Edit component for the Infotip format.
  *
@@ -41,7 +38,7 @@ export function Edit({ value, onChange, onFocus, isActive, contentRef, activeAtt
         <>
             <RichTextToolbarButton
                 icon={info}
-                title={title}
+                title={__('Infotip', 'blablablocks-formats')}
                 onClick={() => setIsSettingOpen(true)}
                 isActive={isActive}
             />
@@ -52,7 +49,6 @@ export function Edit({ value, onChange, onFocus, isActive, contentRef, activeAtt
                     contentRef={contentRef.current}
                     isActive={isActive}
                     value={value}
-                    name={name}
                     onChange={onChange}
                     onFocus={onFocus}
                 />
