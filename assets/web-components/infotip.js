@@ -233,6 +233,8 @@ class TatvaInfotip extends HTMLElement {
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (!this.shadowRoot || oldValue === newValue) return;
 
+		this.showTooltip();
+
 		const updateActions = {
 			'content': () => {
 				this.shadowRoot.querySelector('.infotip-popover-content').innerHTML = newValue;
