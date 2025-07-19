@@ -3,7 +3,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useAnchor } from '@wordpress/rich-text';
-import { useEffect } from '@wordpress/element';
 import { Popover, TabPanel } from '@wordpress/components';
 
 /**
@@ -41,20 +40,6 @@ function InlineUI({
 		editableContentElement: contentRef,
 		settings: { isActive },
 	});
-
-	useEffect(() => {
-		return () => {
-			const { ownerDocument } = contentRef;
-			const infotips = ownerDocument.querySelectorAll(
-				'tatva-infotip'
-			);
-			infotips.forEach((infotip) => {
-				if (infotip && typeof infotip.hideTooltip === 'function') {
-					infotip.hideTooltip();
-				}
-			});
-		};
-	}, [contentRef]);
 
 	return (
 		<Popover

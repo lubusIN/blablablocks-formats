@@ -29,10 +29,18 @@ export function Edit({ value, onChange, onFocus, isActive, contentRef, activeAtt
     const [isSettingOpen, setIsSettingOpen] = useState(false);
 
     useEffect(() => {
-        if (!isActive) {
-            setIsSettingOpen(false);
-        }
-    }, [isActive]);
+        return () => {
+            const { ownerDocument } = contentRef.current;
+            const infotips = ownerDocument.querySelectorAll(
+                'tatva-infotip'
+            );
+            infotips.forEach((infotip) => {
+                if (infotip && typeof infotip.hideTooltip === 'function') {
+                    infotip.hideTooltip();
+                }
+            });
+        };
+    }, [contentRef]);
 
     return (
         <>
