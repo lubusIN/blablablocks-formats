@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { removeFormat } from '@wordpress/rich-text';
 import {
-    Button,
+	Button,
     __experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
 
@@ -24,45 +24,45 @@ import { MARKER_PRESETS } from '../../constants';
  * @param {Object}   props.value            - The current rich text value.
  * @return {JSX.Element}                   - The rendered component.
  */
-function StyleTab({
-    activeAttributes,
-    onChange,
-    onClose,
-    updateAttributes,
-    value,
-}) {
-    const { type, ...attrs } = activeAttributes;
+function StyleTab( {
+	activeAttributes,
+	onChange,
+	onClose,
+	updateAttributes,
+	value,
+} ) {
+	const { type, ...attrs } = activeAttributes;
 
-    return (
-        <>
-            <Grid templateColumns="repeat( 3, minmax( 0, 1fr ) )">
-                {MARKER_PRESETS.map(({ id, label }) => (
-                    <Button
-                        key={id}
-                        id={id}
-                        onClick={() => updateAttributes({ type: id })}
-                        isPressed={type === id}
-                        className="block-editor-format-toolbar__blablablocks-marker-button"
-                    >
-                        <tatva-marker {...attrs} type={id}>
-                            {label}
-                        </tatva-marker>
-                    </Button>
-                ))}
-            </Grid >
-            <Button
-                className="reset-button"
-                disabled={!type}
-                onClick={() => {
-                    onChange(removeFormat(value, 'blablablocks/marker'));
-                    onClose();
-                }}
-                variant="tertiary"
-            >
-                {__('Clear', 'blablablocks-formats')}
-            </Button>
-        </>
-    );
+	return (
+		<>
+			<Grid templateColumns="repeat( 3, minmax( 0, 1fr ) )">
+				{ MARKER_PRESETS.map( ( { id, label } ) => (
+					<Button
+						key={ id }
+						id={ id }
+						onClick={ () => updateAttributes( { type: id } ) }
+						isPressed={ type === id }
+						className="block-editor-format-toolbar__blablablocks-marker-button"
+					>
+						<tatva-marker { ...attrs } type={ id }>
+							{ label }
+						</tatva-marker>
+					</Button>
+				) ) }
+			</Grid>
+			<Button
+				className="reset-button"
+				disabled={ ! type }
+				onClick={ () => {
+					onChange( removeFormat( value, 'blablablocks/marker' ) );
+					onClose();
+				} }
+				variant="tertiary"
+			>
+				{ __( 'Clear', 'blablablocks-formats' ) }
+			</Button>
+		</>
+	);
 }
 
 export default StyleTab;
