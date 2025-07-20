@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -25,47 +25,35 @@ import InfotipIcon from '../../assets/images/infotip';
  * @param {Object}   props.activeAttributes - The currently active attributes.
  * @return {JSX.Element} - The rendered infotip button.
  */
-export function Edit( {
+export function Edit({
 	value,
 	onChange,
 	onFocus,
 	isActive,
 	contentRef,
 	activeAttributes,
-} ) {
-	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
-
-	useEffect( () => {
-		return () => {
-			const { ownerDocument } = contentRef.current;
-			const infotips = ownerDocument.querySelectorAll( 'tatva-infotip' );
-			infotips.forEach( ( infotip ) => {
-				if ( infotip && typeof infotip.hideTooltip === 'function' ) {
-					infotip.hideTooltip();
-				}
-			} );
-		};
-	}, [ contentRef ] );
+}) {
+	const [isSettingOpen, setIsSettingOpen] = useState(false);
 
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={ <InfotipIcon /> }
-				title={ __( 'Infotip', 'blablablocks-formats' ) }
-				onClick={ () => setIsSettingOpen( true ) }
-				isActive={ isActive }
+				icon={<InfotipIcon />}
+				title={__('Infotip', 'blablablocks-formats')}
+				onClick={() => setIsSettingOpen(true)}
+				isActive={isActive}
 			/>
-			{ isSettingOpen && (
+			{isSettingOpen && (
 				<InlineUI
-					activeAttributes={ activeAttributes }
-					onClose={ () => setIsSettingOpen( false ) }
-					contentRef={ contentRef.current }
-					isActive={ isActive }
-					value={ value }
-					onChange={ onChange }
-					onFocus={ onFocus }
+					activeAttributes={activeAttributes}
+					onClose={() => setIsSettingOpen(false)}
+					contentRef={contentRef.current}
+					isActive={isActive}
+					value={value}
+					onChange={onChange}
+					onFocus={onFocus}
 				/>
-			) }
+			)}
 		</>
 	);
 }

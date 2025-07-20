@@ -3,6 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useAnchor } from '@wordpress/rich-text';
+import { useEffect } from '@wordpress/element';
 import { Popover, TabPanel } from '@wordpress/components';
 
 /**
@@ -23,85 +24,97 @@ import { createFormatHelpers } from '../utils';
  * @param {boolean}  props.isActive         - Indicates if the format is currently active.
  * @return {JSX.Element} - The rendered InlineUI component.
  */
-function InlineUI( {
+function InlineUI({
 	activeAttributes,
 	value,
 	onChange,
 	onClose,
 	contentRef,
 	isActive,
-} ) {
+}) {
 	const name = 'blablablocks/infotip'; // Format type name
 
-	const { update, remove } = createFormatHelpers( {
+	const { update, remove } = createFormatHelpers({
 		value,
 		onChange,
 		formatType: name,
 		activeAttributes,
-	} );
+	});
 
-	const anchor = useAnchor( {
+	const anchor = useAnchor({
 		editableContentElement: contentRef,
 		settings: { isActive },
-	} );
+	});
+
+	useEffect(() => {
+		return () => {
+			const { ownerDocument } = contentRef.current;
+			const infotips = ownerDocument.querySelectorAll('tatva-infotip');
+			infotips.forEach((infotip) => {
+				if (infotip && typeof infotip.hideTooltip === 'function') {
+					infotip.hideTooltip();
+				}
+			});
+		};
+	}, [contentRef]);
 
 	return (
 		<Popover
-			anchor={ anchor }
+			anchor={anchor}
 			className="block-editor-format-toolbar__blablablocks-infotip-popover"
 			position="middle center"
-			onClose={ onClose }
-			offset={ 30 }
+			onClose={onClose}
+			offset={30}
 			shift
 			__unstableSlotName="__unstable-block-tools-after"
 		>
 			<TabPanel
 				className="block-editor-format-toolbar__blablablocks-infotip-tab-panel"
-				tabs={ [
+				tabs={[
 					{
 						name: 'text',
-						title: __( 'Text', 'blablablocks-formats' ),
+						title: __('Text', 'blablablocks-formats'),
 						content: (
 							<TextTab
-								activeAttributes={ activeAttributes }
-								name={ name }
-								onChange={ onChange }
-								onClose={ onClose }
-								removeAttributes={ remove }
-								updateAttributes={ update }
-								value={ value }
+								activeAttributes={activeAttributes}
+								name={name}
+								onChange={onChange}
+								onClose={onClose}
+								removeAttributes={remove}
+								updateAttributes={update}
+								value={value}
 							/>
 						),
 					},
 					{
 						name: 'overlay',
-						title: __( 'Overlay', 'blablablocks-formats' ),
+						title: __('Overlay', 'blablablocks-formats'),
 						content: (
 							<OverlayTab
-								activeAttributes={ activeAttributes }
-								updateAttributes={ update }
-								removeAttributes={ remove }
+								activeAttributes={activeAttributes}
+								updateAttributes={update}
+								removeAttributes={remove}
 							/>
 						),
-						disabled: ! activeAttributes.content,
+						disabled: !activeAttributes.content,
 					},
 					{
 						name: 'icon',
-						title: __( 'Icon', 'blablablocks-formats' ),
+						title: __('Icon', 'blablablocks-formats'),
 						content: (
 							<IconTab
-								activeAttributes={ activeAttributes }
-								updateAttributes={ update }
-								removeAttributes={ remove }
+								activeAttributes={activeAttributes}
+								updateAttributes={update}
+								removeAttributes={remove}
 							/>
 						),
 						disabled:
-							! activeAttributes.content &&
-							! activeAttributes[ 'icon-enabled' ],
+							!activeAttributes.content &&
+							!activeAttributes['icon-enabled'],
 					},
-				] }
+				]}
 			>
-				{ ( tab ) => tab.content }
+				{(tab) => tab.content}
 			</TabPanel>
 		</Popover>
 	);
