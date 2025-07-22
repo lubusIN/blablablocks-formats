@@ -11,7 +11,7 @@ import { useState } from '@wordpress/element';
 import './editor.scss';
 import './style.scss';
 import InlineUI from './inline-ui';
-import InfotipIcon from '../../assets/images/infotip';
+import { InfotipIcon } from './components';
 
 /**
  * Edit component for the Infotip format.

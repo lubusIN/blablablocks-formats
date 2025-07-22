@@ -48,7 +48,7 @@ function InlineUI({
 
 	useEffect(() => {
 		return () => {
-			const { ownerDocument } = contentRef.current;
+			const { ownerDocument } = contentRef;
 			const infotips = ownerDocument.querySelectorAll('tatva-infotip');
 			infotips.forEach((infotip) => {
 				if (infotip && typeof infotip.hideTooltip === 'function') {
