@@ -8,7 +8,7 @@ import { RichTextToolbarButton } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import MarkerIcon from '../../assets/images/marker';
+import { MarkerIcon } from './components';
 import InlineUI from './inline-ui';
 
 /**
@@ -22,34 +22,34 @@ import InlineUI from './inline-ui';
  * @param {Object}   props.activeAttributes - The currently active attributes.
  * @return {JSX.Element} - The rendered Marker formats.
  */
-export function Edit( {
+export function Edit({
 	value,
 	onChange,
 	isActive,
 	contentRef,
 	activeAttributes,
-} ) {
-	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
+}) {
+	const [isSettingOpen, setIsSettingOpen] = useState(false);
 
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={ <MarkerIcon /> }
-				title={ __( 'Marker', 'blablablocks-formats' ) }
-				onClick={ () => setIsSettingOpen( true ) }
-				isActive={ isActive }
+				icon={<MarkerIcon />}
+				title={__('Marker', 'blablablocks-formats')}
+				onClick={() => setIsSettingOpen(true)}
+				isActive={isActive}
 			/>
 
-			{ isSettingOpen && (
+			{isSettingOpen && (
 				<InlineUI
-					value={ value }
-					onChange={ onChange }
-					onClose={ () => setIsSettingOpen( false ) }
-					activeAttributes={ activeAttributes }
-					contentRef={ contentRef.current }
-					isActive={ isActive }
+					value={value}
+					onChange={onChange}
+					onClose={() => setIsSettingOpen(false)}
+					activeAttributes={activeAttributes}
+					contentRef={contentRef.current}
+					isActive={isActive}
 				/>
-			) }
+			)}
 		</>
 	);
 }
