@@ -22,7 +22,7 @@ A collection of rich text formats for the WordPress block editor with interactiv
 
 ### InfoTip Format
 
-<!-- TODO - add recording --> 
+<!-- TODO - add recording -->
 
 1. Select any text in the block editor
 2. Click the InfoTip button in the formatting toolbar
@@ -78,11 +78,11 @@ npm run serve
 [LUBUS](http://lubus.in) is a web design agency based in Mumbai.
 
 <a href="https://cal.com/lubus">
-<img src="https://raw.githubusercontent.com/lubusIN/.github/refs/heads/main/profile/banner.png" />
+	<img src="https://raw.githubusercontent.com/lubusIN/.github/refs/heads/main/profile/banner.png" />
 </a>
 
 ## Credits
-<!-- TODO check if this works after repo is made public -->L
+<!-- TODO check if this works after repo is made public -->
 <a href="https://github.com/lubusIN/blablablocks-formats/graphs/contributors">
   <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-formats"/>
 </a>
