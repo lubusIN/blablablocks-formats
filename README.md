@@ -89,7 +89,9 @@ npm run serve
   <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-formats"/>
 </a>
 
--   [Marker](https://thenounproject.com/icon/marker-7644139/) icon by [Amir Ali](https://thenounproject.com/amirali) from [Noun Project](https://thenounproject.com/browse/icons/term/marker/) (CC BY 3.0)
+-   [Infotip](https://thenounproject.com/icon/tooltip-383461/) icon by [Icon Island](https://thenounproject.com/iconisland) from [Noun Project](https://thenounproject.com/browse/icons/term/tooltip/) (CC BY 3.0)
+
+-   [Marker](https://thenounproject.com/icon/highlighter-7628276/) icon by [Muhammad Nur Auliady Pamungkas](https://thenounproject.com/mnauliady) from [Noun Project](https://thenounproject.com/browse/icons/term/highlighter/) (CC BY 3.0)
 
 ## License
 
