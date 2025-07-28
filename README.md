@@ -1,4 +1,4 @@
-![BlaBlaBlocks Formats](.github/banner-image.jpg)
+![BlaBlaBlocks Formats](.github/banner-image.jpeg)
 
 [![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-formats/playground/_playground/blueprint-github.json)
 
