@@ -1,22 +1,23 @@
-# BlaBlaBlocks Formats
-<!-- TODO add graphics -->
-<!-- TODO add playground demo link -->
+![BlaBlaBlocks Formats](.github/banner-image.jpg)
+
+[![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-formats/playground/_playground/blueprint-github.json)
 
 ## Overview
+
 A collection of rich text formats for the WordPress block editor with interactive elements. Starting with InfoTip tooltips and Marker highlights. More to come in the future!
 
 ## Requirements
-- WordPress 6.6+
-- Modern browser with JavaScript enabled
-- Floating UI library (included)
 
+-   WordPress 6.6+
+-   Modern browser with JavaScript enabled
+-   Floating UI library (included)
 
 ## Installation
 
-1. Download the latest release from GitHub  <!--TODO - GH link to be added for release -->
-2. Browse to `WP Admin > Plugins > Add New`
+1. Download the latest release from GitHub
+2. Visit `Plugins > Add New`
 3. Upload the `blablablocks-formats.zip` file
-4. Activate `BlaBlaBlocks Formats` from the plugins page
+4. Activate `BlaBlaBlocks Formats` from plugins page
 
 ## Usage
 
@@ -28,7 +29,6 @@ A collection of rich text formats for the WordPress block editor with interactiv
 2. Click the InfoTip button in the formatting toolbar
 3. Configure your tooltip with custom text, colors, and overlay placement
 
-
 ### Marker Format
 
 <!-- TODO - add recording -->
@@ -37,10 +37,10 @@ A collection of rich text formats for the WordPress block editor with interactiv
 2. Click the Marker button in the formatting toolbar
 3. Choose your preferred highlighting style and animation
 
-
 ## Development
 
 ### 1. Clone the repository
+
 Clone the repository to your local system:
 
 ```bash
@@ -60,6 +60,7 @@ npm install
 ```
 
 ### 4. Build plugin
+
 Build or start the development environment:
 
 ```bash
@@ -67,6 +68,7 @@ npm run build       # Compile the source files
 # OR
 npm run start       # Watch for changes and auto-compile
 ```
+
 ### 5. Launch Playground
 
 ```bash
@@ -82,15 +84,13 @@ npm run serve
 </a>
 
 ## Credits
-<!-- TODO check if this works after repo is made public -->
+
 <a href="https://github.com/lubusIN/blablablocks-formats/graphs/contributors">
   <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-formats"/>
 </a>
 
-* [Marker](https://thenounproject.com/icon/marker-7644139/) icon by [Amir Ali](https://thenounproject.com/amirali) from [Noun Project](https://thenounproject.com/browse/icons/term/marker/) (CC BY 3.0)
-
+-   [Marker](https://thenounproject.com/icon/marker-7644139/) icon by [Amir Ali](https://thenounproject.com/amirali) from [Noun Project](https://thenounproject.com/browse/icons/term/marker/) (CC BY 3.0)
 
 ## License
 
-This project is licensed under the MIT license.
-
+BlaBlaBlocks Formats is open-sourced plugin licensed under the [MIT license](LICENSE)
