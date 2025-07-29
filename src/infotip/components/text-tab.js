@@ -39,8 +39,8 @@ function TextTab( {
 	};
 
 	const handleUnderlineToggle = (enabled) => {
-		if (enabled) {
-			updateAttributes({ underline: enabled });
+		if (enabled === true) {
+			updateAttributes({ underline: "true" });
 		} else {
 			removeAttributes( [ 'underline' ] );
 		}
@@ -66,9 +66,9 @@ function TextTab( {
 			/>
 			<ToggleControl
 				id="underline-toggle"
-				label={ __( 'Underline anchor text', 'blablablocks-formats' ) }
-				checked={ activeAttributes.underline }
-				onChange={ handleUnderlineToggle }
+				label={__('Underline anchor text', 'blablablocks-formats')}
+				checked={activeAttributes.underline === "true"}
+				onChange={handleUnderlineToggle}
 				__nextHasNoMarginBottom
 			/>
 			<Button
