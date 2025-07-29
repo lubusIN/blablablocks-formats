@@ -21,7 +21,7 @@ registerFormatType( 'blablablocks/infotip', {
 	edit: Edit,
 	attributes: {
 		content: 'content',
-		underline: 'underline',
+		"underline": 'underline',
 		'icon-enabled': 'icon-enabled',
 		'icon-position': 'icon-position',
 		'icon-color': 'icon-color',
