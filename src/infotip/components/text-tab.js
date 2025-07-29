@@ -38,9 +38,9 @@ function TextTab( {
 		updateAttributes( { content: sanitizedValue } );
 	};
 
-	const handleUnderlineToggle = ( enabled ) => {
-		if ( enabled ) {
-			updateAttributes( { underline: value } );
+	const handleUnderlineToggle = (enabled) => {
+		if (enabled) {
+			updateAttributes({ underline: enabled });
 		} else {
 			removeAttributes( [ 'underline' ] );
 		}
