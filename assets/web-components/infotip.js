@@ -27,36 +27,36 @@ class TatvaInfotip extends HTMLElement {
 	};
 
 	connectedCallback() {
-		this.attachShadow({ mode: 'open' });
+		this.attachShadow( { mode: 'open' } );
 		this.shadowRoot.innerHTML = this.getTemplate();
 
-		requestAnimationFrame(() => {
+		requestAnimationFrame( () => {
 			this.updateIcon();
 			this.updatePosition();
 			this.initEvents();
 			this.hideTooltip();
-		});
+		} );
 
-		const slot = this.shadowRoot.querySelector('slot');
-		slot.addEventListener('slotchange', () => {
+		const slot = this.shadowRoot.querySelector( 'slot' );
+		slot.addEventListener( 'slotchange', () => {
 			// gather all assigned nodes
-			const nodes = slot.assignedNodes({ flatten: true });
+			const nodes = slot.assignedNodes( { flatten: true } );
 			// check if there’s any non‑empty text left
 			const hasText = nodes.some(
-				(node) =>
+				( node ) =>
 					node.nodeType === Node.TEXT_NODE &&
 					node.textContent.trim() !== ''
 			);
-			if (!hasText) this.remove();
-		});
+			if ( ! hasText ) this.remove();
+		} );
 	}
 
 	// Renders the main template for the component
 	getTemplate() {
-		const content = this.getAttribute('content');
+		const content = this.getAttribute( 'content' );
 		return `
 			<style>
-				${this.getStyles()}
+				${ this.getStyles() }
 			</style>
 			<span class="wrapper">
 				<span class="text" tabindex="0" role="button" aria-describedby="infotip-popover">
@@ -65,7 +65,7 @@ class TatvaInfotip extends HTMLElement {
 				</span>
 				<div class="infotip" id="infotip-popover">
 					<div class="infotip-popover-content">
-						${content}
+						${ content }
 					</div>
 					<div class="arrow"></div>
 				</div>
@@ -75,162 +75,224 @@ class TatvaInfotip extends HTMLElement {
 
 	// Updates the icon based on current attributes
 	updateIcon() {
-		const iconEnabled = this.getAttribute('icon-enabled') === 'true';
-		const iconType = this.getAttribute('icon-type') || 'info';
-		const icon = this.shadowRoot.querySelector('.icon');
+		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
+		const iconType = this.getAttribute( 'icon-type' ) || 'info';
+		const icon = this.shadowRoot.querySelector( '.icon' );
 
-		if (!icon) return;
+		if ( ! icon ) return;
 
 		icon.innerHTML = iconEnabled
 			? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" role="img">
-				${TatvaInfotip.ICONS[iconType] || TatvaInfotip.ICONS.info}
+				${ TatvaInfotip.ICONS[ iconType ] || TatvaInfotip.ICONS.info }
 			</svg>`
 			: '';
 	}
 
 	// Updates the infotip overlay position using FloatingUIDOM
 	updatePosition() {
-		const content = this.getAttribute('content');
-		if (!content) {
+		const content = this.getAttribute( 'content' );
+		const floatingUI = window.FloatingUIDOM;
+		if ( ! content || ! floatingUI ) {
 			this.hideTooltip();
 			return;
 		}
-		const floatingUI = window.FloatingUIDOM;
-		if (!floatingUI) return;
 
-		const anchor = this.shadowRoot.querySelector('.text');
-		const tooltip = this.shadowRoot.querySelector('.infotip');
-		const arrow = tooltip.querySelector('.arrow');
-		const rawPlace = this.getAttribute('overlay-placement') || 'top';
-		const offset = parseInt(this.getAttribute('offset') || '6', 10);
+		const anchor = this.shadowRoot.querySelector( '.text' );
+		const tooltip = this.shadowRoot.querySelector( '.infotip' );
+		const arrow = tooltip.querySelector( '.arrow' );
+
+		const rawPlacement = this.getAttribute( 'overlay-placement' ) || 'top';
+		const offset = parseInt( this.getAttribute( 'offset' ) || '6', 10 );
+
+		const middleware = [
+			floatingUI.flip( {
+				fallbackPlacements: [
+					'top-start',
+					'top',
+					'top-end',
+					'right-start',
+					'right',
+					'right-end',
+					'bottom-start',
+					'bottom',
+					'bottom-end',
+					'left-start',
+					'left',
+					'left-end',
+				],
+			} ),
+			floatingUI.shift( { padding: 5 } ),
+			floatingUI.arrow( { element: arrow, padding: 5 } ),
+		];
 
 		floatingUI
-			.computePosition(anchor, tooltip, {
-				placement: rawPlace,
+			.computePosition( anchor, tooltip, {
+				placement: rawPlacement,
 				strategy: 'fixed',
-				middleware: [
-					floatingUI.flip({
-						fallbackPlacements: [
-							'top-start', 'top', 'top-end',
-							'right-start', 'right', 'right-end',
-							'bottom-start', 'bottom', 'bottom-end',
-							'left-start', 'left', 'left-end',
-						],
-					}),
-					floatingUI.shift({ padding: 5 }),
-					floatingUI.arrow({ element: arrow, padding: 5 }),
-				],
-			})
-			.then(({ placement }) => {
-				const [base, align] = placement.split('-');
+				middleware,
+			} )
+			.then( ( { placement } ) => {
+				const { x, y } = this.calculateTooltipPosition(
+					placement,
+					anchor,
+					tooltip,
+					arrow,
+					offset
+				);
+				this.applyTooltipStyles( tooltip, x, y );
 
-				// measure actual DOM boxes
-				const ref = anchor.getBoundingClientRect();
-				const tipR = tooltip.getBoundingClientRect();
-				// arrow is an 8×8px rotated square half‑diagonal gap
-				const arrowGap = (arrow.offsetWidth || 8) * Math.SQRT2 / 2;
+				const { mainProp, pinProp, center } =
+					this.calculateArrowPosition(
+						placement,
+						anchor,
+						tooltip,
+						arrow,
+						x,
+						y
+					);
+				this.applyArrowStyles( arrow, mainProp, pinProp, center );
+			} );
+	}
 
-				let x, y;
-				if (base === 'top' || base === 'bottom') {
-					if (align === 'start') x = ref.left;
-					else if (align === 'end') x = ref.right - tipR.width;
-					else x = ref.left + (ref.width - tipR.width) / 2;
+	calculateTooltipPosition( placement, anchor, tooltip, arrow, offset ) {
+		const [ base, align ] = placement.split( '-' );
+		const ref = anchor.getBoundingClientRect();
+		const tip = tooltip.getBoundingClientRect();
+		const arrowGap = ( ( arrow.offsetWidth || 8 ) * Math.SQRT2 ) / 2;
 
-					if (base === 'top') y = ref.top - tipR.height - arrowGap - offset;
-					else y = ref.bottom + arrowGap + offset;
-				} else {
-					if (align === 'start') y = ref.top;
-					else if (align === 'end') y = ref.bottom - tipR.height;
-					else y = ref.top + (ref.height - tipR.height) / 2;
+		let x = 0,
+			y = 0;
 
-					if (base === 'left') x = ref.left - tipR.width - arrowGap - offset;
-					else x = ref.right + arrowGap + offset;
-				}
+		if ( [ 'top', 'bottom' ].includes( base ) ) {
+			if ( align === 'start' ) {
+				x = ref.left;
+			} else if ( align === 'end' ) {
+				x = ref.right - tip.width;
+			} else {
+				x = ref.left + ( ref.width - tip.width ) / 2;
+			}
 
-				// clamp inside viewport
-				const vw = window.innerWidth, vh = window.innerHeight;
-				x = Math.min(Math.max(0, x), vw - tipR.width);
-				y = Math.min(Math.max(0, y), vh - tipR.height);
+			if ( base === 'top' ) {
+				y = ref.top - tip.height - arrowGap - offset;
+			} else {
+				y = ref.bottom + arrowGap + offset;
+			}
+		} else {
+			if ( align === 'start' ) {
+				y = ref.top;
+			} else if ( align === 'end' ) {
+				y = ref.bottom - tip.height;
+			} else {
+				y = ref.top + ( ref.height - tip.height ) / 2;
+			}
 
-				Object.assign(tooltip.style, {
-					left: `${x}px`,
-					top: `${y}px`,
-				});
+			if ( base === 'left' ) {
+				x = ref.left - tip.width - arrowGap - offset;
+			} else {
+				x = ref.right + arrowGap + offset;
+			}
+		}
 
-				Object.assign(arrow.style, {
-					top: '',
-					right: '',
-					bottom: '',
-					left: '',
-				});
+		// Clamp within viewport
+		const vw = window.innerWidth,
+			vh = window.innerHeight;
+		x = Math.min( Math.max( 0, x ), vw - tip.width );
+		y = Math.min( Math.max( 0, y ), vh - tip.height );
 
-				// half the arrows size (default 8px)
-				const half = (arrow.offsetWidth || 8) / 2;
-				const side = placement.split('-')[0];
-				const horizontal = side === 'top' || side === 'bottom';
+		return { x, y };
+	}
 
-				// compute center offset minus half the arrow
-				const center = (horizontal
-					? (ref.left + ref.width / 2 - x)
-					: (ref.top + ref.height / 2 - y)
-				) - half;
+	applyTooltipStyles( tooltip, x, y ) {
+		Object.assign( tooltip.style, {
+			left: `${ x }px`,
+			top: `${ y }px`,
+		} );
+	}
 
-				// pick CSS props
-				const mainProp = horizontal ? 'left' : 'top';
-				const pinProp = base === 'top' ? 'bottom'
-					: base === 'bottom' ? 'top'
-						: base === 'left' ? 'right'
-							: 'left';
+	calculateArrowPosition(
+		placement,
+		anchor,
+		tooltip,
+		arrow,
+		tooltipX,
+		tooltipY
+	) {
+		const ref = anchor.getBoundingClientRect();
+		const arrowSize = ( arrow.offsetWidth || 8 ) / 2;
+		const side = placement.split( '-' )[ 0 ];
+		const isHorizontal = [ 'top', 'bottom' ].includes( side );
 
-				arrow.style[mainProp] = `${center}px`;
-				arrow.style[pinProp] = '-4px';
-			});
+		const center =
+			( isHorizontal
+				? ref.left + ref.width / 2 - tooltipX
+				: ref.top + ref.height / 2 - tooltipY ) - arrowSize;
+
+		const mainProp = isHorizontal ? 'left' : 'top';
+		const pinProp = {
+			top: 'bottom',
+			bottom: 'top',
+			left: 'right',
+			right: 'left',
+		}[ side ];
+
+		return { mainProp, pinProp, center };
+	}
+
+	applyArrowStyles( arrow, mainProp, pinProp, center ) {
+		Object.assign( arrow.style, {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+			[ mainProp ]: `${ center }px`,
+			[ pinProp ]: '-4px',
+		} );
 	}
 
 	showTooltip() {
-		this.shadowRoot.querySelector('.infotip').style.display = 'block';
+		this.shadowRoot.querySelector( '.infotip' ).style.display = 'block';
 		this.updatePosition();
 	}
 
 	hideTooltip() {
-		this.shadowRoot.querySelector('.infotip').style.display = 'none';
+		this.shadowRoot.querySelector( '.infotip' ).style.display = 'none';
 	}
 
 	// Sets up mouse and keyboard event listeners for showing/hiding the tooltip
 	initEvents() {
 		const events = [
-			['mouseenter', this.showTooltip],
-			['mouseleave', this.hideTooltip],
-			['focus', this.showTooltip],
-			['blur', this.hideTooltip],
+			[ 'mouseenter', this.showTooltip ],
+			[ 'mouseleave', this.hideTooltip ],
+			[ 'focus', this.showTooltip ],
+			[ 'blur', this.hideTooltip ],
 		];
-		events.forEach(([event, handler]) => {
-			this.addEventListener(event, handler.bind(this));
-		});
+		events.forEach( ( [ event, handler ] ) => {
+			this.addEventListener( event, handler.bind( this ) );
+		} );
 	}
 
 	// Generates the component's CSS based on current attributes
 	getStyles() {
-		const underline = this.getAttribute('underline');
-		const iconEnabled = this.getAttribute('icon-enabled') === 'true';
-		const iconPosition = this.getAttribute('icon-position') || 'left';
-		const iconColor = this.getAttribute('icon-color') || 'currentColor';
+		const underline = this.getAttribute( 'underline' );
+		const iconEnabled = this.getAttribute( 'icon-enabled' ) === 'true';
+		const iconPosition = this.getAttribute( 'icon-position' ) || 'left';
+		const iconColor = this.getAttribute( 'icon-color' ) || 'currentColor';
 		const textColor =
-			this.getAttribute('overlay-text-color') || '#FFFFFF';
+			this.getAttribute( 'overlay-text-color' ) || '#FFFFFF';
 		const bgColor =
-			this.getAttribute('overlay-background-color') || '#222';
+			this.getAttribute( 'overlay-background-color' ) || '#222';
 
 		let css = `
 			.wrapper {
 				position: relative;
 			}
 			.text {
-				text-decoration: ${underline ? 'dotted underline' : 'none'};
+				text-decoration: ${ underline ? 'dotted underline' : 'none' };
 				cursor: pointer;
 				display: inline-flex;
 				vertical-align: bottom;
 				gap: 2px;
-				flex-direction: ${iconPosition === 'right' ? 'row-reverse' : 'row'};
+				flex-direction: ${ iconPosition === 'right' ? 'row-reverse' : 'row' };
 			}
 			.infotip {
 				display: none;
@@ -238,22 +300,22 @@ class TatvaInfotip extends HTMLElement {
 				position: fixed;
 				top: 0px;
 				left: 0px;
-				background: ${bgColor};
-				color: ${textColor};
+				background: ${ bgColor };
+				color: ${ textColor };
 				padding: 10px;
 				border-radius: 4px;
 				font-size: 70%;
 			}
 			.infotip .arrow {
 				position: absolute;
-				background: ${bgColor};
+				background: ${ bgColor };
 				width: 8px;
 				height: 8px;
 				transform: rotate(45deg);
 			}
 		`;
 
-		if (iconEnabled) {
+		if ( iconEnabled ) {
 			css += `
 				.icon {
 					display: inline-flex;
@@ -262,7 +324,7 @@ class TatvaInfotip extends HTMLElement {
 				.icon svg {
 					width: 24px;
 					height: 24px;
-					fill: ${iconColor};
+					fill: ${ iconColor };
 				}
 			`;
 		}
@@ -270,8 +332,8 @@ class TatvaInfotip extends HTMLElement {
 	}
 
 	// Handles attribute changes and updates the component accordingly
-	attributeChangedCallback(name, oldValue, newValue) {
-		if (!this.shadowRoot || oldValue === newValue) return;
+	attributeChangedCallback( name, oldValue, newValue ) {
+		if ( ! this.shadowRoot || oldValue === newValue ) return;
 
 		this.showTooltip();
 
@@ -288,17 +350,17 @@ class TatvaInfotip extends HTMLElement {
 			offset: () => this.updatePosition(),
 		};
 
-		if (updateActions[name]) {
-			updateActions[name]();
+		if ( updateActions[ name ] ) {
+			updateActions[ name ]();
 		}
 
 		// Always update styles
-		this.shadowRoot.querySelector('style').textContent = this.getStyles();
+		this.shadowRoot.querySelector( 'style' ).textContent = this.getStyles();
 	}
 }
 
 window.TatvaInfotip = TatvaInfotip;
 
-if (!window.customElements.get('tatva-infotip')) {
-	window.customElements.define('tatva-infotip', TatvaInfotip);
+if ( ! window.customElements.get( 'tatva-infotip' ) ) {
+	window.customElements.define( 'tatva-infotip', TatvaInfotip );
 }
