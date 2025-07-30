@@ -242,7 +242,7 @@ class TatvaInfotip extends HTMLElement {
 				color: ${textColor};
 				padding: 10px;
 				border-radius: 4px;
-				font-size: 90%;
+				font-size: 70%;
 			}
 			.infotip .arrow {
 				position: absolute;
