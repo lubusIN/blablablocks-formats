@@ -94,6 +94,15 @@ function blablablocks_register_assets()
 		[],
 		$version
 	);
+
+	// Register Odometer library for counter animation.
+	wp_register_script(
+		'odometer-lib',
+		'https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js',
+		[],
+		'0.4.8',
+		true
+	);
 }
 add_action('init', 'blablablocks_register_assets');
 
@@ -112,3 +121,20 @@ function blablablocks_formats_enqueue_assets()
 	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
+
+/**
+ * Enqueue counter animation script.
+ *
+ * This script is used for the counter format to animate number changes.
+ */
+function blablablocks_formats_enqueue_counter_animation()
+{
+	wp_enqueue_script(
+		'blablablocks-counter-frontend',
+		plugins_url('assets/counter.js', __FILE__),
+		['odometer-lib'],
+		'1.0.0',
+		true
+	);
+}
+add_action('wp_enqueue_scripts', 'blablablocks_formats_enqueue_counter_animation');

@@ -4,3 +4,4 @@
 import './marker';
 import './infotip';
 import './gradient-text';
+import './counter';
