@@ -6,7 +6,7 @@ import { removeFormat, useAnchor } from '@wordpress/rich-text';
 import {
     __experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients
 } from '@wordpress/block-editor';
-import { Popover, GradientPicker } from '@wordpress/components';
+import { Button, Popover, GradientPicker } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -74,6 +74,7 @@ function InlineUI({
                     }
                     update({ style: `${PREFIX}${gradient}` });
                 }}
+                clearable={false}
             />
             <Button
                 accessibleWhenDisabled
