@@ -1,3 +1,5 @@
+<p align="center"><img width="250" src=".github/logo.svg"></p>
+
 ![BlaBlaBlocks Formats](.github/banner-image.jpeg)
 
 [![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-formats/playground/_playground/blueprint-github.json)
@@ -84,10 +86,6 @@ npm run serve
 </a>
 
 ## Credits
-
-<a href="https://github.com/lubusIN/blablablocks-formats/graphs/contributors">
-  <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-formats"/>
-</a>
 
 -   [Infotip](https://thenounproject.com/icon/tooltip-383461/) icon by [Icon Island](https://thenounproject.com/iconisland) from [Noun Project](https://thenounproject.com/browse/icons/term/tooltip/) (CC BY 3.0)
 
