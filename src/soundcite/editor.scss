@@ -1,0 +1,47 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.block-editor-format-toolbar__soundcite {
+	&-container {
+		display: flex;
+
+		.components-button {
+			margin-bottom: 14px;
+			margin-right: 2px;
+			align-self: flex-end;
+		}
+	}
+
+	&-value {
+		margin: 7px;
+	}
+
+	&-action {
+		margin: 0 7px;
+	}
+}
+
+.soundcite {
+	// Loaded
+	background-color: rgba(0, 0, 0, 0.15);
+	border-radius: 6px;
+	padding: 0 5px 0 5px;
+	display: inline-block;
+
+	&:before {
+		// Loaded
+		display: inline-block;
+		content: "";
+		vertical-align: -10%;
+		margin-right: 0.25em;
+
+		// Play
+		font-size: 0.9em;
+		position: relative;
+		top: -0.05em;
+		border: 0.5em solid transparent;
+		border-left: 0.75em solid black;
+	}
+}
