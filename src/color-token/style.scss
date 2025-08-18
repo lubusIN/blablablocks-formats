@@ -1,0 +1,21 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.lubus-color-token {
+	display: inline-block;
+
+	&::before {
+		content: "";
+		background-color: var(--lubus-color);
+		border: 1px solid var(--lubus-border-color);
+		border-radius: 4px;
+		margin-right: 6px;
+		padding: 8px;
+		display: inherit;
+		position: relative;
+		top: 2px;
+	}
+}
