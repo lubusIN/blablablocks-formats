@@ -7,3 +7,4 @@ import './typography';
 import './counter';
 import './gradient-text';
 import './clear-formats';
+import './color-token';
