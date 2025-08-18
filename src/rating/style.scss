@@ -1,0 +1,35 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.has-rating {
+	display: inline-block;
+
+	&:before {
+		margin-right: 5px;
+		color: #f69e0b;
+	}
+}
+
+.has-1-star:before {
+	content: "★☆☆☆☆";
+}
+
+.has-2-star:before {
+	content: "★★☆☆☆";
+}
+
+.has-3-star:before {
+	content: "★★★☆☆";
+}
+
+.has-4-star:before {
+	content: "★★★★☆";
+}
+
+.has-5-star:before {
+	content: "★★★★★";
+}
