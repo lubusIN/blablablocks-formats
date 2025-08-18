@@ -1,0 +1,84 @@
+$odometer-duration: var(--odo-duration, 1.6s) !default;
+
+@mixin inline-block {
+    display: inline-block;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+}
+
+.odometer {
+
+    &.odometer-auto-theme,
+    &.odometer-theme-default {
+        @include inline-block;
+        position: relative;
+
+        .odometer-digit {
+            @include inline-block;
+            position: relative;
+
+            .odometer-digit-spacer {
+                @include inline-block;
+                visibility: hidden;
+            }
+
+            .odometer-digit-inner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: block;
+                text-align: left;
+                overflow: hidden;
+            }
+
+            .odometer-ribbon {
+                display: block;
+
+                &-inner {
+                    display: block;
+                    backface-visibility: hidden;
+                }
+            }
+
+            .odometer-value {
+                display: block;
+                transform: translateZ(0);
+
+                &.odometer-last-value {
+                    position: absolute;
+                }
+            }
+        }
+
+        &.odometer-animating-up {
+            .odometer-ribbon-inner {
+                transition: transform $odometer-duration;
+            }
+
+            &.odometer-animating .odometer-ribbon-inner {
+                transform: translateY(-100%);
+            }
+        }
+
+        &.odometer-animating-down {
+            .odometer-ribbon-inner {
+                transform: translateY(-100%);
+            }
+
+            &.odometer-animating .odometer-ribbon-inner {
+                transition: transform $odometer-duration;
+                transform: translateY(0);
+            }
+        }
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .odometer-ribbon-inner {
+        transition-duration: 0.1s !important;
+    }
+}
