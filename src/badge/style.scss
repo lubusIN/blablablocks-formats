@@ -1,0 +1,50 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.has-badge {
+	padding: 2px 10px;
+	border-radius: 4px;
+
+	&.has-badge-gray {
+		background-color: #F3F4F6;
+		color: #1F2A37;
+	}
+
+	&.has-badge-red {
+		background-color: #FDE2E1;
+		color: #991B1C;
+	}
+
+	&.has-badge-yellow {
+		background-color: #FEF3C7;
+		color: #93410F;
+	}
+
+	&.has-badge-green {
+		background-color: #D1FAE4;
+		color: #076046;
+	}
+
+	&.has-badge-blue {
+		background-color: #DBEAFE;
+		color: #1E40AF;
+	}
+
+	&.has-badge-indigo {
+		background-color: #E0E8FF;
+		color: #3830A3;
+	}
+
+	&.has-badge-purple {
+		background-color: #ECE9FD;
+		color: #5B23B6;
+	}
+
+	&.has-badge-pink {
+		background-color: #FBE7F2;
+		color: #9E174D;
+	}
+}
