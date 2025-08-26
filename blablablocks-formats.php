@@ -4,7 +4,7 @@
  * Plugin Name:			BlaBlaBlocks Formats
  * Description:			Rich text formats from BlaBlaBlocks.
  * Version:				1.0.0
- * Requires at least:	6.7
+ * Requires at least:	6.6
  * Requires PHP:		7.4
  * Author:				Lubus
  * Author URI:			https://lubus.in
