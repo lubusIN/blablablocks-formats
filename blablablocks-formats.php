@@ -1,17 +1,18 @@
 <?php
 
 /**
- * Plugin Name:       BlaBlaBlocks Formats
- * Description:       Rich text formats from BlaBlaBlocks.
- * Version:           1.0.0
- * Requires at least: 6.7
- * Requires PHP:      7.4
- * Author:            Lubus
- * License:           MIT
- * License URI:       https://www.gnu.org/licenses/MIT
- * Text Domain:       blablablocks-formats
+ * Plugin Name:			BlaBlaBlocks Formats
+ * Description:			Rich text formats from BlaBlaBlocks.
+ * Version:				1.0.0
+ * Requires at least:	6.7
+ * Requires PHP:		7.4
+ * Author:				Lubus
+ * Author URI:			https://lubus.in
+ * License:				MIT
+ * License URI:			https://www.gnu.org/licenses/MIT
+ * Text Domain:			blablablocks-formats
  *
- * @package Lubusin\BlaBlaBlocksFormats
+ * @package.			BlaBlaBlocks Formats
  */
 
 if (! defined('ABSPATH')) {
@@ -21,7 +22,7 @@ if (! defined('ABSPATH')) {
 /**
  * Register BlaBlaBlocks formats scripts and styles.
  */
-function blablablocks_register_assets()
+function blablablocks_formats_register_assets()
 {
 	$file          = plugin_dir_path(__FILE__) . 'build/index.asset.php';
 	$asset        = file_exists($file) ? include $file : ['dependencies' => [], 'version' => '1.0.0'];
@@ -95,7 +96,7 @@ function blablablocks_register_assets()
 		$version
 	);
 }
-add_action('init', 'blablablocks_register_assets');
+add_action('init', 'blablablocks_formats_register_assets');
 
 /**
  * Enqueue scripts and styles for BlaBlaBlocks formats.
