@@ -39,19 +39,19 @@ function blablablocks_register_assets()
 
 	// Register Floating UI script
 	wp_register_script(
-		'blablablocks-floating-ui-asset',
-		'https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.0',
+		'blablablocks-floating-ui-core-asset',
+		plugins_url('assets/vendor/floating-ui/core.umd.min.js', __FILE__),
 		[],
-		'1.7.0',
+		filemtime(plugin_dir_path(__FILE__) . 'assets/vendor/floating-ui/core.umd.min.js'),
 		true
 	);
 
 	// Register Floating UI DOM script
 	wp_register_script(
 		'blablablocks-floating-ui-dom-asset',
-		'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.0',
-		['blablablocks-floating-ui-asset'],
-		'1.7.0',
+		plugins_url('assets/vendor/floating-ui/dom.umd.min.js', __FILE__),
+		['blablablocks-floating-ui-core-asset'],
+		filemtime(plugin_dir_path(__FILE__) . 'assets/vendor/floating-ui/dom.umd.min.js'),
 		true
 	);
 
@@ -73,7 +73,7 @@ function blablablocks_register_assets()
 			[
 				'blablablocks-marker-format-asset',
 				'blablablocks-infotip-format-asset',
-				'blablablocks-floating-ui-asset',
+				'blablablocks-floating-ui-core-asset',
 				'blablablocks-floating-ui-dom-asset',
 			]
 		),
