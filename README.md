@@ -16,7 +16,7 @@ A collection of rich text formats for the WordPress block editor with interactiv
 
 ## Installation
 
-1. Download the latest release from GitHub
+1. [Download](https://github.com/lubusIN/blablablocks-formats/archive/refs/tags/v1.0.0.zip) latest release from GitHub
 2. Visit `Plugins > Add New`
 3. Upload the `blablablocks-formats.zip` file
 4. Activate `BlaBlaBlocks Formats` from plugins page
@@ -76,6 +76,9 @@ npm run start       # Watch for changes and auto-compile
 ```bash
 npm run serve
 ```
+
+> [!NOTE]
+> Refer to `package.json` for additional available npm commands.
 
 ## Meet Your Artisans
 
