@@ -19,25 +19,16 @@ A collection of rich text formats for the WordPress block editor with interactiv
 1. [Download](https://github.com/lubusIN/blablablocks-formats/archive/refs/tags/v1.0.0.zip) latest release from GitHub
 2. Visit `Plugins > Add New`
 3. Upload the `blablablocks-formats.zip` file
-4. Activate `BlaBlaBlocks Formats` from plugins page
+4. Activate `BlaBlaBlocks Formats` from the plugins page
 
 ## Usage
 
-### InfoTip Format
+### Available Formats
+- **Marker**: Add a hand-drawn style highlight to text.
+- **InfoTip**: Add a tooltip to any inline text.
 
-<!-- TODO - add recording -->
-
-1. Select any text in the block editor
-2. Click the InfoTip button in the formatting toolbar
-3. Configure your tooltip with custom text, colors, and overlay placement
-
-### Marker Format
-
-<!-- TODO - add recording -->
-
-1. Select text you want to highlight
-2. Click the Marker button in the formatting toolbar
-3. Choose your preferred highlighting style and animation
+> [!NOTE]
+> Refer to the [documentation](https://github.com/lubusIN/blablablocks-formats/wiki) for detailed guidance on using formats.
 
 ## Development
 
@@ -91,9 +82,8 @@ npm run serve
 ## Credits
 
 -   [Infotip](https://thenounproject.com/icon/tooltip-383461/) icon by [Icon Island](https://thenounproject.com/iconisland) from [Noun Project](https://thenounproject.com/browse/icons/term/tooltip/) (CC BY 3.0)
-
 -   [Marker](https://thenounproject.com/icon/highlighter-7628276/) icon by [Muhammad Nur Auliady Pamungkas](https://thenounproject.com/mnauliady) from [Noun Project](https://thenounproject.com/browse/icons/term/highlighter/) (CC BY 3.0)
 
 ## License
 
-BlaBlaBlocks Formats is open-sourced plugin licensed under the [MIT license](LICENSE)
+BlaBlaBlocks Formats is an open-sourced plugin licensed under the [MIT license](LICENSE)
