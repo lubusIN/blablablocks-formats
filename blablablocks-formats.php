@@ -113,3 +113,38 @@ function blablablocks_formats_enqueue_assets()
 	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
+
+/**
+ * check if post has the given format
+ *
+ * @param string $format_class
+ * @param string $post
+ * @return boolean
+ */
+function blablablocks_has_format($format_class, $post = null)
+{
+	if( !$post ) {
+		$wp_post = get_post();
+		if ( $wp_post instanceof WP_Post ) {
+			$post = $wp_post->post_content;
+		}
+	}
+
+	if (trim($format_class) === '' || trim($post) === '') {
+        return false;
+    }
+
+    // Regex looks for the class inside any class attribute
+    $pattern = '/class\s*=\s*(["\'])(.*?)\1/i';
+
+    if (preg_match_all($pattern, $post, $matches)) {
+        foreach ($matches[2] as $classAttr) {
+            $classes = preg_split('/\s+/', $classAttr);
+            if (in_array($format_class, $classes, true)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
