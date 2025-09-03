@@ -69,15 +69,7 @@ function blablablocks_formats_register_assets()
 	wp_register_script(
 		'blablablocks-formats',
 		plugins_url('build/index.js', __FILE__),
-		array_merge(
-			$build_deps,
-			[
-				'blablablocks-marker-format-asset',
-				'blablablocks-infotip-format-asset',
-				'blablablocks-floating-ui-core-asset',
-				'blablablocks-floating-ui-dom-asset',
-			]
-		),
+		$build_deps,
 		$version,
 		true
 	);
@@ -90,29 +82,13 @@ function blablablocks_formats_register_assets()
 		$version
 	);
 	wp_register_style(
-		'blablablocks-formats-editor-styles',
+		'blablablocks-formats-styles',
 		plugins_url('build/style-index.css', __FILE__),
 		[],
 		$version
 	);
 }
 add_action('init', 'blablablocks_formats_register_assets');
-
-/**
- * Enqueue scripts and styles for BlaBlaBlocks formats.
- */
-function blablablocks_formats_enqueue_assets()
-{
-	// Enqueue main script and frontend styles.
-	wp_enqueue_script('blablablocks-formats');
-	wp_enqueue_style('blablablocks-formats-editor-styles');
-
-	// Enqueue editor styles in admin.
-	if (is_admin()) {
-		wp_enqueue_style('blablablocks-formats-editor');
-	}
-}
-add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
 
 /**
  * check if post has the given format
@@ -123,28 +99,64 @@ add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
  */
 function blablablocks_has_format($format_class, $post = null)
 {
-	if( !$post ) {
+	if (!$post) {
 		$wp_post = get_post();
-		if ( $wp_post instanceof WP_Post ) {
+		if ($wp_post instanceof WP_Post) {
 			$post = $wp_post->post_content;
 		}
 	}
 
 	if (trim($format_class) === '' || trim($post) === '') {
-        return false;
-    }
+		return false;
+	}
 
-    // Regex looks for the class inside any class attribute
-    $pattern = '/class\s*=\s*(["\'])(.*?)\1/i';
+	// Regex looks for the class inside any class attribute
+	$pattern = '/class\s*=\s*(["\'])(.*?)\1/i';
 
-    if (preg_match_all($pattern, $post, $matches)) {
-        foreach ($matches[2] as $classAttr) {
-            $classes = preg_split('/\s+/', $classAttr);
-            if (in_array($format_class, $classes, true)) {
-                return true;
-            }
-        }
-    }
+	if (preg_match_all($pattern, $post, $matches)) {
+		foreach ($matches[2] as $classAttr) {
+			$classes = preg_split('/\s+/', $classAttr);
+			if (in_array($format_class, $classes, true)) {
+				return true;
+			}
+		}
+	}
 
-    return false;
+	return false;
 }
+
+/**
+ * Enqueue scripts and styles for BlaBlaBlocks formats.
+ */
+function blablablocks_formats_enqueue_assets()
+{
+	if (is_admin()) {
+		wp_enqueue_script('blablablocks-marker-format-asset');
+		wp_enqueue_script('blablablocks-infotip-format-asset');
+		wp_enqueue_script('blablablocks-formats');
+		wp_enqueue_style('blablablocks-formats-editor');
+		wp_enqueue_style('blablablocks-formats-styles');
+	}
+
+	$needs_marker  = blablablocks_has_format('has-marker-format');
+	$needs_infotip = blablablocks_has_format('has-infotip-format');
+
+	// If neither format is present, do nothing.
+	if (! $needs_marker && ! $needs_infotip) {
+		return;
+	}
+
+	// Base stylesheet for frontend.
+	wp_enqueue_style('blablablocks-formats-styles');
+
+	if ($needs_marker) {
+		wp_enqueue_script('blablablocks-marker-format-asset');
+	}
+
+	if ($needs_infotip) {
+		wp_enqueue_script('blablablocks-infotip-format-asset');
+	}
+
+	wp_enqueue_script('blablablocks-formats');
+}
+add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
