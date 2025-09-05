@@ -4,7 +4,7 @@ Tags:              format, rich text format, BlaBlaBlocks
 Requires at least: 6.6
 Tested up to:      6.8
 Requires PHP:      7.4
-Stable tag:        1.0.0
+Stable tag:        1.1.0
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
@@ -48,6 +48,9 @@ You can install this plugin either automatically through the WordPress admin or 
 Manual installation method requires downloading the BlaBlaBlocks Formats plugin and uploading it to your web server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation).
 
 == Changelog ==
+
+= 1.1.0 =
+- Added a conditional check to load assets only when specific formats are used.
 
 = 1.0.0 =
 Initial release 🎉
