@@ -156,7 +156,5 @@ function blablablocks_formats_enqueue_assets()
 	if ($needs_infotip) {
 		wp_enqueue_script('blablablocks-infotip-format-asset');
 	}
-
-	wp_enqueue_script('blablablocks-formats');
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
