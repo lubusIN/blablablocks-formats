@@ -29,9 +29,7 @@ The BlaBlaBlocks Formats is open source. Not only is it free to use, but you are
 
 == Screenshots ==
 1. **Marker settings** - Select and adjust Marker type and settings.
-2. **Frontend view of Marker**
-3. **InfoTip settings** - Add InfoTip text and adjust settings.
-4. **Frontend view of InfoTip**
+2. **InfoTip settings** - Add InfoTip text and adjust settings.
 
 == Installation ==
 You can install this plugin either automatically through the WordPress admin or manually via FTP.
@@ -48,6 +46,9 @@ You can install this plugin either automatically through the WordPress admin or 
 Manual installation method requires downloading the BlaBlaBlocks Formats plugin and uploading it to your web server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation).
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed unnecessary backend scripts (React, Redux, etc.) from loading on the frontend when applying formats.
 
 = 1.1.0 =
 - Added a conditional check to load assets only when specific formats are used.
