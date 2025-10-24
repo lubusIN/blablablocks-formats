@@ -1,6 +1,6 @@
-=== BlaBlaBlocks Formats ===
+=== Rich Text Formats – Animated Highlight, Marker, Tooltip ===
 Contributors:      lubus, ajitbohra, punitv342, nagpai
-Tags:              format, rich text format, BlaBlaBlocks
+Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
 Tested up to:      6.8
 Requires PHP:      7.4
@@ -8,15 +8,68 @@ Stable tag:        1.1.1
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
-Interactive rich text formats for the WordPress block editor.
+Add tooltips, highlights & interactivity to text in the Gutenberg editor. Enhance readability with rich text formats.
 
 == Description ==
-A collection of rich text formats for the WordPress block editor with interactive elements.
 
-=== What makes BlaBlaBlocks Formats special? ===
-* **Simple usage** - Add interactive tooltips and animated highlights with the ease of adding any simple text format.
-* **More control** - A variety of customization possible in behavior, colors and animation for each format
-* **Editor Compatibility** – fully integrated with the Block Editor’s UI and server-side rendering pipeline.
+BlaBlaBlocks Formats lets you enhance your Gutenberg editor with **interactive rich text formats** like tooltips, animated highlights/markers directly inside WordPress.  
+No coding needed. Just select your text, choose a format, and instantly make your content more engaging.
+
+With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips that improve readability, emphasize key information, and bring motion to your writing.
+
+### Key Features
+
+* **Interactive text formats** - Add **InfoTips**, **markers**, and **highlights** directly from the block toolbar.
+* **Live customization** - Change color, animation, and behavior in real time.
+* **Lightweight & optimized** - Assets load only when formats are used.
+* **Native Gutenberg integration** - Seamlessly fits the WordPress Block Editor.
+
+### Why Choose BlaBlaBlocks Formats?
+
+Because plain text doesn’t always tell the full story!  
+Highlight key phrases, provide helpful InfoTips, or animate your words all within the familiar block editor UI.
+
+* No shortcodes or custom HTML needed.  
+* 100% visual control inside the editor.  
+* Works with all themes and blocks.
+
+### How It Works
+
+1. Select any text in the Gutenberg editor.
+2. Choose a format: Highlight, or InfoTip.
+3. Adjust style and behavior using the sidebar options.
+4. See the preview instantly.
+
+Formats are rendered on both editor and frontend views with minimal code overhead.
+
+## # Use Cases
+
+* Add **InfoTips** to glossary terms or product details.  
+* Highlight **important phrases** in tutorials or documentation.  
+* Create **animated text markers** for blog emphasis.  
+* Design **interactive learning content** in WordPress.
+
+### Available Formats
+
+#### 1. Marker
+Underline or highlight text segments with customizable color and animation.
+
+#### 2. InfoTip
+Attach informative tooltips to any text selection perfect for definitions, links, or extra context.
+
+### Customization Options
+
+* Marker color & animation style  
+* Tooltip position, size, and behavior  
+* Animation speed & easing type  
+* Backend-only or frontend-visible options  
+* Per-format settings saved automatically
+
+### Performance & Optimization
+
+* BlaBlaBlocks Formats loads assets only when necessary, reducing frontend bloat.  
+* No React, Redux, or large JS libraries 
+* Powered by the web component, not loaded on the public site unless formats are active.
 
 === Open Source and Free ===
 The BlaBlaBlocks Formats is open source. Not only is it free to use, but you are also welcome to collaborate and contribute to its development.
@@ -27,23 +80,46 @@ The BlaBlaBlocks Formats is open source. Not only is it free to use, but you are
 - **Report Issues:**  
   [https://github.com/lubusIN/blablablocks-formats/issues](https://github.com/lubusIN/blablablocks-formats/issues)
 
+- **Documentation:**  
+  [https://github.com/lubusIN/blablablocks-formats/wiki](https://github.com/lubusIN/blablablocks-formats/wiki)
+
 == Screenshots ==
-1. **Marker settings** - Select and adjust Marker type and settings.
+1. **Marker settings** - Select and adjust the Marker type and settings.
 2. **InfoTip settings** - Add InfoTip text and adjust settings.
 
 == Installation ==
 You can install this plugin either automatically through the WordPress admin or manually via FTP.
 
-= Automatic Installation =
+= Automatic =
 
 1. Log in to your WordPress dashboard.
 2. Navigate to Plugins > Add New.
 3. In the search field, type “BlaBlaBlocks Formats, then hit Enter or click Search Plugins.
 4. Click Install Now, then Activate.
 
-= Manual Installation =
+= Manual =
 
 Manual installation method requires downloading the BlaBlaBlocks Formats plugin and uploading it to your web server via your favorite FTP application. The WordPress codex contains [instructions on how to do this here](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation).
+
+== Frequently Asked Questions ==
+
+### 1. How do I add an InfoTip to text?
+Select your text in the block editor, open the format dropdown, and choose **InfoTip**. Add your tooltip text and customize appearance instantly.
+
+### 2. Will this work with third-party blocks?
+Yes. BlaBlaBlocks Formats integrates with all core and third-party Gutenberg blocks that support rich text.
+
+### 3. Can I customize highlight colors?
+Absolutely! You can set custom colors or choose from prebuilt palettes via the sidebar controls.
+
+### 4. Does it affect site performance?
+Not at all. Scripts are only loaded when formats are applied, ensuring a minimal footprint.
+
+### 5. Does it work with Full Site Editing (FSE)?
+Yes, the formats are fully compatible with block themes and the Site Editor.
+
+### 6. Is it open source?
+Yes! BlaBlaBlocks Formats is MIT-licensed and open for contributions.
 
 == Changelog ==
 
