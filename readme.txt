@@ -2,9 +2,9 @@
 Contributors:      lubus, ajitbohra, punitv342, nagpai
 Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
-Tested up to:      6.8
+Tested up to:      6.9
 Requires PHP:      7.4
-Stable tag:        1.1.1
+Stable tag:        1.1.2
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
@@ -122,6 +122,10 @@ Yes, the formats are fully compatible with block themes and the Site Editor.
 Yes! BlaBlaBlocks Formats is MIT-licensed and open for contributions.
 
 == Changelog ==
+
+= 1.1.2 =
+* Bump plugin version to 1.1.2
+* Update "Tested up to" to 6.9
 
 = 1.1.1 =
 * Fixed unnecessary backend scripts (React, Redux, etc.) from loading on the frontend when applying formats.

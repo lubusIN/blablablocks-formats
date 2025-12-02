@@ -3,7 +3,7 @@
 /**
  * Plugin Name:			BlaBlaBlocks Formats
  * Description:			Rich text formats from BlaBlaBlocks.
- * Version:				1.1.1
+ * Version:				1.1.2
  * Requires at least:	6.6
  * Requires PHP:		7.4
  * Author:				Lubus

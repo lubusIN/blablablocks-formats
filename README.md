@@ -24,7 +24,7 @@ A collection of rich text formats for the WordPress block editor with interactiv
 
 ### Manual
 
-1. [Download](https://github.com/lubusIN/blablablocks-formats/archive/refs/tags/v1.1.1.zip) latest release from GitHub
+1. [Download](https://github.com/lubusIN/blablablocks-formats/archive/refs/tags/v1.1.2.zip) latest release from GitHub
 2. Visit `Plugins > Add New`
 3. Upload the `blablablocks-formats.zip` file
 4. Activate `BlaBlaBlocks Formats` from the plugins page
