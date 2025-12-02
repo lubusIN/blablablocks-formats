@@ -45,7 +45,7 @@
 		<link>https://playground.wordpress.net/scope:kind-old-city/blablablocks-formats/</link>
 		<pubDate>Mon, 28 Jul 2025 08:07:02 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://playground.wordpress.net/scope:kind-old-city/?page_id=1</guid>
+		<guid isPermaLink="false">https://playground.wordpress.net/scope:kind-old-city/?page_id=4</guid>
 		<description></description>
 		<content:encoded><![CDATA[<!-- wp:paragraph -->
 <p><strong><tatva-infotip content="A set of custom formats that add interactivity and visual emphasis to your content." overlay-placement="left-start" overlay-background-color="#503AA8" overlay-text-color="#FFEE58" icon-enabled="true" icon-type="info" class="has-infotip-format">BlaBlaBlocks formats</tatva-infotip></strong> bring a collection of rich text tools to the WordPress block editor—starting with interactive elements like <strong><tatva-marker type="double" class="has-marker-format">InfoTip</tatva-marker></strong> tooltips and <strong><tatva-marker type="double" class="has-marker-format">Marker</tatva-marker></strong> highlights. And there's more to come!</p>
@@ -75,7 +75,7 @@
 <p>These tools make blogs, tutorials, and product pages look sharp and easy to follow.</p>
 <!-- /wp:paragraph -->]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1</wp:post_id>
+		<wp:post_id>4</wp:post_id>
 		<wp:post_date><![CDATA[2025-07-28 08:07:02]]></wp:post_date>
 		<wp:post_date_gmt><![CDATA[2025-07-28 08:07:02]]></wp:post_date_gmt>
 		<wp:post_modified><![CDATA[2025-07-28 08:07:02]]></wp:post_modified>
