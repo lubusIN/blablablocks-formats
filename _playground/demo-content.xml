@@ -26,7 +26,7 @@
 >
 
 <channel>
-	<title>My WordPress Website</title>
+	<title>Wordpress BlaBlaBlocks Formats</title>
 	<link>https://playground.wordpress.net/scope:kind-old-city</link>
 	<description></description>
 	<pubDate>Mon, 28 Jul 2025 09:22:21 +0000</pubDate>
@@ -48,7 +48,31 @@
 		<guid isPermaLink="false">https://playground.wordpress.net/scope:kind-old-city/?page_id=1</guid>
 		<description></description>
 		<content:encoded><![CDATA[<!-- wp:paragraph -->
-<p>BlablaBlocks formats bring a collection of rich text tools to the WordPress block editor—starting with interactive elements like  InfoTip  tooltips and  Marker  highlights. And there's more to come!</p>
+<p><strong><tatva-infotip content="A set of custom formats that add interactivity and visual emphasis to your content." overlay-placement="left-start" overlay-background-color="#503AA8" overlay-text-color="#FFEE58" icon-enabled="true" icon-type="info" class="has-infotip-format">BlaBlaBlocks formats</tatva-infotip></strong> bring a collection of rich text tools to the WordPress block editor—starting with interactive elements like <strong><tatva-marker type="double" class="has-marker-format">InfoTip</tatva-marker></strong> tooltips and <strong><tatva-marker type="double" class="has-marker-format">Marker</tatva-marker></strong> highlights. And there's more to come!</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>With <strong><tatva-marker type="circle" class="has-marker-format">Circle</tatva-marker></strong>, you can wrap important words and make them pop.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong><tatva-marker type="double-underline" class="has-marker-format">Double Underline</tatva-marker></strong> is perfect for drawing extra focus on key phrases.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong><tatva-marker type="underline-zigzag" color="#2000ff" animation-function="steps(5, end)" class="has-marker-format">Zigzag</tatva-marker></strong> gives a creative and fun underline style for special points.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Want to show edits? Use <strong><tatva-marker type="strikethrough" animation="false" class="has-marker-format">Strikethrough</tatva-marker></strong> or <strong><tatva-marker type="cross" animation="false" class="has-marker-format">Cross</tatva-marker></strong> to mark changes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Add some personality with <strong><tatva-marker type="curly" animation-function="ease" animation-duration="5" class="has-marker-format">Curly Underline</tatva-marker></strong> for a stylish touch.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>These tools make blogs, tutorials, and product pages look sharp and easy to follow.</p>
 <!-- /wp:paragraph -->]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1</wp:post_id>
