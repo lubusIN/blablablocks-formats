@@ -3,3 +3,4 @@
  */
 import './marker';
 import './infotip';
+import './clear-formats';
