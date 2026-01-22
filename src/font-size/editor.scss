@@ -1,0 +1,24 @@
+/**
+ * Editor styles for the font-size format.
+ */
+
+.block-editor-format-toolbar__blablablocks-font-size-popover {
+	z-index: 1000000;
+
+	.components-popover__content {
+		min-width: 220px;
+	}
+
+	.components-font-size-picker__controls {
+		margin-bottom: 0;
+	}
+
+	.reset-button {
+		justify-content: center;
+	}
+}
+
+// Ensure font-size format is visible in the editor
+.has-font-size-format {
+	// The inline style will handle the actual font-size
+}
