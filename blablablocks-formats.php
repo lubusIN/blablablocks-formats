@@ -138,11 +138,12 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_style('blablablocks-formats-styles');
 	}
 
-	$needs_marker  = blablablocks_has_format('has-marker-format');
-	$needs_infotip = blablablocks_has_format('has-infotip-format');
+	$needs_marker     = blablablocks_has_format('has-marker-format');
+	$needs_infotip    = blablablocks_has_format('has-infotip-format');
+	$needs_changecase = blablablocks_has_format('has-change-case-format');
 
-	// If neither format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip) {
+	// If no format is present, do nothing.
+	if (! $needs_marker && ! $needs_infotip && ! $needs_changecase) {
 		return;
 	}
 

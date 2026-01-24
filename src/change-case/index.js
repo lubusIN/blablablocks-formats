@@ -1,17 +1,23 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import { Icon } from '@wordpress/icons';
-import { Popover, MenuItem } from '@wordpress/components';
 import {
-	create,
-	insert,
-	isCollapsed,
-	useAnchorRef,
-	toggleFormat,
-	slice,
-	getTextContent,
+	reset,
+	formatCapitalize,
+	formatLowercase,
+	formatUppercase,
+} from '@wordpress/icons';
+import {
+	Popover,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+} from '@wordpress/components';
+import {
+	useAnchor,
+	applyFormat,
+	removeFormat,
 	registerFormatType,
 } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
@@ -20,125 +26,146 @@ import { RichTextToolbarButton } from '@wordpress/block-editor';
  * Internal dependencies
  */
 import './editor.scss';
+import './style.scss';
 
 const name = 'lubus/change-case';
 const title = 'Change Case';
 
 /**
- * Icon
+ * Main icon for toolbar button
  */
-function formatIcon() {
-	return (
-		<Icon
-			icon={
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<defs />
-					<path fill="none" d="M0 0h24v24H0V0z" />
-					<path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z" />
-				</svg>
-			}
-		/>
-	);
-}
+const ChangeCaseIcon = () => (
+	<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		<path fill="none" d="M0 0h24v24H0V0z" />
+		<path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z" fill="currentColor" />
+	</svg>
+);
+
+/**
+ * Text transform options matching WordPress core
+ */
+const TEXT_TRANSFORMS = [
+	{
+		label: __( 'None' ),
+		value: 'none',
+		icon: reset,
+	},
+	{
+		label: __( 'Uppercase' ),
+		value: 'uppercase',
+		icon: formatUppercase,
+	},
+	{
+		label: __( 'Lowercase' ),
+		value: 'lowercase',
+		icon: formatLowercase,
+	},
+	{
+		label: __( 'Capitalize' ),
+		value: 'capitalize',
+		icon: formatCapitalize,
+	},
+];
 
 /**
  *  Format edit
  */
 function EditButton( props ) {
-	const { value, onChange, onFocus, isActive, contentRef } = props;
+	const { value, onChange, onFocus, isActive, contentRef, activeAttributes } = props;
 
-	const [ isChangingCase, setIsChangingCase ] = useState( false );
+	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 
-	const anchorRef = useAnchorRef( {
-		ref: contentRef,
-		value,
-		settings: {
-			title,
-		},
+	const anchor = useAnchor( {
+		editableContentElement: contentRef.current,
+		settings: { isActive },
 	} );
 
-	function toTitleCase( str ) {
-		const text = str
-			.match(
-				/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-			)
-			.map( ( x ) => x.charAt( 0 ).toUpperCase() + x.slice( 1 ) )
-			.join( ' ' );
-
-		return text;
+	// Get the currently active case type from the class attribute
+	const activeClass = activeAttributes?.class || '';
+	let activeCaseType = activeClass.replace( 'has-', '' ).replace( '-case', '' );
+	
+	// Map our class names to WordPress core values
+	if ( activeCaseType === 'titlecase' ) {
+		activeCaseType = 'capitalize';
+	}
+	if ( !activeCaseType ) {
+		activeCaseType = 'none';
 	}
 
-	function onToggle( type ) {
-		let text = getTextContent( slice( value ) );
+	// Check if selection contains multiple words (for capitalize validation)
+	const selectedText = value.text.slice( value.start, value.end );
+	const hasMultipleWords = selectedText.trim().split( /\s+/ ).length > 1;
 
-		switch ( type ) {
-			case 'upper':
-				text = text.toUpperCase();
-				break;
-
-			case 'lower':
-				text = text.toLowerCase();
-				break;
-
-			case 'title':
-				text = toTitleCase( text );
-				break;
+	// Filter options based on selection
+	const availableOptions = TEXT_TRANSFORMS.filter( ( option ) => {
+		// Show capitalize only for multi-word selections
+		if ( option.value === 'capitalize' && ! hasMultipleWords ) {
+			return false;
 		}
+		return true;
+	} );
 
-		const toInsert = toggleFormat(
-			create( { text } ),
-			{
+	function handleChange( newValue ) {
+		// Remove any existing case format first
+		let newFormattedValue = removeFormat( value, name );
+
+		// If newValue is not 'none', apply the format
+		if ( newValue && newValue !== 'none' ) {
+			// Map WordPress core values to our class names
+			let caseType = newValue;
+			if ( newValue === 'capitalize' ) {
+				caseType = 'titlecase';
+			}
+
+			const className = `has-${ caseType }-case`;
+			newFormattedValue = applyFormat( newFormattedValue, {
 				type: name,
-			},
-			0,
-			text.length
-		);
-
-		onChange( insert( value, toInsert ) );
-	}
-
-	function onClick( type ) {
-		if ( isCollapsed( value ) ) {
-			return;
+				attributes: {
+					class: className,
+				},
+			} );
 		}
 
-		onToggle( type );
+		onChange( newFormattedValue );
 		onFocus();
-		setIsChangingCase( false );
-	}
-
-	function openOptions() {
-		setIsChangingCase( true );
-	}
-
-	function closeOptions() {
-		setIsChangingCase( false );
+		setIsPopoverOpen( false );
 	}
 
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={ formatIcon }
+				icon={ ChangeCaseIcon }
 				title={ title }
-				onClick={ openOptions }
+				onClick={ () => setIsPopoverOpen( true ) }
 				isActive={ isActive }
 			/>
-			{ isChangingCase && (
+			{ isPopoverOpen && (
 				<Popover
-					position="bottom center"
-					anchorRef={ anchorRef }
-					onClose={ closeOptions }
-					className="block-editor-format-toolbar__lubus-changecase-popover"
+					anchor={ anchor }
+					onClose={ () => setIsPopoverOpen( false ) }
+					placement="bottom"
+					shift
+					offset={ 10 }
 				>
-					<MenuItem onClick={ () => onClick( 'upper' ) }>
-						UPPER CASE
-					</MenuItem>
-					<MenuItem onClick={ () => onClick( 'lower' ) }>
-						lower case
-					</MenuItem>
-					<MenuItem onClick={ () => onClick( 'title' ) }>
-						Title Case
-					</MenuItem>
+					<div style={ { padding: '8px' } }>
+						<ToggleGroupControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							isBlock
+							label={ __( 'Letter case' ) }
+							value={ activeCaseType }
+							onChange={ handleChange }
+						>
+							{ availableOptions.map( ( option ) => (
+								<ToggleGroupControlOptionIcon
+									key={ option.value }
+									value={ option.value }
+									icon={ option.icon }
+									label={ option.label }
+								/>
+							) ) }
+						</ToggleGroupControl>
+					</div>
 				</Popover>
 			) }
 		</>
@@ -146,11 +173,14 @@ function EditButton( props ) {
 }
 
 /**
- * Register Richtext Color Format.
+ * Register Change Case Format.
  */
 registerFormatType( name, {
 	title,
-	tagName: 'ChangeText',
-	className: null,
+	tagName: 'span',
+	className: 'has-change-case-format',
 	edit: EditButton,
+	attributes: {
+		class: 'class',
+	},
 } );
