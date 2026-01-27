@@ -49,6 +49,11 @@ function InlineUI( {
 	);
 
 	const handleFontSizeChange = ( newFontSize ) => {
+		if ( ! newFontSize ) {
+			onChange( removeFormat( value, 'blablablocks/font-size' ) );
+			return;
+		}
+
 		if ( newFontSize ) {
 			// Find the font size object to get the slug
 			const fontSizeObj = fontSizes?.find(
