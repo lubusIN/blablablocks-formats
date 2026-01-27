@@ -2,10 +2,9 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useAnchor } from '@wordpress/rich-text';
+import { useAnchor, removeFormat } from '@wordpress/rich-text';
 import { Popover, Button, FontSizePicker } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import { removeFormat } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
@@ -24,54 +23,57 @@ import { createFormatHelpers } from '../utils';
  * @param {boolean}  props.isActive         - Indicates if the format is active.
  * @return {JSX.Element}                    - The rendered component.
  */
-function InlineUI({
+function InlineUI( {
 	value,
 	onChange,
 	onClose,
 	activeAttributes,
 	contentRef,
 	isActive,
-}) {
-	const { update } = createFormatHelpers({
+} ) {
+	const { replace } = createFormatHelpers( {
 		value,
 		onChange,
 		formatType: 'blablablocks/font-size',
 		activeAttributes,
-	});
+	} );
 
-	const anchor = useAnchor({
+	const anchor = useAnchor( {
 		editableContentElement: contentRef,
 		settings: { isActive },
-	});
+	} );
 
 	const fontSizes = useSelect(
-		(select) => select('core/block-editor').getSettings().fontSizes,
+		( select ) => select( 'core/block-editor' ).getSettings().fontSizes,
 		[]
 	);
 
-	const handleFontSizeChange = (newFontSize) => {
-		if (newFontSize) {
+	const handleFontSizeChange = ( newFontSize ) => {
+		if ( newFontSize ) {
 			// Find the font size object to get the slug
 			const fontSizeObj = fontSizes?.find(
-				(size) => size.size === newFontSize || size.slug === newFontSize
+				( size ) =>
+					size.size === newFontSize || size.slug === newFontSize
 			);
 
-			if (fontSizeObj && fontSizeObj.slug) {
+			if ( fontSizeObj && fontSizeObj.slug ) {
 				// Use CSS class for theme-defined font sizes
-				update({
-					class: `has-${fontSizeObj.slug}-font-size`,
-				});
+				replace( {
+					class: `has-${ fontSizeObj.slug }-font-size`,
+					style: undefined,
+				} );
 			} else {
 				// Use inline style for custom font sizes
-				update({
-					style: `font-size: ${newFontSize}`,
-				});
+				replace( {
+					style: `font-size: ${ newFontSize }`,
+					class: undefined,
+				} );
 			}
 		}
 	};
 
 	const handleClear = () => {
-		onChange(removeFormat(value, 'blablablocks/font-size'));
+		onChange( removeFormat( value, 'blablablocks/font-size' ) );
 		onClose();
 	};
 
@@ -79,21 +81,23 @@ function InlineUI({
 	const getCurrentFontSize = () => {
 		// Check if there's a class attribute with has-*-font-size pattern
 		const classAttr = activeAttributes.class;
-		if (classAttr) {
-			const match = classAttr.match(/has-([a-z0-9-]+)-font-size/);
-			if (match) {
-				const slug = match[1];
-				const fontSizeObj = fontSizes?.find((size) => size.slug === slug);
+		if ( classAttr ) {
+			const match = classAttr.match( /has-([a-z0-9-]+)-font-size/ );
+			if ( match ) {
+				const slug = match[ 1 ];
+				const fontSizeObj = fontSizes?.find(
+					( size ) => size.slug === slug
+				);
 				return fontSizeObj ? fontSizeObj.size : null;
 			}
 		}
 
 		// Check if there's a style attribute with font-size
 		const styleAttr = activeAttributes.style;
-		if (styleAttr) {
-			const match = styleAttr.match(/font-size:\s*([^;]+)/);
-			if (match) {
-				return match[1].trim();
+		if ( styleAttr ) {
+			const match = styleAttr.match( /font-size:\s*([^;]+)/ );
+			if ( match ) {
+				return match[ 1 ].trim();
 			}
 		}
 
@@ -104,27 +108,27 @@ function InlineUI({
 
 	return (
 		<Popover
-			anchor={anchor}
+			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-font-size-popover"
-			offset={20}
-			onClose={onClose}
+			offset={ 20 }
+			onClose={ onClose }
 			placement="bottom"
 			shift
 		>
-			<div style={{ padding: '16px', minWidth: '220px' }}>
+			<div style={ { padding: '16px', minWidth: '220px' } }>
 				<FontSizePicker
-					value={fontSizeValue}
-					onChange={handleFontSizeChange}
-					fontSizes={fontSizes}
+					value={ fontSizeValue }
+					onChange={ handleFontSizeChange }
+					fontSizes={ fontSizes }
 				/>
 				<Button
 					className="reset-button"
-					disabled={!fontSizeValue}
-					onClick={handleClear}
+					disabled={ ! fontSizeValue }
+					onClick={ handleClear }
 					variant="tertiary"
-					style={{ marginTop: '12px', width: '100%' }}
+					style={ { marginTop: '12px', width: '100%' } }
 				>
-					{__('Clear', 'blablablocks-formats')}
+					{ __( 'Clear', 'blablablocks-formats' ) }
 				</Button>
 			</div>
 		</Popover>
