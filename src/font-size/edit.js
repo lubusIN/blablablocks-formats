@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { typography } from '@wordpress/icons';
+import { textHorizontal } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -34,7 +34,7 @@ export function Edit({
 	return (
 		<>
 			<RichTextToolbarButton
-				icon={typography}
+				icon={textHorizontal}
 				title={__('Font Size', 'blablablocks-formats')}
 				onClick={() => setIsSettingOpen(true)}
 				isActive={isActive}

@@ -125,13 +125,13 @@ function InlineUI( {
 					value={ fontSizeValue }
 					onChange={ handleFontSizeChange }
 					fontSizes={ fontSizes }
+					__next40pxDefaultSize
 				/>
 				<Button
 					className="reset-button"
 					disabled={ ! fontSizeValue }
 					onClick={ handleClear }
 					variant="tertiary"
-					style={ { marginTop: '12px', width: '100%' } }
 				>
 					{ __( 'Clear', 'blablablocks-formats' ) }
 				</Button>

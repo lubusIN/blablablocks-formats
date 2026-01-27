@@ -3,22 +3,13 @@
  */
 
 .block-editor-format-toolbar__blablablocks-font-size-popover {
-	z-index: 1000000;
-
 	.components-popover__content {
-		min-width: 220px;
-	}
-
-	.components-font-size-picker__controls {
-		margin-bottom: 0;
+		min-width: 20.625rem;
 	}
 
 	.reset-button {
-		justify-content: center;
+		margin-top: 1rem;
+		display: block;
+		margin-left: auto;
 	}
-}
-
-// Ensure font-size format is visible in the editor
-.has-font-size-format {
-	// The inline style will handle the actual font-size
 }
