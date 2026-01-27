@@ -2,14 +2,13 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useAnchor, removeFormat } from '@wordpress/rich-text';
+import { useAnchor } from '@wordpress/rich-text';
 import { Popover, Button, FontSizePicker } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-import { createFormatHelpers } from '../utils';
+import { useFontSize } from './hooks';
 
 /**
  * InlineUI component for handling FontSize text formatting options.
@@ -31,85 +30,26 @@ function InlineUI( {
 	contentRef,
 	isActive,
 } ) {
-	const { replace } = createFormatHelpers( {
-		value,
-		onChange,
-		formatType: 'blablablocks/font-size',
-		activeAttributes,
-	} );
-
 	const anchor = useAnchor( {
 		editableContentElement: contentRef,
 		settings: { isActive },
 	} );
 
-	const fontSizes = useSelect(
-		( select ) => select( 'core/block-editor' ).getSettings().fontSizes,
-		[]
-	);
-
-	const handleFontSizeChange = ( newFontSize ) => {
-		if ( ! newFontSize ) {
-			onChange( removeFormat( value, 'blablablocks/font-size' ) );
-			return;
-		}
-
-		if ( newFontSize ) {
-			// Find the font size object to get the slug
-			const fontSizeObj = fontSizes?.find(
-				( size ) =>
-					size.size === newFontSize || size.slug === newFontSize
-			);
-
-			if ( fontSizeObj && fontSizeObj.slug ) {
-				// Use CSS class for theme-defined font sizes
-				replace( {
-					class: `has-${ fontSizeObj.slug }-font-size`,
-					style: undefined,
-				} );
-			} else {
-				// Use inline style for custom font sizes
-				replace( {
-					style: `font-size: ${ newFontSize }`,
-					class: undefined,
-				} );
-			}
-		}
-	};
+	const {
+		fontSizes,
+		fontSizeValue,
+		onFontSizeChange,
+		onClear,
+	} = useFontSize( {
+		value,
+		onChange,
+		activeAttributes,
+	} );
 
 	const handleClear = () => {
-		onChange( removeFormat( value, 'blablablocks/font-size' ) );
+		onClear();
 		onClose();
 	};
-
-	// Extract current font size from class or style attribute
-	const getCurrentFontSize = () => {
-		// Check if there's a class attribute with has-*-font-size pattern
-		const classAttr = activeAttributes.class;
-		if ( classAttr ) {
-			const match = classAttr.match( /has-([a-z0-9-]+)-font-size/ );
-			if ( match ) {
-				const slug = match[ 1 ];
-				const fontSizeObj = fontSizes?.find(
-					( size ) => size.slug === slug
-				);
-				return fontSizeObj ? fontSizeObj.size : null;
-			}
-		}
-
-		// Check if there's a style attribute with font-size
-		const styleAttr = activeAttributes.style;
-		if ( styleAttr ) {
-			const match = styleAttr.match( /font-size:\s*([^;]+)/ );
-			if ( match ) {
-				return match[ 1 ].trim();
-			}
-		}
-
-		return null;
-	};
-
-	const fontSizeValue = getCurrentFontSize();
 
 	return (
 		<Popover
@@ -123,7 +63,7 @@ function InlineUI( {
 			<div style={ { padding: '16px', minWidth: '220px' } }>
 				<FontSizePicker
 					value={ fontSizeValue }
-					onChange={ handleFontSizeChange }
+					onChange={ onFontSizeChange }
 					fontSizes={ fontSizes }
 					__next40pxDefaultSize
 				/>
