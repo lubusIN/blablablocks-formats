@@ -141,9 +141,10 @@ function blablablocks_formats_enqueue_assets()
 	$needs_marker     = blablablocks_has_format('has-marker-format');
 	$needs_infotip    = blablablocks_has_format('has-infotip-format');
 	$needs_changecase = blablablocks_has_format('has-change-case-format');
+	$needs_fontsize   = blablablocks_has_format('has-font-size-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_changecase) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_fontsize && ! $needs_changecase) {
 		return;
 	}
 
@@ -157,5 +158,8 @@ function blablablocks_formats_enqueue_assets()
 	if ($needs_infotip) {
 		wp_enqueue_script('blablablocks-infotip-format-asset');
 	}
+
+	// Font-size format doesn't need additional scripts on frontend
+	// The inline styles handle the rendering
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
