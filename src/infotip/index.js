@@ -14,10 +14,10 @@ import { Edit } from './edit';
 /**
  * Registers the Infotip format type.
  */
-registerFormatType( 'blablablocks/infotip', {
-	title: __( 'Infotip', 'blablablocks-formats' ),
+registerFormatType('blablablocks/infotip', {
+	title: __('Infotip', 'blablablocks-formats'),
 	tagName: 'tatva-infotip',
-	className: 'has-infotip',
+	className: 'has-infotip-format',
 	edit: Edit,
 	attributes: {
 		content: 'content',
@@ -31,4 +31,4 @@ registerFormatType( 'blablablocks/infotip', {
 		'overlay-text-color': 'overlay-text-color',
 		'overlay-background-color': 'overlay-background-color',
 	},
-} );
+});
