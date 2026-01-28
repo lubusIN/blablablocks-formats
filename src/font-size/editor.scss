@@ -1,0 +1,16 @@
+/**
+ * Editor styles for the font-size format.
+ */
+
+.block-editor-format-toolbar__blablablocks-font-size-popover {
+	.components-popover__content {
+		min-width: 20.625rem;
+		padding: 16px;
+	}
+
+	.reset-button {
+		margin-top: 1rem;
+		display: block;
+		margin-left: auto;
+	}
+}

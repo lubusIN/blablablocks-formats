@@ -14,10 +14,10 @@ import { Edit } from './edit';
 /**
  * Registers the Marker format type.
  */
-registerFormatType( 'blablablocks/marker', {
-	title: __( 'Marker', 'blablablocks-formats' ),
+registerFormatType('blablablocks/marker', {
+	title: __('Marker', 'blablablocks-formats'),
 	tagName: 'tatva-marker',
-	className: 'has-marker-text',
+	className: 'has-marker-format',
 	edit: Edit,
 	attributes: {
 		type: 'type',
@@ -26,4 +26,4 @@ registerFormatType( 'blablablocks/marker', {
 		'animation-function': 'animation-function',
 		color: 'color',
 	},
-} );
+});
