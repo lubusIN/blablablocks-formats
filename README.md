@@ -1,6 +1,8 @@
+<p align="center"><img height="75" src=".github/logo.svg"></p>
+
 ![BlaBlaBlocks Formats](.github/banner-image.jpeg)
 
-[![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-formats/playground/_playground/blueprint-github.json)
+[![Getting Started Wiki](https://img.shields.io/badge/Documentation-000?style=for-the-badge&logo=googledocs&logoColor=fff)](https://github.com/lubusIN/blablablocks-formats/wiki) [![Playground Demo Link](https://img.shields.io/badge/Live%20Preview-3858e9?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0ibm9uZSI%2BPHBhdGggZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTEuOSAzNi40MjVjLTIuMTgxIDMuMDA3LTMuMzMyIDYuNzAzLTMuNTE3IDEwLjc2NWEyNi40MyAyNi40MyAwIDAgMC0uMDE0IDEuOTk4Yy4yNzYgOS4xMzggNS4xMzQgMTkuNzggMTMuODk4IDI4LjU0NEMzNS42NzggOTEuMTQ0IDUzLjQ5MiA5NS40MSA2My41NzUgODguMWMtNC4yNDEtMS04LjUzMi0yLjU1OC0xMi43NTctNC42MzVhMjMuMDE5IDIzLjAxOSAwIDAgMS0zLjUwMi0uNDRjLTIuMTM5LS40MjctNC40LTEuMTYxLTYuNzAzLTIuMjA2LTQuMjEzLTEuOTEtOC41NjgtNC44NTctMTIuNTcyLTguODYxLTQuMDA0LTQuMDA0LTYuOTUtOC4zNTgtOC44Ni0xMi41Ny0xLjA0NS0yLjMwNC0xLjc4LTQuNTY2LTIuMjA3LTYuNzA0YTIzLjAwNiAyMy4wMDYgMCAwIDEtLjQzOS0zLjUwMWMtMi4wNzgtNC4yMjYtMy42MzYtOC41MTctNC42MzYtMTIuNzU4Wm0tOC40MDEgMjUuNDNjLjMwNS0uMzA1LjYyNS0uNTkuOTYtLjg1NGE1MC4zNzIgNTAuMzcyIDAgMCAwIDMuODY4IDguNTI2Yy0uMjE0Ljk0My0uMjYgMi4yMzUuMDg3IDMuOTY2LjY4OCAzLjQzNyAyLjgzMSA3LjY1NyA2LjYzNCAxMS40NiAzLjgwMiAzLjgwMiA4LjAyMiA1Ljk0NSAxMS40NTkgNi42MzMgMS43MzIuMzQ2IDMuMDI0LjMwMSAzLjk2Ny4wODdBNTAuMzc1IDUwLjM3NSAwIDAgMCAzOSA5NS41NDFjLS4yNjQuMzM0LS41NS42NTUtLjg1NS45Ni02LjM3OCA2LjM3OC0xOS4zMDQgMy43OTMtMjguODcyLTUuNzc0Qy0uMjk0IDgxLjE1OS0yLjg3OSA2OC4yMzMgMy41IDYxLjg1NVptMzEuNzYgMi44ODZDNTQuMzkyIDgzLjg3NSA4MC4yNDUgODkuMDQ2IDkzLjAwMSA3Ni4yOWM0LjYxMy00LjYxMyA2Ljg4MS0xMC45MzcgNi45OTQtMTguMDM3LjE5OC0xMi41MzYtNi4zMjctMjcuNDktMTguNTQzLTM5LjcwNkM2Mi4zMi0uNTg4IDM2LjQ2Ni01Ljc2IDIzLjcxIDYuOTk3Yy00LjYxOCA0LjYyLTYuODg3IDEwLjk1NC02Ljk5NCAxOC4wNjYtLjE4NyAxMi41MyA2LjMzNiAyNy40NzEgMTguNTQzIDM5LjY3OFptMjYuOTQ2IDMuMzk1Yy4zNTYgMS43NzcuNDkyIDMuMzg0LjQ1IDQuODI3LTcuMTg1LTIuNTAxLTE0LjgtNy4xNzQtMjEuNjIyLTEzLjk5Ni02LjgyMi02LjgyMi0xMS40OTUtMTQuNDM3LTEzLjk5Ni0yMS42MjMgMS40NDItLjA0IDMuMDUuMDk1IDQuODI2LjQ1IDYuMDUgMS4yMSAxMy4wODEgNC44NzMgMTkuMjc2IDExLjA2NyA2LjE5NCA2LjE5NSA5Ljg1NyAxMy4yMjYgMTEuMDY2IDE5LjI3NVpNMjkuNDg0IDEyLjc3MmMtMy40NTggMy40NTgtNS4zMDIgOS4wOC00LjM3MyAxNi41MjEgOS43ODEtLjk1IDIxLjk3MyAzLjk2NSAzMS44MDIgMTMuNzk0IDkuODI4IDkuODI4IDE0Ljc0NSAyMi4wMiAxMy43OTQgMzEuODAxIDcuNDQuOTMgMTMuMDYzLS45MTUgMTYuNTItNC4zNzIgMy44NDgtMy44NDcgNS42OTgtMTAuMzc2IDMuOTUyLTE5LjEwNC0xLjczMi04LjY2Mi02LjkxNC0xOC41MDUtMTUuNS0yNy4wOTEtOC41ODYtOC41ODYtMTguNDMtMTMuNzY4LTI3LjA5MS0xNS41LTguNzI5LTEuNzQ2LTE1LjI1Ny4xMDQtMTkuMTA0IDMuOTUxWiIgY2xpcC1ydWxlPSJldmVub2RkIi8%2BPC9zdmc%2B&logoSize=auto)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-formats/playground/_playground/blueprint-github.json) [![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/blablablocks-formats?style=for-the-badge&logo=wordpress&label=Install&labelColor=blue)](https://wordpress.org/plugins/blablablocks-formats/)
 
 ## Overview
 
@@ -14,28 +16,28 @@ A collection of rich text formats for the WordPress block editor with interactiv
 
 ## Installation
 
-1. Download the latest release from GitHub
+### Automatic
+
+1. Go to Plugins → Add New in your WordPress dashboard.
+2. Search for BlaBlaBlocks Formats.
+3. Click Install Now and then Activate.
+
+### Manual
+
+1. [Download](https://github.com/lubusIN/blablablocks-formats/releases) latest release from GitHub
 2. Visit `Plugins > Add New`
 3. Upload the `blablablocks-formats.zip` file
-4. Activate `BlaBlaBlocks Formats` from plugins page
+4. Activate `BlaBlaBlocks Formats` from the plugins page
 
 ## Usage
 
-### InfoTip Format
+### Available Formats
 
-<!-- TODO - add recording -->
+-   **Marker**: Add a hand-drawn style highlight to text.
+-   **InfoTip**: Add a tooltip to any inline text.
 
-1. Select any text in the block editor
-2. Click the InfoTip button in the formatting toolbar
-3. Configure your tooltip with custom text, colors, and overlay placement
-
-### Marker Format
-
-<!-- TODO - add recording -->
-
-1. Select text you want to highlight
-2. Click the Marker button in the formatting toolbar
-3. Choose your preferred highlighting style and animation
+> [!NOTE]
+> Refer to the [documentation](https://github.com/lubusIN/blablablocks-formats/wiki) for detailed guidance on using formats.
 
 ## Development
 
@@ -75,6 +77,9 @@ npm run start       # Watch for changes and auto-compile
 npm run serve
 ```
 
+> [!NOTE]
+> Refer to `package.json` for additional available npm commands.
+
 ## Meet Your Artisans
 
 [LUBUS](http://lubus.in) is a web design agency based in Mumbai.
@@ -85,14 +90,9 @@ npm run serve
 
 ## Credits
 
-<a href="https://github.com/lubusIN/blablablocks-formats/graphs/contributors">
-  <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-formats"/>
-</a>
-
 -   [Infotip](https://thenounproject.com/icon/tooltip-383461/) icon by [Icon Island](https://thenounproject.com/iconisland) from [Noun Project](https://thenounproject.com/browse/icons/term/tooltip/) (CC BY 3.0)
-
 -   [Marker](https://thenounproject.com/icon/highlighter-7628276/) icon by [Muhammad Nur Auliady Pamungkas](https://thenounproject.com/mnauliady) from [Noun Project](https://thenounproject.com/browse/icons/term/highlighter/) (CC BY 3.0)
 
 ## License
 
-BlaBlaBlocks Formats is open-sourced plugin licensed under the [MIT license](LICENSE)
+BlaBlaBlocks Formats is an open-sourced plugin licensed under the [MIT license](LICENSE)
