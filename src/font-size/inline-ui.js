@@ -35,16 +35,13 @@ function InlineUI( {
 		settings: { isActive },
 	} );
 
-	const {
-		fontSizes,
-		fontSizeValue,
-		onFontSizeChange,
-		onClear,
-	} = useFontSize( {
-		value,
-		onChange,
-		activeAttributes,
-	} );
+	const { fontSizes, fontSizeValue, onFontSizeChange, onClear } = useFontSize(
+		{
+			value,
+			onChange,
+			activeAttributes,
+		}
+	);
 
 	const handleClear = () => {
 		onClear();
@@ -60,22 +57,20 @@ function InlineUI( {
 			placement="bottom"
 			shift
 		>
-			<div style={ { padding: '16px', minWidth: '220px' } }>
-				<FontSizePicker
-					value={ fontSizeValue }
-					onChange={ onFontSizeChange }
-					fontSizes={ fontSizes }
-					__next40pxDefaultSize
-				/>
-				<Button
-					className="reset-button"
-					disabled={ ! fontSizeValue }
-					onClick={ handleClear }
-					variant="tertiary"
-				>
-					{ __( 'Clear', 'blablablocks-formats' ) }
-				</Button>
-			</div>
+			<FontSizePicker
+				value={ fontSizeValue }
+				onChange={ onFontSizeChange }
+				fontSizes={ fontSizes }
+				__next40pxDefaultSize
+			/>
+			<Button
+				className="reset-button"
+				disabled={ ! fontSizeValue }
+				onClick={ handleClear }
+				variant="tertiary"
+			>
+				{ __( 'Clear', 'blablablocks-formats' ) }
+			</Button>
 		</Popover>
 	);
 }
