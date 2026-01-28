@@ -1,0 +1,16 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.has-uppercase-case {
+	text-transform: uppercase;
+}
+
+.has-lowercase-case {
+	text-transform: lowercase;
+}
+
+.has-titlecase-case {
+	text-transform: capitalize;
+}
