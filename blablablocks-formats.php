@@ -141,9 +141,10 @@ function blablablocks_formats_enqueue_assets()
 	$needs_marker   = blablablocks_has_format('has-marker-format');
 	$needs_infotip  = blablablocks_has_format('has-infotip-format');
 	$needs_fontsize = blablablocks_has_format('has-font-size-format');
+	$needs_typography = blablablocks_has_format('has-typography-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_fontsize) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_fontsize && ! $needs_typography) {
 		return;
 	}
 
@@ -160,5 +161,6 @@ function blablablocks_formats_enqueue_assets()
 
 	// Font-size format doesn't need additional scripts on frontend
 	// The inline styles handle the rendering
+
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
