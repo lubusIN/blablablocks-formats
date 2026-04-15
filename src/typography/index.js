@@ -8,7 +8,6 @@ import { registerFormatType } from '@wordpress/rich-text';
  * Internal dependencies
  */
 import './editor.scss';
-import './style.scss';
 import { Edit } from './edit';
 import { TYPOGRAPHY_CLASS_NAME } from './hooks';
 

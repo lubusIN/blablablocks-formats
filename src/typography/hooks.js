@@ -21,9 +21,9 @@ export const TYPOGRAPHY_FORMAT_TYPE = 'blablablocks/typography';
 export const TYPOGRAPHY_CLASS_NAME = 'has-typography-format';
 
 /**
- * Class used for drop-cap styling.
+ * Class used by legacy drop-cap content.
  */
-export const TYPOGRAPHY_DROP_CAP_CLASS = 'has-drop-cap';
+const TYPOGRAPHY_DROP_CAP_CLASS = 'has-drop-cap';
 
 /**
  * Legacy drop-cap class retained for backward-compatible parsing.
@@ -59,10 +59,7 @@ const STYLE_ATTRIBUTES = {
 	fontFamily: 'font-family',
 	fontStyle: 'font-style',
 	fontWeight: 'font-weight',
-	lineHeight: 'line-height',
 	letterSpacing: 'letter-spacing',
-	textDecoration: 'text-decoration',
-	writingMode: 'writing-mode',
 	textTransform: 'text-transform',
 };
 
@@ -74,12 +71,8 @@ const DEFAULT_VALUES = {
 	fontFamily: '',
 	fontStyle: '',
 	fontWeight: '',
-	lineHeight: '',
 	letterSpacing: '',
-	textDecoration: '',
-	writingMode: '',
 	textTransform: '',
-	dropCap: false,
 };
 
 /**
@@ -121,16 +114,6 @@ const stringifyStyleString = ( styles ) =>
 		.filter( ( [ , value ] ) => value !== undefined && value !== '' )
 		.map( ( [ property, value ] ) => `${ property }: ${ value }` )
 		.join( '; ' );
-
-/**
- * Check whether a class list contains a specific token.
- *
- * @param {string} className Space-separated class string.
- * @param {string} needle    Target class token.
- * @return {boolean} True when the token is present.
- */
-const hasClassName = ( className = '', needle ) =>
-	className.split( /\s+/ ).filter( Boolean ).includes( needle );
 
 /**
  * Convert a label or slug-like value into kebab-case.
@@ -198,8 +181,7 @@ const findPresetByClass = (
  * @return {boolean} True when any typography setting is enabled.
  */
 const hasTypographyValue = ( values ) =>
-	Object.keys( STYLE_ATTRIBUTES ).some( ( key ) => values[ key ] ) ||
-	values.dropCap;
+	Object.keys( STYLE_ATTRIBUTES ).some( ( key ) => values[ key ] );
 
 /**
  * Hydrate normalized typography values from the active rich-text attributes.
@@ -236,17 +218,8 @@ const getTypographyValues = (
 			'',
 		fontStyle: styles[ STYLE_ATTRIBUTES.fontStyle ] || '',
 		fontWeight: styles[ STYLE_ATTRIBUTES.fontWeight ] || '',
-		lineHeight: styles[ STYLE_ATTRIBUTES.lineHeight ] || '',
 		letterSpacing: styles[ STYLE_ATTRIBUTES.letterSpacing ] || '',
-		textDecoration: styles[ STYLE_ATTRIBUTES.textDecoration ] || '',
-		writingMode: styles[ STYLE_ATTRIBUTES.writingMode ] || '',
 		textTransform: styles[ STYLE_ATTRIBUTES.textTransform ] || '',
-		dropCap:
-			hasClassName( activeAttributes.class, TYPOGRAPHY_DROP_CAP_CLASS ) ||
-			hasClassName(
-				activeAttributes.class,
-				LEGACY_TYPOGRAPHY_DROP_CAP_CLASS
-			),
 	};
 };
 
@@ -270,10 +243,6 @@ const buildFormatAttributes = (
 				pattern.test( token )
 			)
 	);
-
-	if ( values.dropCap ) {
-		classNames.push( TYPOGRAPHY_DROP_CAP_CLASS );
-	}
 
 	const fontSizePreset = fontSizes.find(
 		( preset ) =>

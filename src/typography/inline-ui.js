@@ -5,20 +5,12 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect, useRef } from '@wordpress/element';
 import { useAnchor } from '@wordpress/rich-text';
+import { Button, FontSizePicker, Popover } from '@wordpress/components';
 import {
-	Button,
-	FontSizePicker,
-	Popover,
-	ToggleControl,
-} from '@wordpress/components';
-import {
-	LineHeightControl,
 	__experimentalFontAppearanceControl as FontAppearanceControl,
 	__experimentalFontFamilyControl as FontFamilyControl,
 	__experimentalLetterSpacingControl as LetterSpacingControl,
-	__experimentalTextDecorationControl as TextDecorationControl,
 	__experimentalTextTransformControl as TextTransformControl,
-	__experimentalWritingModeControl as WritingModeControl,
 } from '@wordpress/block-editor';
 
 /**
@@ -153,19 +145,6 @@ function InlineUI( {
 				</div>
 
 				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
-					<LineHeightControl
-						value={ values.lineHeight || undefined }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								lineHeight: newValue || '',
-							} )
-						}
-						__unstableInputWidth="auto"
-						__next40pxDefaultSize
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
 					<LetterSpacingControl
 						value={ values.letterSpacing || undefined }
 						onChange={ ( newValue ) =>
@@ -179,31 +158,6 @@ function InlineUI( {
 				</div>
 
 				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
-					<WritingModeControl
-						value={ values.writingMode || undefined }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								writingMode: newValue || '',
-							} )
-						}
-						size="__unstable-large"
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
-					<TextDecorationControl
-						value={ values.textDecoration || undefined }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								textDecoration: newValue || '',
-							} )
-						}
-						__unstableInputWidth="auto"
-						__next40pxDefaultSize
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field">
 					<TextTransformControl
 						value={ values.textTransform || undefined }
 						onChange={ ( newValue ) =>
@@ -214,22 +168,6 @@ function InlineUI( {
 						showNone
 						isBlock
 						size="__unstable-large"
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field">
-					<ToggleControl
-						label={ __( 'Drop cap', 'blablablocks-formats' ) }
-						checked={ values.dropCap }
-						onChange={ ( nextValue ) =>
-							updateTypography( {
-								dropCap: nextValue,
-							} )
-						}
-						help={ __(
-							'Show a large initial letter.',
-							'blablablocks-formats'
-						) }
 					/>
 				</div>
 			</div>

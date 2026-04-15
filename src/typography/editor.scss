@@ -20,22 +20,14 @@
 		grid-column: span 1;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field > * {
+	.block-editor-format-toolbar__blablablocks-typography-field>* {
 		margin-bottom: 0;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.components-base-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.components-dropdown,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.components-custom-select-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.block-editor-line-height-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.block-editor-text-decoration-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair
-		.block-editor-letter-spacing-control {
+	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-base-control,
+	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-dropdown,
+	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-custom-select-control,
+	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .block-editor-letter-spacing-control {
 		width: 100%;
 	}
 
