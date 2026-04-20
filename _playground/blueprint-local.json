@@ -19,6 +19,13 @@
             "options": {
                 "blogname": "BlaBlaBlocks Formats | Local Dev 🧑‍💻"
             }
+        },
+       {
+            "step": "importWxr",
+            "file": {
+                "resource": "bundled",
+                "path": "/demo-content.xml"
+            }
         }
     ]
 }

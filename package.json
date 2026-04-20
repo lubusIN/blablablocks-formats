@@ -13,7 +13,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --blocks-manifest",
-		"serve": "npx @wp-playground/cli server --auto-mount --blueprint=./_playground/blueprint-local.json"
+		"serve": "npx @wp-playground/cli@latest server --auto-mount --blueprint=./_playground/blueprint-local.json --blueprint-may-read-adjacent-files"
 	},
 	"prettier": "@wordpress/prettier-config",
 	"devDependencies": {
