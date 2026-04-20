@@ -4,6 +4,8 @@
 .github
 .gitignore
 .DS_Store
+.nvmrc
+.eslintrc.js
 _playground
 _wordpress-org
 composer.json
