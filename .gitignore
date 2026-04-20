@@ -136,7 +136,9 @@ dist
 .pnp.*
 
 # Build files
-build/
+#build
+build
+vendor
 
 # Mac system files
 *.DS_Store

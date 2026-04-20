@@ -1,0 +1,42 @@
+{
+    "name": "lubusin/blablablocks-formats",
+    "description": "A collection of rich text formats for the WordPress block editor with interactive elements. Starting with InfoTip tooltips and Marker highlights. More to come in the future!.",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "block",
+        "formats",
+        "blablablocks"
+    ],
+    "homepage": "https://lubus.in",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Punit Verma",
+            "email": "punit@lubus.in",
+            "homepage": "https://lubus.in"
+        },
+        {
+            "name": "Ajit Bohra",
+            "email": "ajit@lubus.in",
+            "homepage": "https://lubus.in"
+        }
+    ],
+    "type": "wordpress-plugin",
+    "support": {
+        "issues": "https://github.com/lubusIN/blablablocks-formats/issues",
+        "source": "https://github.com/lubusIN/blablablocks-formats"
+    },
+    "extra": {
+        "installer-name": "blablablocks-formats"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "composer/installers": "^2.3"
+    }
+}
