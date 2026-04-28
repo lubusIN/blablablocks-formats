@@ -1,33 +1,31 @@
 .block-editor-format-toolbar__blablablocks-typography-popover {
 	.components-popover__content {
-		width: min(24rem, calc(100vw - 2rem));
+		width: 100%;
+		min-width: min(18rem, calc(100vw - 2rem));
 		max-height: min(72vh, 40rem);
 		overflow: auto;
 		padding: 1rem;
-	}
-
-	.block-editor-format-toolbar__blablablocks-typography-fields {
 		display: grid;
-		gap: 12px;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 18px;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field {
+	.components-popover__content > :not( .is-inline-pair ) {
 		grid-column: 1 / -1;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair {
+	.components-popover__content > .is-inline-pair {
 		grid-column: span 1;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field>* {
+	.components-popover__content > * {
 		margin-bottom: 0;
 	}
 
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-base-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-dropdown,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .components-custom-select-control,
-	.block-editor-format-toolbar__blablablocks-typography-field.is-inline-pair .block-editor-letter-spacing-control {
+	.components-popover__content > .is-inline-pair,
+	.components-popover__content > .is-inline-pair .components-base-control,
+	.components-popover__content > .is-inline-pair .components-dropdown,
+	.components-popover__content > .is-inline-pair .components-custom-select-control,
+	.components-popover__content > .is-inline-pair .block-editor-letter-spacing-control {
 		width: 100%;
 	}
 

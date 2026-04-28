@@ -30,25 +30,25 @@ import { useTypography } from './hooks';
  * @param {boolean}  props.isActive         - Indicates if the format is active.
  * @return {JSX.Element}                    - The rendered typography popover.
  */
-function InlineUI( {
+function InlineUI({
 	value,
 	onChange,
 	onClose,
 	activeAttributes,
 	contentRef,
 	isActive,
-} ) {
-	const liveAnchor = useAnchor( {
+}) {
+	const liveAnchor = useAnchor({
 		editableContentElement: contentRef,
 		settings: { isActive },
-	} );
-	const fallbackAnchorRef = useRef( null );
+	});
+	const fallbackAnchorRef = useRef(null);
 
-	useEffect( () => {
-		if ( liveAnchor ) {
+	useEffect(() => {
+		if (liveAnchor) {
 			fallbackAnchorRef.current = liveAnchor;
 		}
-	}, [ liveAnchor ] );
+	}, [liveAnchor]);
 
 	const anchor = liveAnchor || fallbackAnchorRef.current;
 
@@ -60,13 +60,13 @@ function InlineUI( {
 		hasAnyValue,
 		updateTypography,
 		clearAll,
-	} = useTypography( {
+	} = useTypography({
 		value,
 		onChange,
 		activeAttributes,
-	} );
+	});
 
-	const handleFocusOutside = ( event ) => {
+	const handleFocusOutside = (event) => {
 		const nextFocusedElement =
 			event?.relatedTarget instanceof HTMLElement
 				? event.relatedTarget
@@ -86,99 +86,92 @@ function InlineUI( {
 
 	return (
 		<Popover
-			anchor={ anchor }
+			anchor={anchor}
 			className="block-editor-format-toolbar__blablablocks-typography-popover"
 			flip
-			offset={ 20 }
-			onClose={ onClose }
-			onFocusOutside={ handleFocusOutside }
+			offset={20}
+			onClose={onClose}
+			onFocusOutside={handleFocusOutside}
 			placement="bottom"
 			shift
 		>
-			<div className="block-editor-format-toolbar__blablablocks-typography-fields">
-				<div className="block-editor-format-toolbar__blablablocks-typography-field">
-					<FontFamilyControl
-						value={ values.fontFamily }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								fontFamily: newValue || '',
-							} )
-						}
-						{ ...( fontFamilies.length > 0
-							? { fontFamilies }
-							: {} ) }
-						__next40pxDefaultSize
-					/>
-				</div>
+			<FontFamilyControl
+				className="is-full-width"
+				value={values.fontFamily}
+				onChange={(newValue) =>
+					updateTypography({
+						fontFamily: newValue || '',
+					})
+				}
+				{...(fontFamilies.length > 0 ? { fontFamilies } : {})}
+				__next40pxDefaultSize
+			/>
 
-				<div className="block-editor-format-toolbar__blablablocks-typography-field">
-					<FontSizePicker
-						value={ values.fontSize }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								fontSize: newValue || '',
-							} )
-						}
-						fontSizes={ fontSizes }
-						disableCustomFontSizes={ false }
-						withSlider
-						withReset={ false }
-						__next40pxDefaultSize
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field">
-					<FontAppearanceControl
-						value={ {
-							fontStyle: values.fontStyle || undefined,
-							fontWeight: values.fontWeight || undefined,
-						} }
-						onChange={ ( nextValue ) =>
-							updateTypography( {
-								fontStyle: nextValue.fontStyle || '',
-								fontWeight: nextValue.fontWeight || '',
-							} )
-						}
-						fontFamilyFaces={ fontFamilyFaces }
-						__next40pxDefaultSize
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
-					<LetterSpacingControl
-						value={ values.letterSpacing || undefined }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								letterSpacing: newValue || '',
-							} )
-						}
-						__unstableInputWidth="auto"
-						__next40pxDefaultSize
-					/>
-				</div>
-
-				<div className="block-editor-format-toolbar__blablablocks-typography-field is-inline-pair">
-					<TextTransformControl
-						value={ values.textTransform || undefined }
-						onChange={ ( newValue ) =>
-							updateTypography( {
-								textTransform: newValue || '',
-							} )
-						}
-						showNone
-						isBlock
-						size="__unstable-large"
-					/>
-				</div>
+			<div>
+				<FontSizePicker
+					className="is-full-width"
+					value={values.fontSize}
+					onChange={(newValue) =>
+						updateTypography({
+							fontSize: newValue || '',
+						})
+					}
+					fontSizes={fontSizes}
+					disableCustomFontSizes={false}
+					withSlider
+					withReset={false}
+					__next40pxDefaultSize
+				/>
 			</div>
+
+			<FontAppearanceControl
+				className="is-full-width"
+				value={{
+					fontStyle: values.fontStyle || undefined,
+					fontWeight: values.fontWeight || undefined,
+				}}
+				onChange={(nextValue) =>
+					updateTypography({
+						fontStyle: nextValue.fontStyle || '',
+						fontWeight: nextValue.fontWeight || '',
+					})
+				}
+				fontFamilyFaces={fontFamilyFaces}
+				__next40pxDefaultSize
+			/>
+
+			<LetterSpacingControl
+				className="is-inline-pair"
+				value={values.letterSpacing || undefined}
+				onChange={(newValue) =>
+					updateTypography({
+						letterSpacing: newValue || '',
+					})
+				}
+				__unstableInputWidth="auto"
+				__next40pxDefaultSize
+			/>
+
+			<TextTransformControl
+				className="is-inline-pair"
+				value={values.textTransform || undefined}
+				onChange={(newValue) =>
+					updateTypography({
+						textTransform: newValue || '',
+					})
+				}
+				showNone
+				isBlock
+				size="__unstable-large"
+			/>
 
 			<Button
 				className="reset-button"
-				disabled={ ! hasAnyValue }
-				onClick={ clearAll }
+				disabled={!hasAnyValue}
+				onClick={clearAll}
 				variant="tertiary"
 			>
-				{ __( 'Clear', 'blablablocks-formats' ) }
+				{__('Clear', 'blablablocks-formats')}
 			</Button>
 		</Popover>
 	);
