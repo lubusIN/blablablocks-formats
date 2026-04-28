@@ -1,25 +1,25 @@
-=== Rich Text Formats – Animated Highlight, Marker, Tooltip ===
+=== Rich Text Formats ===
 Contributors:      lubus, ajitbohra, punitv342, nagpai
 Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
 Tested up to:      6.9
 Requires PHP:      7.4
-Stable tag:        1.1.2
+Stable tag:        1.1.3
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
-Add tooltips, highlights & interactivity to text in the Gutenberg editor. Enhance readability with rich text formats.
+Rich text enhancements for the WordPress block editor.
 
 == Description ==
 
-BlaBlaBlocks Formats lets you enhance your Gutenberg editor with **interactive rich text formats** like tooltips, animated highlights/markers directly inside WordPress.  
+BlaBlaBlocks Formats lets you enhance your Gutenberg editor with **interactive rich text formats** like tooltips, markers, inline typography controls, and formatting utilities directly inside WordPress.  
 No coding needed. Just select your text, choose a format, and instantly make your content more engaging.
 
-With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips that improve readability, emphasize key information, and bring motion to your writing.
+With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips, inline typography styling, and quick formatting controls to improve readability and emphasize key information.
 
 ### Key Features
 
-* **Interactive text formats** - Add **InfoTips**, **markers**, and **highlights** directly from the block toolbar.
+* **Interactive text formats** - Add **InfoTips**, **markers**, **typography controls**, and **clear formatting** directly from the block toolbar.
 * **Live customization** - Change color, animation, and behavior in real time.
 * **Lightweight & optimized** - Assets load only when formats are used.
 * **Native Gutenberg integration** - Seamlessly fits the WordPress Block Editor.
@@ -27,7 +27,7 @@ With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips th
 ### Why Choose BlaBlaBlocks Formats?
 
 Because plain text doesn’t always tell the full story!  
-Highlight key phrases, provide helpful InfoTips, or animate your words all within the familiar block editor UI.
+Highlight key phrases, provide helpful InfoTips, adjust inline typography, or quickly remove formatting, all within the familiar block editor UI.
 
 * No shortcodes or custom HTML needed.  
 * 100% visual control inside the editor.  
@@ -36,7 +36,7 @@ Highlight key phrases, provide helpful InfoTips, or animate your words all withi
 ### How It Works
 
 1. Select any text in the Gutenberg editor.
-2. Choose a format: Highlight, or InfoTip.
+2. Choose a format such as Marker, InfoTip, Typography, or Clear formatting.
 3. Adjust style and behavior using the sidebar options.
 4. See the preview instantly.
 
@@ -46,8 +46,8 @@ Formats are rendered on both editor and frontend views with minimal code overhea
 
 * Add **InfoTips** to glossary terms or product details.  
 * Highlight **important phrases** in tutorials or documentation.  
-* Create **animated text markers** for blog emphasis.  
-* Design **interactive learning content** in WordPress.
+* Apply **inline typography styles** to emphasize selected text.  
+* Clear unwanted formatting from copied or edited content.
 
 ### Available Formats
 
@@ -57,11 +57,17 @@ Underline or highlight text segments with customizable color and animation.
 #### 2. InfoTip
 Attach informative tooltips to any text selection perfect for definitions, links, or extra context.
 
+#### 3. Typography
+Apply inline typography styles such as font family, font size, appearance, letter spacing, and letter case.
+
+#### 4. Clear formatting
+Remove applied inline formatting from selected text with a single toolbar action.
+
 ### Customization Options
 
 * Marker color & animation style  
 * Tooltip position, size, and behavior  
-* Animation speed & easing type  
+* Typography presets and inline text styling  
 * Backend-only or frontend-visible options  
 * Per-format settings saved automatically
 
