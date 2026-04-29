@@ -131,6 +131,12 @@ Yes! BlaBlaBlocks Formats is MIT-licensed and open for contributions.
 
 == Changelog ==
 
+= 1.1.3 =
+* Add the new Typography rich text format.
+* Add the Clear formatting toolbar action.
+* Refresh plugin documentation to cover the new formats.
+* Bump plugin version to 1.1.3
+
 = 1.1.2 =
 * Bump plugin version to 1.1.2
 * Update "Tested up to" to 6.9
