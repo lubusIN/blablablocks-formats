@@ -1,6 +1,6 @@
 {
     "$schema": "https://playground.wordpress.net/blueprint-schema.json",
-    "landingPage": "/wp-admin/post.php?post=9&action=edit",
+    "landingPage": "/wp-admin/post.php?post=11&action=edit",
     "login": true,
     "features": {
         "networking": true
@@ -20,7 +20,7 @@
                 "blogname": "Wordpress BlaBlaBlocks Formats"
             }
         },
-         {
+        {
             "step": "installPlugin",
             "pluginData": {
                 "resource": "git:directory",
