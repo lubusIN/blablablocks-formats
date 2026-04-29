@@ -1,0 +1,37 @@
+.block-editor-format-toolbar__blablablocks-typography-popover {
+	.components-popover__content {
+		width: 100%;
+		min-width: min(18rem, calc(100vw - 2rem));
+		max-height: min(72vh, 40rem);
+		overflow: auto;
+		padding: 1rem;
+		display: grid;
+		gap: 18px;
+	}
+
+	.components-popover__content > :not( .is-inline-pair ) {
+		grid-column: 1 / -1;
+	}
+
+	.components-popover__content > .is-inline-pair {
+		grid-column: span 1;
+	}
+
+	.components-popover__content > * {
+		margin-bottom: 0;
+	}
+
+	.components-popover__content > .is-inline-pair,
+	.components-popover__content > .is-inline-pair .components-base-control,
+	.components-popover__content > .is-inline-pair .components-dropdown,
+	.components-popover__content > .is-inline-pair .components-custom-select-control,
+	.components-popover__content > .is-inline-pair .block-editor-letter-spacing-control {
+		width: 100%;
+	}
+
+	.reset-button {
+		margin-top: 12px;
+		display: block;
+		margin-left: auto;
+	}
+}

@@ -3,7 +3,7 @@
 /**
  * Plugin Name:			BlaBlaBlocks Formats
  * Description:			Rich text formats from BlaBlaBlocks.
- * Version:				1.1.2
+ * Version:				1.1.3
  * Requires at least:	6.6
  * Requires PHP:		7.4
  * Author:				Lubus
@@ -138,11 +138,12 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_style('blablablocks-formats-styles');
 	}
 
-	$needs_marker  = blablablocks_has_format('has-marker-format');
-	$needs_infotip = blablablocks_has_format('has-infotip-format');
+	$needs_marker   = blablablocks_has_format('has-marker-format');
+	$needs_infotip  = blablablocks_has_format('has-infotip-format');
+	$needs_typography = blablablocks_has_format('has-typography-format');
 
-	// If neither format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip) {
+	// If no format is present, do nothing.
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography) {
 		return;
 	}
 
@@ -156,5 +157,9 @@ function blablablocks_formats_enqueue_assets()
 	if ($needs_infotip) {
 		wp_enqueue_script('blablablocks-infotip-format-asset');
 	}
+
+	// Font-size format doesn't need additional scripts on frontend
+	// The inline styles handle the rendering
+
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');

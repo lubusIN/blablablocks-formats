@@ -6,7 +6,7 @@
 
 ## Overview
 
-A collection of rich text formats for the WordPress block editor with interactive elements. Starting with InfoTip tooltips and Marker highlights. More to come in the future!
+A collection of rich text formats for the WordPress block editor.
 
 ## Requirements
 
@@ -35,6 +35,8 @@ A collection of rich text formats for the WordPress block editor with interactiv
 
 -   **Marker**: Add a hand-drawn style highlight to text.
 -   **InfoTip**: Add a tooltip to any inline text.
+-   **Typography**: Apply inline typography controls such as font family, font size, appearance, letter spacing, and letter case.
+-   **Clear formatting**: Remove applied inline formats from selected text with a single toolbar action.
 
 > [!NOTE]
 > Refer to the [documentation](https://github.com/lubusIN/blablablocks-formats/wiki) for detailed guidance on using formats.
