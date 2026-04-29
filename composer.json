@@ -1,6 +1,6 @@
 {
     "name": "lubusin/blablablocks-formats",
-    "description": "A collection of rich text formats for the WordPress block editor with interactive elements. Starting with InfoTip tooltips and Marker highlights. More to come in the future!.",
+    "description": "A collection of rich text formats for the WordPress block editor.",
     "keywords": [
         "wordpress",
         "plugin",
