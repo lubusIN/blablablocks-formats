@@ -92,6 +92,8 @@ The BlaBlaBlocks Formats is open source. Not only is it free to use, but you are
 == Screenshots ==
 1. **Marker settings** - Select and adjust the Marker type and settings.
 2. **InfoTip settings** - Add InfoTip text and adjust settings.
+3. **Typography settings** - Adjust inline typography styles such as font, size, appearance, letter spacing, and letter case.
+4. **Clear formatting** - Remove applied inline formatting from selected text with a single toolbar action.
 
 == Installation ==
 You can install this plugin either automatically through the WordPress admin or manually via FTP.
