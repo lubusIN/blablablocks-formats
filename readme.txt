@@ -2,9 +2,9 @@
 Contributors:      lubus, ajitbohra, punitv342, nagpai
 Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
-Tested up to:      6.9
+Tested up to:      7.0
 Requires PHP:      7.4
-Stable tag:        1.1.3
+Stable tag:        1.1.4
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
