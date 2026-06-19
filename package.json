@@ -5,6 +5,12 @@
 	"author": "Lubus",
 	"license": "MIT",
 	"main": "build/index.js",
+	"files": [
+		"assets/**",
+		"build/**",
+		"*.php",
+		"readme.*"
+	],
 	"scripts": {
 		"build": "wp-scripts build --blocks-manifest",
 		"format": "wp-scripts format",
