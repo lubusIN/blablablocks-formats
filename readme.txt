@@ -4,7 +4,7 @@ Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
 Tested up to:      7.0
 Requires PHP:      7.4
-Stable tag:        1.1.4
+Stable tag:        1.1.5
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
@@ -12,7 +12,7 @@ Rich text enhancements for the WordPress block editor.
 
 == Description ==
 
-BlaBlaBlocks Formats lets you enhance your Gutenberg editor with **interactive rich text formats** like tooltips, markers, inline typography controls, and formatting utilities directly inside WordPress.  
+BlaBlaBlocks Formats lets you enhance your Gutenberg editor with **interactive rich text formats** like tooltips, markers, inline typography controls, and formatting utilities directly inside WordPress.
 No coding needed. Just select your text, choose a format, and instantly make your content more engaging.
 
 With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips, inline typography styling, and quick formatting controls to improve readability and emphasize key information.
@@ -26,11 +26,11 @@ With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips, i
 
 ### Why Choose BlaBlaBlocks Formats?
 
-Because plain text doesn’t always tell the full story!  
+Because plain text doesn’t always tell the full story!
 Highlight key phrases, provide helpful InfoTips, adjust inline typography, or quickly remove formatting, all within the familiar block editor UI.
 
-* No shortcodes or custom HTML needed.  
-* 100% visual control inside the editor.  
+* No shortcodes or custom HTML needed.
+* 100% visual control inside the editor.
 * Works with all themes and blocks.
 
 ### How It Works
@@ -44,9 +44,9 @@ Formats are rendered on both editor and frontend views with minimal code overhea
 
 ## # Use Cases
 
-* Add **InfoTips** to glossary terms or product details.  
-* Highlight **important phrases** in tutorials or documentation.  
-* Apply **inline typography styles** to emphasize selected text.  
+* Add **InfoTips** to glossary terms or product details.
+* Highlight **important phrases** in tutorials or documentation.
+* Apply **inline typography styles** to emphasize selected text.
 * Clear unwanted formatting from copied or edited content.
 
 ### Available Formats
@@ -65,28 +65,28 @@ Remove applied inline formatting from selected text with a single toolbar action
 
 ### Customization Options
 
-* Marker color & animation style  
-* Tooltip position, size, and behavior  
-* Typography presets and inline text styling  
-* Backend-only or frontend-visible options  
+* Marker color & animation style
+* Tooltip position, size, and behavior
+* Typography presets and inline text styling
+* Backend-only or frontend-visible options
 * Per-format settings saved automatically
 
 ### Performance & Optimization
 
-* BlaBlaBlocks Formats loads assets only when necessary, reducing frontend bloat.  
-* No React, Redux, or large JS libraries 
+* BlaBlaBlocks Formats loads assets only when necessary, reducing frontend bloat.
+* No React, Redux, or large JS libraries
 * Powered by the web component, not loaded on the public site unless formats are active.
 
 === Open Source and Free ===
 The BlaBlaBlocks Formats is open source. Not only is it free to use, but you are also welcome to collaborate and contribute to its development.
 
-- **Source Code:**  
+- **Source Code:**
   [https://github.com/lubusIN/blablablocks-formats](https://github.com/lubusIN/blablablocks-formats)
 
-- **Report Issues:**  
+- **Report Issues:**
   [https://github.com/lubusIN/blablablocks-formats/issues](https://github.com/lubusIN/blablablocks-formats/issues)
 
-- **Documentation:**  
+- **Documentation:**
   [https://github.com/lubusIN/blablablocks-formats/wiki](https://github.com/lubusIN/blablablocks-formats/wiki)
 
 == Screenshots ==
@@ -130,6 +130,9 @@ Yes, the formats are fully compatible with block themes and the Site Editor.
 Yes! BlaBlaBlocks Formats is MIT-licensed and open for contributions.
 
 == Changelog ==
+
+= 1.1.5 =
+* Fixed "floating UI packaging.
 
 = 1.1.4 =
 * Update "Tested up to" to 7.0.
