@@ -1,4 +1,4 @@
-<p align="center"><img height="75" src=".github/assets/logo.svg"></p>
+<p align="center"><img height="50" src=".github/assets/logo.svg"></p>
 
 ![BlaBlaBlocks Formats](.github/assets/banner.png)
 
