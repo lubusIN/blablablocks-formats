@@ -2,6 +2,7 @@
 
 /**
  * Plugin Name:			BlaBlaBlocks Formats
+ * Plugin URI: 			https://lubus.in
  * Description:			Rich text formats from BlaBlaBlocks.
  * Version:				1.1.6
  * Requires at least:	6.6
