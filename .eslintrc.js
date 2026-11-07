@@ -21,6 +21,7 @@ module.exports = {
 		'jsdoc/require-param-type': 'off',
 		'jsdoc/require-param': 'off',
 		'no-unused-vars': [ 'error', { varsIgnorePattern: '^_' } ],
+		'import/no-unresolved': 'off',
 	},
 	parserOptions: {
 		requireConfigFile: false,
