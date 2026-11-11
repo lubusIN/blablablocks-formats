@@ -45,7 +45,7 @@
 		<link>https://playground.wordpress.net/scope:loyal-peaceful-city/blablablocks-formats/</link>
 		<pubDate>Wed, 29 Apr 2026 01:14:58 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://playground.wordpress.net/scope:loyal-peaceful-city/?page_id=11</guid>
+		<guid isPermaLink="false">https://playground.wordpress.net/scope:loyal-peaceful-city/?page_id=4</guid>
 		<description></description>
 		<content:encoded><![CDATA[<!-- wp:paragraph -->
 <p><tatva-infotip content="A set of custom formats that add interactivity and visual emphasis to your content." icon-enabled="true" icon-type="info" overlay-placement="left-start" overlay-text-color="#FFEE58" overlay-background-color="#503AA8" class="has-infotip-format"><span class="has-typography-format has-x-large-font-size" style="font-style: normal; font-weight: 500; text-transform: capitalize">BlaBlaBlocks formats</span></tatva-infotip> bring a collection of rich text tools to the WordPress block editor—starting with interactive elements like <strong><tatva-marker type="double" class="has-marker-format">InfoTip</tatva-marker></strong> tooltips and <strong><tatva-marker type="double" class="has-marker-format">Marker</tatva-marker></strong> highlights. And there's more to come!</p>

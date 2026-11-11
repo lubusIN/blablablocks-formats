@@ -79,6 +79,26 @@ npm run start       # Watch for changes and auto-compile
 npm run serve
 ```
 
+### Local Development with `@lubusin/tatva`
+
+When developing features or fixing issues in the underlying web components (`tatva`) concurrently with this plugin:
+
+1. Clone or checkout the `tatva` repository alongside this repository:
+   ```bash
+   git clone git@github.com:lubusIN/tatva.git
+   ```
+2. Update `@lubusin/tatva` in `package.json` to reference the local checkout:
+   ```json
+   "dependencies": {
+     "@lubusin/tatva": "file:../../tatva"
+   }
+   ```
+3. Run `npm install` to link the local repository.
+4. Run `npm run start` or `npm run build` to compile using your local changes.
+
+> [!IMPORTANT]
+> Before submitting a pull request or creating a production release, switch `@lubusin/tatva` back to the published npm version (e.g. `"^1.1.0"`) and run `npm install`.
+
 > [!NOTE]
 > Refer to `package.json` for additional available npm commands.
 

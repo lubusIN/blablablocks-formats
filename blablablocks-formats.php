@@ -2,8 +2,9 @@
 
 /**
  * Plugin Name:			BlaBlaBlocks Formats
+ * Plugin URI: 			https://lubus.in
  * Description:			Rich text formats from BlaBlaBlocks.
- * Version:				1.1.6
+ * Version:				1.2.0
  * Requires at least:	6.6
  * Requires PHP:		7.4
  * Author:				Lubus
@@ -29,39 +30,27 @@ function blablablocks_formats_register_assets()
 	$version      = $asset['version'];
 	$build_deps   = $asset['dependencies'];
 
+	$marker_file   = plugin_dir_path(__FILE__) . 'build/marker.asset.php';
+	$marker_asset  = file_exists($marker_file) ? include $marker_file : ['dependencies' => [], 'version' => $version];
+
+	$infotip_file  = plugin_dir_path(__FILE__) . 'build/infotip.asset.php';
+	$infotip_asset = file_exists($infotip_file) ? include $infotip_file : ['dependencies' => [], 'version' => $version];
+
 	// Register Marker format web component script
 	wp_register_script(
 		'blablablocks-marker-format-asset',
-		plugins_url('assets/web-components/marker.js', __FILE__),
-		[],
-		$version,
-		true
-	);
-
-	// Register Floating UI script
-	wp_register_script(
-		'blablablocks-floating-ui-core-asset',
-		plugins_url('assets/vendor/floating-ui/core.umd.min.js', __FILE__),
-		[],
-		filemtime(plugin_dir_path(__FILE__) . 'assets/vendor/floating-ui/core.umd.min.js'),
-		true
-	);
-
-	// Register Floating UI DOM script
-	wp_register_script(
-		'blablablocks-floating-ui-dom-asset',
-		plugins_url('assets/vendor/floating-ui/dom.umd.min.js', __FILE__),
-		['blablablocks-floating-ui-core-asset'],
-		filemtime(plugin_dir_path(__FILE__) . 'assets/vendor/floating-ui/dom.umd.min.js'),
+		plugins_url('build/marker.js', __FILE__),
+		$marker_asset['dependencies'],
+		$marker_asset['version'],
 		true
 	);
 
 	// Register infotip format web component script
 	wp_register_script(
 		'blablablocks-infotip-format-asset',
-		plugins_url('assets/web-components/infotip.js', __FILE__),
-		['blablablocks-floating-ui-dom-asset'],
-		$version,
+		plugins_url('build/infotip.js', __FILE__),
+		$infotip_asset['dependencies'],
+		$infotip_asset['version'],
 		true
 	);
 
