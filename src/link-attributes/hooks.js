@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
+import { useMemo, useState, useEffect } from '@wordpress/element';
 import { applyFormat, getActiveFormat } from '@wordpress/rich-text';
 
 /**
@@ -23,6 +23,24 @@ export const RESERVED_LINK_ATTRIBUTES = [
  * Core link attributes that need to be preserved when updating a link format.
  */
 const CORE_LINK_KEYS = [ 'url', 'type', 'id', 'target', 'rel', 'class' ];
+
+/**
+ * Preserves registered core link attributes from an active link format.
+ *
+ * @param {Object|null} activeLink - The active core/link format object.
+ * @return {Object} Clean object containing only core link attributes.
+ */
+function getCoreLinkAttributes( activeLink ) {
+	const core = {};
+	if ( activeLink?.attributes ) {
+		for ( const key of CORE_LINK_KEYS ) {
+			if ( activeLink.attributes[ key ] !== undefined ) {
+				core[ key ] = activeLink.attributes[ key ];
+			}
+		}
+	}
+	return core;
+}
 
 /**
  * Extracts custom attributes from an active link format.
@@ -67,96 +85,72 @@ export function useLinkAttributes( { value, onChange } ) {
 		[ activeLink ]
 	);
 
-	const initialAttributes = useMemo( () => {
-		return customAttributes.length
-			? customAttributes
-			: [ { key: '', value: '' } ];
-	}, [ customAttributes ] );
-
-	const [ attributes, setAttributes ] = useState( initialAttributes );
+	const [ attributes, setAttributes ] = useState( () =>
+		customAttributes.length ? customAttributes : [ { key: '', value: '' } ]
+	);
 
 	// Resync when the active link changes
 	useEffect( () => {
-		setAttributes( initialAttributes );
-	}, [ initialAttributes ] );
+		setAttributes(
+			customAttributes.length
+				? customAttributes
+				: [ { key: '', value: '' } ]
+		);
+	}, [ customAttributes ] );
 
-	const updateAttribute = useCallback( ( index, field, fieldValue ) => {
-		setAttributes( ( prev ) => {
-			const updated = [ ...prev ];
-			if ( updated[ index ] ) {
-				updated[ index ] = {
-					...updated[ index ],
-					[ field ]: fieldValue,
-				};
-			}
-			return updated;
-		} );
-	}, [] );
-
-	const addAttribute = useCallback( () => {
+	const addAttribute = () =>
 		setAttributes( ( prev ) => [ ...prev, { key: '', value: '' } ] );
-	}, [] );
 
-	const removeAttribute = useCallback( ( index ) => {
+	const removeAttribute = ( index ) =>
 		setAttributes( ( prev ) => prev.filter( ( _, i ) => i !== index ) );
-	}, [] );
 
-	const getCoreLinkAttributes = useCallback( () => {
-		const coreAttrs = {};
-		if ( activeLink && activeLink.attributes ) {
-			CORE_LINK_KEYS.forEach( ( key ) => {
-				if ( activeLink.attributes[ key ] !== undefined ) {
-					coreAttrs[ key ] = activeLink.attributes[ key ];
-				}
-			} );
-		}
-		return coreAttrs;
-	}, [ activeLink ] );
+	const updateAttribute = ( index, field, val ) =>
+		setAttributes( ( prev ) =>
+			prev.map( ( attr, i ) =>
+				i === index ? { ...attr, [ field ]: val } : attr
+			)
+		);
 
-	const applyAttributes = useCallback( () => {
+	const applyAttributes = () => {
 		if ( ! activeLink ) {
 			return;
 		}
 
 		const customAttrs = {};
-		attributes.forEach( ( { key, value: attrVal } ) => {
-			const trimmedKey = key.trim();
+		for ( const { key, value: val } of attributes ) {
+			const trimmed = key.trim();
 			if (
-				trimmedKey &&
-				! RESERVED_LINK_ATTRIBUTES.includes( trimmedKey.toLowerCase() )
+				trimmed &&
+				! RESERVED_LINK_ATTRIBUTES.includes( trimmed.toLowerCase() )
 			) {
-				customAttrs[ trimmedKey ] = attrVal;
+				customAttrs[ trimmed ] = val;
 			}
-		} );
+		}
 
-		const coreAttrs = getCoreLinkAttributes();
-		const finalAttributes = {
-			...coreAttrs,
-			...customAttrs,
-		};
+		onChange(
+			applyFormat( value, {
+				type: 'core/link',
+				attributes: {
+					...getCoreLinkAttributes( activeLink ),
+					...customAttrs,
+				},
+			} )
+		);
+	};
 
-		const newValue = applyFormat( value, {
-			type: 'core/link',
-			attributes: finalAttributes,
-		} );
-
-		onChange( newValue );
-	}, [ activeLink, attributes, getCoreLinkAttributes, onChange, value ] );
-
-	const clearAllAttributes = useCallback( () => {
+	const clearAllAttributes = () => {
 		if ( ! activeLink ) {
 			return;
 		}
 
-		const coreAttrs = getCoreLinkAttributes();
-		const newValue = applyFormat( value, {
-			type: 'core/link',
-			attributes: coreAttrs,
-		} );
-
-		setAttributes( [] );
-		onChange( newValue );
-	}, [ activeLink, getCoreLinkAttributes, onChange, value ] );
+		setAttributes( [ { key: '', value: '' } ] );
+		onChange(
+			applyFormat( value, {
+				type: 'core/link',
+				attributes: getCoreLinkAttributes( activeLink ),
+			} )
+		);
+	};
 
 	return {
 		attributes,
