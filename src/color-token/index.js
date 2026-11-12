@@ -6,22 +6,19 @@ import tinycolor from 'tinycolor2';
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { brush } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import { Panel, Popover } from '@wordpress/components';
 import {
 	slice,
-	useAnchorRef,
+	useAnchor,
 	applyFormat,
 	removeFormat,
 	getTextContent,
 	registerFormatType,
 } from '@wordpress/rich-text';
-import {
-	ColorPalette,
-	RichTextToolbarButton,
-	__unstableRichTextInputEvent,
-} from '@wordpress/block-editor';
+import { ColorPalette, RichTextToolbarButton } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -29,8 +26,8 @@ import {
 import './editor.scss';
 import './style.scss';
 
-const name = 'lubus/color';
-const title = 'Color';
+const name = 'blablablocks/color-token';
+const title = __( 'Color Token', 'blablablocks-formats' );
 
 function InlineUI( {
 	value,
@@ -38,23 +35,19 @@ function InlineUI( {
 	onClose,
 	activeAttributes,
 	contentRef,
+	isActive,
 } ) {
 	const { color } = activeAttributes;
 
-	const anchorRef = useAnchorRef( {
-		ref: contentRef,
-		value,
-		settings: {
-			title,
-			tagName: 'span',
-			className: 'lubus-color-token',
-		},
+	const anchor = useAnchor( {
+		editableContentElement: contentRef,
+		settings: { isActive },
 	} );
 
 	function onSetColor( newColor ) {
 		const colorObj = tinycolor( newColor );
 
-		const color = colorObj.toString();
+		const parsedColor = colorObj.toString();
 		const border = colorObj.darken( 20 ).toString();
 
 		if ( newColor ) {
@@ -62,8 +55,8 @@ function InlineUI( {
 				applyFormat( value, {
 					type: name,
 					attributes: {
-						style: `--lubus-color: ${ color }; --lubus-border-color: ${ border }`,
-						color,
+						style: `--lubus-color: ${ parsedColor }; --lubus-border-color: ${ border }`,
+						color: parsedColor,
 						border,
 						theme: 'minimal',
 					},
@@ -77,10 +70,11 @@ function InlineUI( {
 
 	return (
 		<Popover
-			position="bottom center"
-			anchorRef={ anchorRef }
+			anchor={ anchor }
 			className="block-editor-format-toolbar__lubus-color-popover"
 			onClose={ onClose }
+			placement="bottom"
+			shift
 		>
 			<Panel className="block-editor-format-toolbar__lubus-color-picker">
 				<ColorPalette value={ color } onChange={ onSetColor } />
@@ -111,15 +105,15 @@ function EditColor( props ) {
 		const colorObj = tinycolor( colorInput );
 
 		if ( colorObj.isValid() ) {
-			const color = colorObj.toString();
+			const parsedColor = colorObj.toString();
 			const border = colorObj.darken( 20 ).toString();
 
 			onChange(
 				applyFormat( value, {
 					type: name,
 					attributes: {
-						style: `--lubus-color: ${ color }; --lubus-border-color: ${ border }`,
-						color,
+						style: `--lubus-color: ${ parsedColor }; --lubus-border-color: ${ border }`,
+						color: parsedColor,
 						border,
 						theme: 'minimal',
 					},
@@ -132,7 +126,9 @@ function EditColor( props ) {
 
 	function onClick() {
 		onToggle();
-		onFocus();
+		if ( typeof onFocus === 'function' ) {
+			onFocus();
+		}
 	}
 
 	return (
@@ -141,13 +137,9 @@ function EditColor( props ) {
 				icon={ brush }
 				title={ title }
 				onClick={ () =>
-					!! activeAttributes.color ? openSettings() : onClick()
+					activeAttributes?.color ? openSettings() : onClick()
 				}
 				isActive={ isActive }
-			/>
-			<__unstableRichTextInputEvent
-				inputType="formatBold"
-				onInput={ onToggle }
 			/>
 
 			{ isSettingOpen && (
@@ -156,7 +148,8 @@ function EditColor( props ) {
 					onChange={ onChange }
 					onClose={ closeSettings }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef }
+					contentRef={ contentRef?.current || contentRef }
+					isActive={ isActive }
 				/>
 			) }
 		</>
@@ -169,7 +162,7 @@ function EditColor( props ) {
 registerFormatType( name, {
 	title,
 	tagName: 'span',
-	className: 'lubus-color-token',
+	className: 'has-color-token-format',
 	edit: EditColor,
 	attributes: {
 		style: 'style',
