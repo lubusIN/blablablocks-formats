@@ -1,0 +1,11 @@
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+.block-editor-format-toolbar__blablablocks-link-attributes-popover {
+
+	.components-popover__content {
+		min-width: min(23rem, calc(100vw - 2rem));
+		padding: 1rem;
+	}
+}
