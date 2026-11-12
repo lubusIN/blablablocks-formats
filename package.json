@@ -32,6 +32,7 @@
 	},
 	"dependencies": {
 		"@floating-ui/dom": "^1.8.0",
-		"@lubusin/tatva": "^1.1.1"
+		"@lubusin/tatva": "^1.1.1",
+		"tinycolor2": "^1.6.0"
 	}
 }

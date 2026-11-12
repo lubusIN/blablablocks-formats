@@ -1,0 +1,15 @@
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+.block-editor-format-toolbar__blablablocks-color-token-popover {
+
+	.components-popover__content {
+		min-width: 18rem;
+		padding: 1rem;
+	}
+
+	.components-color-palette {
+		padding: 0;
+	}
+}
