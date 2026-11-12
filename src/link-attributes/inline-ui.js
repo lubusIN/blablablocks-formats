@@ -20,6 +20,52 @@ import { trash } from '@wordpress/icons';
 import { useLinkAttributes } from './hooks';
 
 /**
+ * Single attribute key-value row.
+ *
+ * @param {Object}   props          - Component props.
+ * @param {number}   props.index    - Row index.
+ * @param {Object}   props.attr     - Attribute object ({ key, value }).
+ * @param {Function} props.onChange - Attribute update callback.
+ * @param {Function} props.onRemove - Attribute removal callback.
+ * @return {JSX.Element} Row component.
+ */
+function AttributeRow( { index, attr, onChange, onRemove } ) {
+	return (
+		<Flex gap={ 2 } align="center">
+			<FlexBlock>
+				<TextControl
+					label={ __( 'Attribute name', 'blablablocks-formats' ) }
+					hideLabelFromVision
+					placeholder={ __( 'Attribute', 'blablablocks-formats' ) }
+					value={ attr.key }
+					onChange={ ( val ) => onChange( index, 'key', val ) }
+					__nextHasNoMarginBottom
+				/>
+			</FlexBlock>
+			<FlexBlock>
+				<TextControl
+					label={ __( 'Attribute value', 'blablablocks-formats' ) }
+					hideLabelFromVision
+					placeholder={ __( 'Value', 'blablablocks-formats' ) }
+					value={ attr.value }
+					onChange={ ( val ) => onChange( index, 'value', val ) }
+					__nextHasNoMarginBottom
+				/>
+			</FlexBlock>
+			<FlexItem>
+				<Button
+					icon={ trash }
+					label={ __( 'Delete attribute', 'blablablocks-formats' ) }
+					onClick={ () => onRemove( index ) }
+					isDestructive
+					size="compact"
+				/>
+			</FlexItem>
+		</Flex>
+	);
+}
+
+/**
  * Popover UI for managing custom link attributes.
  *
  * @param {Object}   props            - Component props.
@@ -83,66 +129,13 @@ export default function InlineUI( { value, onChange, onClose, contentRef } ) {
 					) : (
 						<Flex direction="column" gap={ 2 }>
 							{ attributes.map( ( attr, index ) => (
-								<Flex key={ index } gap={ 2 } align="center">
-									<FlexBlock>
-										<TextControl
-											label={ __(
-												'Attribute name',
-												'blablablocks-formats'
-											) }
-											hideLabelFromVision
-											placeholder={ __(
-												'Attribute',
-												'blablablocks-formats'
-											) }
-											value={ attr.key }
-											onChange={ ( val ) =>
-												updateAttribute(
-													index,
-													'key',
-													val
-												)
-											}
-											__nextHasNoMarginBottom
-										/>
-									</FlexBlock>
-									<FlexBlock>
-										<TextControl
-											label={ __(
-												'Attribute value',
-												'blablablocks-formats'
-											) }
-											hideLabelFromVision
-											placeholder={ __(
-												'Value',
-												'blablablocks-formats'
-											) }
-											value={ attr.value }
-											onChange={ ( val ) =>
-												updateAttribute(
-													index,
-													'value',
-													val
-												)
-											}
-											__nextHasNoMarginBottom
-										/>
-									</FlexBlock>
-									<FlexItem>
-										<Button
-											icon={ trash }
-											label={ __(
-												'Delete attribute',
-												'blablablocks-formats'
-											) }
-											onClick={ () =>
-												removeAttribute( index )
-											}
-											isDestructive
-											size="compact"
-										/>
-									</FlexItem>
-								</Flex>
+								<AttributeRow
+									key={ index }
+									index={ index }
+									attr={ attr }
+									onChange={ updateAttribute }
+									onRemove={ removeAttribute }
+								/>
 							) ) }
 						</Flex>
 					) }
