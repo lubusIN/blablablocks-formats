@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import tinycolor from 'tinycolor2';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -16,6 +11,7 @@ import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
  * Internal dependencies
  */
 import { FORMAT_NAME } from './index';
+import { getColorTokenAttributes } from './utils';
 
 /**
  * InlineUI component for handling Color Token formatting options.
@@ -60,19 +56,12 @@ function InlineUI( {
 
 	const handleColorChange = ( newColor ) => {
 		if ( newColor ) {
-			const colorObj = tinycolor( newColor );
-			const parsedColor = colorObj.toString();
-			const border = colorObj.darken( 20 ).toString();
+			const colorAttrs = getColorTokenAttributes( newColor );
 
 			onChange(
 				applyFormat( value, {
 					type: FORMAT_NAME,
-					attributes: {
-						style: `--lubus-color: ${ parsedColor }; --lubus-border-color: ${ border }`,
-						color: parsedColor,
-						border,
-						theme: 'minimal',
-					},
+					attributes: colorAttrs,
 				} )
 			);
 		} else {
