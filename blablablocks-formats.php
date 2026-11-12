@@ -145,9 +145,10 @@ function blablablocks_formats_enqueue_assets()
 	$needs_typography    = blablablocks_has_format('has-typography-format');
 	$needs_gradient_text = blablablocks_has_format('has-gradient-text-format');
 	$needs_counter       = blablablocks_has_format('has-number-counter-format');
+	$needs_color_token   = blablablocks_has_format('has-color-token-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter && ! $needs_color_token) {
 		return;
 	}
 
