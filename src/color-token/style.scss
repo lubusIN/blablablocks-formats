@@ -1,21 +1,23 @@
 /**
  * The following styles get applied both on the front of your site
  * and in the editor.
- *
- * Replace them with your own styles or remove the file completely.
  */
-.has-color-token-format {
-	display: inline-block;
+
+.has-color-token-format,
+.lubus-color-token {
 
 	&::before {
 		content: "";
-		background-color: var(--lubus-color);
-		border: 1px solid var(--lubus-border-color);
-		border-radius: 4px;
-		margin-right: 6px;
-		padding: 8px;
-		display: inherit;
-		position: relative;
-		top: 2px;
+		display: inline-block;
+		width: 0.875em;
+		height: 0.875em;
+		margin-inline-end: 0.2em;
+		vertical-align: -0.075em;
+		box-sizing: border-box;
+		background-color: var(--blablablocks-color-token, var(--lubus-color, currentColor));
+		border: 1px solid var(--blablablocks-color-token-border, var(--lubus-border-color, rgba(0, 0, 0, 0.15)));
+		border-radius: 0.2em;
+		print-color-adjust: exact;
+		-webkit-print-color-adjust: exact;
 	}
 }
