@@ -1,0 +1,3 @@
+
+
+.has-color-token-format:before,.lubus-color-token:before{background-color:var(--blablablocks-color-token,var(--lubus-color,currentColor));border:1px solid var(--blablablocks-color-token-border,var(--lubus-border-color,rgba(0,0,0,.15)));border-radius:.2em;box-sizing:border-box;content:"";display:inline-block;height:.875em;margin-inline-end:.2em;print-color-adjust:exact;-webkit-print-color-adjust:exact;vertical-align:-.075em;width:.875em}
