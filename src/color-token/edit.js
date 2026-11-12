@@ -15,7 +15,9 @@ import { applyFormat, getTextContent, slice } from '@wordpress/rich-text';
  * Internal dependencies
  */
 import InlineUI from './inline-ui';
+import { useAutoColorFormat } from './hooks';
 import { FORMAT_NAME, FORMAT_TITLE } from './index';
+import { getColorTokenAttributes } from './utils';
 
 /**
  * Edit component for the Color Token format in the block editor.
@@ -39,6 +41,9 @@ export function Edit( {
 } ) {
 	const [ isSettingOpen, setIsSettingOpen ] = useState( false );
 
+	// Attach auto-formatting on paste and typing
+	useAutoColorFormat( { value, onChange, contentRef } );
+
 	const openSettings = () => setIsSettingOpen( true );
 	const closeSettings = () => setIsSettingOpen( false );
 
@@ -47,18 +52,12 @@ export function Edit( {
 		const colorObj = tinycolor( colorInput );
 
 		if ( colorObj.isValid() ) {
-			const parsedColor = colorObj.toString();
-			const border = colorObj.darken( 20 ).toString();
+			const colorAttrs = getColorTokenAttributes( colorInput );
 
 			onChange(
 				applyFormat( value, {
 					type: FORMAT_NAME,
-					attributes: {
-						style: `--lubus-color: ${ parsedColor }; --lubus-border-color: ${ border }`,
-						color: parsedColor,
-						border,
-						theme: 'minimal',
-					},
+					attributes: colorAttrs,
 				} )
 			);
 		} else {
@@ -92,7 +91,7 @@ export function Edit( {
 					onChange={ onChange }
 					onClose={ closeSettings }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef?.current || contentRef }
+					contentRef={ contentRef }
 					isActive={ isActive }
 				/>
 			) }
