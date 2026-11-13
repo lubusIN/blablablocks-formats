@@ -17,22 +17,7 @@ import {
  */
 import { FORMAT_NAME } from './index';
 import { createFormatHelpers } from '../utils';
-
-/**
- * Default configuration constants.
- */
-const DEFAULT_ANIMATION = 'odometer';
-const DEFAULT_DURATION = 1200;
-
-/**
- * Animation options for ToggleGroupControl.
- */
-const ANIMATION_OPTIONS = [
-	{ value: 'odometer', label: __( 'Odometer', 'blablablocks-formats' ) },
-	{ value: 'linear', label: __( 'Linear', 'blablablocks-formats' ) },
-	{ value: 'steps', label: __( 'Steps', 'blablablocks-formats' ) },
-	{ value: 'scramble', label: __( 'Scramble', 'blablablocks-formats' ) },
-];
+import { DEFAULT_ATTRIBUTES, ANIMATION_OPTIONS } from './constants';
 
 /**
  * InlineUI component for handling number counter formatting options.
@@ -66,11 +51,12 @@ function InlineUI( {
 		activeAttributes,
 	} );
 
-	const currentAnim = activeAttributes?.animation || DEFAULT_ANIMATION;
+	const currentAnim =
+		activeAttributes?.animation || DEFAULT_ATTRIBUTES.animation;
 	const parsedDuration = parseInt( activeAttributes?.duration, 10 );
 	const currentDuration = Number.isFinite( parsedDuration )
 		? parsedDuration
-		: DEFAULT_DURATION;
+		: parseInt( DEFAULT_ATTRIBUTES.duration, 10 );
 	const currentOnScroll = activeAttributes?.[ 'on-scroll' ] !== 'false';
 
 	const handleClear = () => {

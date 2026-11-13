@@ -13,15 +13,7 @@ import { applyFormat } from '@wordpress/rich-text';
 import CounterIcon from './icon';
 import InlineUI from './inline-ui';
 import { FORMAT_NAME, FORMAT_TITLE } from './index';
-
-/**
- * Default format attributes.
- */
-const DEFAULT_ATTRIBUTES = {
-	animation: 'odometer',
-	duration: '1200',
-	'on-scroll': 'true',
-};
+import { DEFAULT_ATTRIBUTES } from './constants';
 
 /**
  * Check if a string is a valid numeric value (allowing commas).
