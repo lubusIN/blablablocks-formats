@@ -1,308 +1,247 @@
-// Counter animations: uses Odometer library for odometer mode; keeps other modes intact.
-(function () {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = () => {
-        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    };
+( function () {
+	const prefersReducedMotion = () =>
+		window.matchMedia &&
+		window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
-    // Smooth easing function for polished marketing counters
-    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+	const easeOutCubic = ( t ) => 1 - Math.pow( 1 - t, 3 );
 
-    // Generate random number similar to target
-    const randomLike = (target, decimals) => {
-        const pow = Math.pow(10, decimals);
-        const max = Math.max(1, Math.abs(target));
-        const n = Math.random() * max;
-        return Math.round(n * pow) / pow;
-    };
+	const randomLike = ( target, decimals ) => {
+		const pow = Math.pow( 10, decimals );
+		const n = Math.random() * Math.max( 1, Math.abs( target ) );
+		return Math.round( n * pow ) / pow;
+	};
 
-    // Parse duration from various formats: "2s", "2.5s", "2500", "2500ms"
-    const parseDuration = (raw, fallback = 1600) => {
-        if (raw == null || raw === '') return fallback;
+	const formatNumber = ( val, decimals ) =>
+		Number( val ).toLocaleString( undefined, {
+			minimumFractionDigits: decimals,
+			maximumFractionDigits: decimals,
+		} );
 
-        const s = String(raw).trim().toLowerCase();
-        const sec = s.endsWith('s') && !s.endsWith('ms');
-        const ms = s.endsWith('ms');
-        const n = parseFloat(s.replace(/(ms|s)$/, ''));
+	const animateOdometer = ( el, rawText, duration, reducedMotion ) => {
+		const chars = rawText.split( '' );
+		const container = document.createElement( 'span' );
+		container.className = 'bbb-odometer';
+		container.setAttribute( 'aria-label', rawText );
 
-        if (isNaN(n)) return fallback;
+		let digitCount = 0;
+		chars.forEach( ( ch ) => {
+			if ( /\d/.test( ch ) ) {
+				digitCount++;
+			}
+		} );
 
-        let val = sec ? n * 1000 : n;
-        // Treat small integers as seconds
-        if (!sec && !ms && val < 50) val *= 1000;
+		let currentDigit = 0;
+		const ribbons = [];
 
-        return Math.max(0, Math.round(val));
-    };
+		chars.forEach( ( ch ) => {
+			if ( ! /\d/.test( ch ) ) {
+				const sym = document.createElement( 'span' );
+				sym.className = 'bbb-odometer-symbol';
+				sym.textContent = ch;
+				container.appendChild( sym );
+				return;
+			}
 
-    // Build Odometer format string based on decimal places
-    const odometerFormat = (decimals) => {
-        return decimals > 0 ? `(,ddd).${'d'.repeat(decimals)}` : '(,ddd)';
-    };
+			const targetDigit = parseInt( ch, 10 );
+			const digitEl = document.createElement( 'span' );
+			digitEl.className = 'bbb-odometer-digit';
 
-    // Initialize or reuse Odometer instance
-    const ensureOdometer = (el, decimals, durationMs) => {
-        const Odo = window.Odometer;
-        if (!Odo) return null;
+			const spacer = document.createElement( 'span' );
+			spacer.className = 'bbb-odometer-spacer';
+			spacer.textContent = '0';
+			digitEl.appendChild( spacer );
 
-        const desiredFormat = odometerFormat(decimals);
-        const existing = el.__odometer;
+			const ribbon = document.createElement( 'span' );
+			ribbon.className = 'bbb-odometer-ribbon';
 
-        // Check if existing instance needs update
-        if (existing) {
-            let changed = false;
+			const cycles =
+				1 +
+				Math.floor(
+					( currentDigit / Math.max( 1, digitCount - 1 ) ) * 2
+				);
+			currentDigit++;
 
-            if (existing.options) {
-                if (existing.options.duration !== durationMs) {
-                    existing.options.duration = durationMs;
-                    changed = true;
-                }
-                if (existing.options.format !== desiredFormat) {
-                    existing.options.format = desiredFormat;
-                    changed = true;
-                }
-            } else {
-                changed = true;
-            }
+			const items = [ 0 ];
+			for ( let c = 0; c < cycles; c++ ) {
+				for ( let d = 0; d <= 9; d++ ) {
+					items.push( d );
+				}
+			}
+			items.push( targetDigit );
 
-            if (!changed) return existing;
+			const totalItems = items.length;
+			const targetIndex = totalItems - 1;
 
-            // Clean up existing instance
-            try {
-                el.__odometer = null;
-                el.classList.remove('odometer');
-            } catch (_) { }
-        }
+			items.forEach( ( num ) => {
+				const item = document.createElement( 'span' );
+				item.className = 'bbb-odometer-item';
+				item.textContent = String( num );
+				ribbon.appendChild( item );
+			} );
 
-        // Create new Odometer instance
-        const odo = new Odo({
-            el,
-            value: 0,
-            duration: Number.isFinite(durationMs) ? Number(durationMs) : 1600,
-            format: desiredFormat,
-        });
+			digitEl.appendChild( ribbon );
+			container.appendChild( digitEl );
 
-        el.__odometer = odo;
-        return odo;
-    };
+			ribbons.push( {
+				ribbon,
+				targetIndex,
+				totalItems,
+			} );
+		} );
 
-    // Main function to run counter animations
-    const run = () => {
-        const els = document.querySelectorAll('.has-number-counter, number-counter.has-number-counter');
-        if (!els.length) return;
+		el.textContent = '';
+		el.appendChild( container );
 
-        // Check for reduced motion preference
-        const reducedMotion = prefersReducedMotion();
+		if ( reducedMotion ) {
+			ribbons.forEach( ( { ribbon, targetIndex, totalItems } ) => {
+				ribbon.style.transform = `translateY(-${
+					( targetIndex / totalItems ) * 100
+				}%)`;
+			} );
+			return;
+		}
 
-        // Animate individual counter element
-        const animate = (el) => {
-            const target = parseFloat(el.dataset.countTo ?? el.textContent);
-            if (isNaN(target)) return;
+		requestAnimationFrame( () => {
+			requestAnimationFrame( () => {
+				ribbons.forEach(
+					( { ribbon, targetIndex, totalItems }, idx ) => {
+						const stagger =
+							( idx / Math.max( 1, ribbons.length ) ) * 120;
+						const digitDuration = duration + stagger;
+						ribbon.style.transition = `transform ${ digitDuration }ms cubic-bezier(0.16, 1, 0.3, 1)`;
+						ribbon.style.transform = `translateY(-${
+							( targetIndex / totalItems ) * 100
+						}%)`;
+					}
+				);
+			} );
+		} );
+	};
 
-            const rawDuration = el.dataset.duration ?? '1600';
-            const duration = parseDuration(rawDuration, 1600);
+	const animateNumeric = (
+		el,
+		target,
+		decimals,
+		duration,
+		mode,
+		reducedMotion
+	) => {
+		if ( reducedMotion ) {
+			el.textContent = formatNumber( target, decimals );
+			return;
+		}
 
-            // Determine animation mode
-            const requested = String(el.dataset.anim ?? '').trim().toLowerCase();
-            const forceOdo = el.hasAttribute('data-odometer') || requested === 'odometer';
-            const mode = forceOdo ? 'odometer' : (requested || 'ease');
+		let startTime = null;
 
-            const decimals = (String(target).split('.')[1] || '').length;
+		const step = ( timestamp ) => {
+			if ( ! startTime ) {
+				startTime = timestamp;
+			}
+			const progress = Math.min(
+				( timestamp - startTime ) / duration,
+				1
+			);
 
-            // If user prefers reduced motion and element respects it, show final value immediately
-            if (reducedMotion) {
-                // Display final value without animation
-                const formatted = Number(target).toLocaleString(undefined, {
-                    minimumFractionDigits: decimals,
-                    maximumFractionDigits: decimals,
-                });
-                el.textContent = formatted;
-                el.setAttribute('data-final', formatted);
+			let current;
+			switch ( mode ) {
+				case 'steps': {
+					const steps = 15;
+					const snapped = Math.ceil( progress * steps ) / steps;
+					current = target * snapped;
+					break;
+				}
+				case 'scramble': {
+					current =
+						progress < 0.8
+							? randomLike( target, decimals )
+							: target * easeOutCubic( ( progress - 0.8 ) / 0.2 );
+					break;
+				}
+				case 'linear':
+				default:
+					current = target * progress;
+					break;
+			}
 
-                // Add a class to indicate animation was skipped for styling purposes
-                el.classList.add('animation-skipped');
-                return;
-            }
+			if ( progress < 1 ) {
+				el.textContent = formatNumber( current, decimals );
+				requestAnimationFrame( step );
+			} else {
+				el.textContent = formatNumber( target, decimals );
+			}
+		};
 
-            // Format number with locale-specific formatting
-            const renderNumber = (val) => {
-                el.textContent = Number(val).toLocaleString(undefined, {
-                    minimumFractionDigits: decimals,
-                    maximumFractionDigits: decimals,
-                });
-            };
+		el.textContent = formatNumber( 0, decimals );
+		requestAnimationFrame( step );
+	};
 
-            // Cleanup if not using odometer mode
-            if (mode !== 'odometer') {
-                if (el.__odometer) {
-                    try { el.__odometer = null; } catch (e) { }
-                }
-                if (el.classList.contains('odometer')) {
-                    el.classList.remove('odometer');
-                }
-            }
+	const animate = ( el ) => {
+		const rawText = ( el.dataset.countTo ?? el.textContent ).trim();
+		const cleanText = rawText.replace( /,/g, '' );
+		const target = parseFloat( cleanText );
 
-            // ODOMETER MODE
-            if (mode === 'odometer') {
-                const odo = ensureOdometer(el, decimals, duration);
+		if ( isNaN( target ) ) {
+			return;
+		}
 
-                // Fallback to ease animation if library missing
-                if (!odo) {
-                    let startTime = null;
-                    const step = (ts) => {
-                        if (!startTime) startTime = ts;
-                        const raw = Math.min((ts - startTime) / duration, 1);
-                        const p = easeOutCubic(raw);
-                        const value = target * p;
+		const mode = ( el.dataset.anim || 'odometer' ).toLowerCase();
+		const duration = Math.max(
+			100,
+			parseInt( el.dataset.duration || '1200', 10 )
+		);
+		const reducedMotion = prefersReducedMotion();
 
-                        renderNumber(value);
+		if ( mode === 'odometer' ) {
+			animateOdometer( el, rawText, duration, reducedMotion );
+		} else {
+			const decimals = ( cleanText.split( '.' )[ 1 ] || '' ).length;
+			animateNumeric(
+				el,
+				target,
+				decimals,
+				duration,
+				mode,
+				reducedMotion
+			);
+		}
+	};
 
-                        if (raw < 1) {
-                            requestAnimationFrame(step);
-                        } else {
-                            renderNumber(target);
-                            const formatted = Number(target).toLocaleString(undefined, {
-                                minimumFractionDigits: decimals,
-                                maximumFractionDigits: decimals,
-                            });
-                            el.setAttribute('data-final', formatted);
-                        }
-                    };
-                    renderNumber(0);
-                    requestAnimationFrame(step);
-                    return;
-                }
+	const init = () => {
+		const elements = document.querySelectorAll(
+			'.has-number-counter-format'
+		);
+		if ( ! elements.length ) {
+			return;
+		}
 
-                // Initialize with zero and trigger animation
-                renderNumber(0);
+		let observer = null;
+		if ( 'IntersectionObserver' in window ) {
+			observer = new IntersectionObserver(
+				( entries ) => {
+					entries.forEach( ( entry ) => {
+						if ( entry.isIntersecting ) {
+							observer.unobserve( entry.target );
+							animate( entry.target );
+						}
+					} );
+				},
+				{ threshold: 0.2 }
+			);
+		}
 
-                requestAnimationFrame(() => {
-                    // Ensure duration is applied
-                    if (odo.options && odo.options.duration !== duration) {
-                        odo.options.duration = duration;
-                    }
-                    odo.update(target);
-                    const seconds = Math.max(0, Math.round(duration)) / 1000;
-                    el.style.setProperty('--odo-duration', `${seconds}s`);
-                });
+		elements.forEach( ( el ) => {
+			const onScroll = el.dataset.onScroll !== 'false';
+			if ( onScroll && observer ) {
+				observer.observe( el );
+			} else {
+				animate( el );
+			}
+		} );
+	};
 
-                // Set final attribute when animation completes
-                const setFinal = () => {
-                    const formatted = Number(target).toLocaleString(undefined, {
-                        minimumFractionDigits: decimals,
-                        maximumFractionDigits: decimals,
-                    });
-                    el.setAttribute('data-final', formatted);
-                };
-
-                // Handle completion with event listener and timeout fallback
-                let done = false;
-                const onDone = () => {
-                    if (done) return;
-                    done = true;
-                    setFinal();
-                    el.removeEventListener('odometerdone', onDone);
-                };
-
-                el.addEventListener('odometerdone', onDone, { once: true });
-                setTimeout(onDone, duration + 120);
-                return;
-            }
-
-            // NON-ODOMETER MODES (ease/linear/steps/scramble)
-            let startTime = null;
-
-            const step = (ts) => {
-                if (!startTime) startTime = ts;
-                const raw = Math.min((ts - startTime) / duration, 1);
-
-                let p = raw;
-
-                let value;
-                switch (mode) {
-                    case 'steps': {
-                        const steps = 20;
-                        const snapped = Math.ceil(p * steps) / steps;
-                        value = target * snapped;
-                        break;
-                    }
-                    case 'scramble': {
-                        value = raw < 0.8
-                            ? randomLike(target, decimals)
-                            : target * easeOutCubic((raw - 0.8) / 0.2);
-                        break;
-                    }
-                    case 'linear':
-                    default:
-                        value = target * p;
-                        break;
-                }
-
-                renderNumber(value);
-
-                if (raw < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    renderNumber(target);
-                    const formatted = Number(target).toLocaleString(undefined, {
-                        minimumFractionDigits: decimals,
-                        maximumFractionDigits: decimals,
-                    });
-                    el.setAttribute('data-final', formatted);
-                }
-            };
-
-            // Initialize starting value for non-odometer modes
-            el.textContent = '';
-            el.append(
-                document.createTextNode(
-                    (0).toLocaleString(undefined, {
-                        minimumFractionDigits: decimals,
-                        maximumFractionDigits: decimals,
-                    })
-                )
-            );
-            requestAnimationFrame(step);
-        };
-
-        // Intersection Observer for scroll-triggered animations
-        const io = new IntersectionObserver(
-            (entries, obs) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    animate(entry.target);
-                    obs.unobserve(entry.target);
-                });
-            },
-            { threshold: 0.2 }
-        );
-
-        // Process each counter element
-        els.forEach((el) => {
-            // Check if animation should start on scroll (default: true)
-            const onScrollAttr = (el.dataset.onScroll ?? 'true').toString().toLowerCase();
-            const onScroll = onScrollAttr !== 'false';
-
-            if (onScroll) {
-                io.observe(el);  // Start when scrolled into view
-            } else {
-                animate(el);     // Start immediately
-            }
-        });
-    };
-
-    // Initialize after fonts are ready to prevent metric jumps
-    const start = () => {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', run);
-        } else {
-            run();
-        }
-    };
-
-    // Wait for fonts to load before starting
-    if (document.fonts && 'ready' in document.fonts) {
-        document.fonts.ready.then(start);
-    } else {
-        start();
-    }
-})();
+	if ( document.readyState === 'loading' ) {
+		document.addEventListener( 'DOMContentLoaded', init );
+	} else {
+		init();
+	}
+} )();

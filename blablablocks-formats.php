@@ -77,12 +77,12 @@ function blablablocks_formats_register_assets()
 		$version
 	);
 
-	// Register Odometer library for counter animation.
+	// Register counter animation script.
 	wp_register_script(
-		'odometer-lib',
-		'https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js',
+		'blablablocks-counter-frontend',
+		plugins_url('assets/counter.js', __FILE__),
 		[],
-		'0.4.8',
+		$version,
 		true
 	);
 }
@@ -139,9 +139,10 @@ function blablablocks_formats_enqueue_assets()
 	$needs_marker   = blablablocks_has_format('has-marker-format');
 	$needs_infotip  = blablablocks_has_format('has-infotip-format');
 	$needs_typography = blablablocks_has_format('has-typography-format');
+	$needs_counter    = blablablocks_has_format('has-number-counter-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_counter) {
 		return;
 	}
 
@@ -155,22 +156,9 @@ function blablablocks_formats_enqueue_assets()
 	if ($needs_infotip) {
 		wp_enqueue_script('blablablocks-infotip-format-asset');
 	}
+
+	if ($needs_counter) {
+		wp_enqueue_script('blablablocks-counter-frontend');
+	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
-
-/**
- * Enqueue counter animation script.
- *
- * This script is used for the counter format to animate number changes.
- */
-function blablablocks_formats_enqueue_counter_animation()
-{
-	wp_enqueue_script(
-		'blablablocks-counter-frontend',
-		plugins_url('assets/counter.js', __FILE__),
-		['odometer-lib'],
-		'1.0.0',
-		true
-	);
-}
-add_action('wp_enqueue_scripts', 'blablablocks_formats_enqueue_counter_animation');
