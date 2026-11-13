@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useRef } from '@wordpress/element';
 import { removeFormat, useAnchor } from '@wordpress/rich-text';
 import {
 	Button,
@@ -20,15 +19,31 @@ import { FORMAT_NAME } from './index';
 import { createFormatHelpers } from '../utils';
 
 /**
+ * Default configuration constants.
+ */
+const DEFAULT_ANIMATION = 'odometer';
+const DEFAULT_DURATION = 1200;
+
+/**
+ * Animation options for ToggleGroupControl.
+ */
+const ANIMATION_OPTIONS = [
+	{ value: 'odometer', label: __( 'Odometer', 'blablablocks-formats' ) },
+	{ value: 'linear', label: __( 'Linear', 'blablablocks-formats' ) },
+	{ value: 'steps', label: __( 'Steps', 'blablablocks-formats' ) },
+	{ value: 'scramble', label: __( 'Scramble', 'blablablocks-formats' ) },
+];
+
+/**
  * InlineUI component for handling number counter formatting options.
  *
- * @param {Object}   props                  The component properties.
- * @param {Object}   props.activeAttributes The currently active attributes.
- * @param {Object}   props.value            The current value of the rich text.
- * @param {Function} props.onChange         Function to update the rich text value.
- * @param {Function} props.onClose          Function to close the popover.
- * @param {Object}   props.contentRef       Reference to the editable content element.
- * @param {boolean}  props.isActive         Indicates if the format is currently active.
+ * @param {Object}      props                  The component properties.
+ * @param {Object}      props.activeAttributes The currently active attributes.
+ * @param {Object}      props.value            The current value of the rich text.
+ * @param {Function}    props.onChange         Function to update the rich text value.
+ * @param {Function}    props.onClose          Function to close the popover.
+ * @param {HTMLElement} props.contentRef       Reference to the editable content element.
+ * @param {boolean}     props.isActive         Indicates if the format is currently active.
  * @return {JSX.Element} The rendered InlineUI component.
  */
 function InlineUI( {
@@ -39,15 +54,10 @@ function InlineUI( {
 	contentRef,
 	isActive,
 } ) {
-	const anchorRef = useRef( null );
-	const liveAnchor = useAnchor( {
+	const anchor = useAnchor( {
 		editableContentElement: contentRef?.current || contentRef,
 		settings: { isActive },
 	} );
-
-	if ( liveAnchor ) {
-		anchorRef.current = liveAnchor;
-	}
 
 	const { update } = createFormatHelpers( {
 		value,
@@ -56,35 +66,23 @@ function InlineUI( {
 		activeAttributes,
 	} );
 
-	const currentAnim = activeAttributes?.animation || 'odometer';
-	const currentDuration = parseInt(
-		activeAttributes?.duration || '1200',
-		10
-	);
-	const currentOnScroll =
-		( activeAttributes?.[ 'on-scroll' ] ?? 'true' ).toString() !== 'false';
+	const currentAnim = activeAttributes?.animation || DEFAULT_ANIMATION;
+	const parsedDuration = parseInt( activeAttributes?.duration, 10 );
+	const currentDuration = Number.isFinite( parsedDuration )
+		? parsedDuration
+		: DEFAULT_DURATION;
+	const currentOnScroll = activeAttributes?.[ 'on-scroll' ] !== 'false';
 
 	const handleClear = () => {
 		onChange( removeFormat( value, FORMAT_NAME ) );
 		onClose();
 	};
 
-	const handleFocusOutside = ( event ) => {
-		if (
-			! event?.relatedTarget?.closest?.(
-				'.components-popover, [role="dialog"]'
-			)
-		) {
-			onClose();
-		}
-	};
-
 	return (
 		<Popover
-			anchor={ liveAnchor || anchorRef.current }
+			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-number-counter-popover"
 			onClose={ onClose }
-			onFocusOutside={ handleFocusOutside }
 			offset={ 20 }
 			placement="bottom"
 			shift
@@ -97,22 +95,13 @@ function InlineUI( {
 				isBlock
 				__next40pxDefaultSize
 			>
-				<ToggleGroupControlOption
-					value="odometer"
-					label={ __( 'Odometer', 'blablablocks-formats' ) }
-				/>
-				<ToggleGroupControlOption
-					value="linear"
-					label={ __( 'Linear', 'blablablocks-formats' ) }
-				/>
-				<ToggleGroupControlOption
-					value="steps"
-					label={ __( 'Steps', 'blablablocks-formats' ) }
-				/>
-				<ToggleGroupControlOption
-					value="scramble"
-					label={ __( 'Scramble', 'blablablocks-formats' ) }
-				/>
+				{ ANIMATION_OPTIONS.map( ( { value: optValue, label } ) => (
+					<ToggleGroupControlOption
+						key={ optValue }
+						value={ optValue }
+						label={ label }
+					/>
+				) ) }
 			</ToggleGroupControl>
 
 			<RangeControl
@@ -128,27 +117,18 @@ function InlineUI( {
 			/>
 
 			<ToggleControl
-				label={ __(
-					'Start when scrolled into view',
-					'blablablocks-formats'
-				) }
+				__nextHasNoMarginBottom
+				label={ __( 'Animate on scroll', 'blablablocks-formats' ) }
 				checked={ currentOnScroll }
 				onChange={ ( checked ) =>
 					update( {
-						'on-scroll': checked ? 'true' : 'false',
+						'on-scroll': String( checked ),
 					} )
 				}
-				help={
-					currentOnScroll
-						? __(
-								'Animate when this number enters the viewport.',
-								'blablablocks-formats'
-						  )
-						: __(
-								'Animate immediately on load.',
-								'blablablocks-formats'
-						  )
-				}
+				help={ __(
+					'Trigger animation only when scrolled into view.',
+					'blablablocks-formats'
+				) }
 			/>
 
 			<Button

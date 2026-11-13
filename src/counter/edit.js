@@ -15,6 +15,15 @@ import InlineUI from './inline-ui';
 import { FORMAT_NAME, FORMAT_TITLE } from './index';
 
 /**
+ * Default format attributes.
+ */
+const DEFAULT_ATTRIBUTES = {
+	animation: 'odometer',
+	duration: '1200',
+	'on-scroll': 'true',
+};
+
+/**
  * Check if a string is a valid numeric value (allowing commas).
  *
  * @param {string} str - String to check.
@@ -24,6 +33,53 @@ const isNumeric = ( str ) => {
 	const cleaned = String( str ).replace( /,/g, '' ).trim();
 	return /^[+-]?(\d+(\.\d+)?|\.\d+)$/.test( cleaned );
 };
+
+/**
+ * Resolves target selection boundaries and selected text for numeric formatting.
+ * Expands collapsed cursor to a surrounding number, or trims whitespace from selection.
+ *
+ * @param {Object} value - Rich text value object.
+ * @return {{ start: number, end: number, selected: string }} Resolved selection details.
+ */
+function resolveNumericSelection( value ) {
+	const { start, end, text } = value;
+	let targetStart = start;
+	let targetEnd = end;
+
+	if ( targetStart === targetEnd ) {
+		let s = targetStart;
+		let e = targetEnd;
+		const isNumChar = ( ch ) => /[0-9,.]/.test( ch );
+
+		while ( s > 0 && isNumChar( text[ s - 1 ] ) ) {
+			s--;
+		}
+		while ( e < text.length && isNumChar( text[ e ] ) ) {
+			e++;
+		}
+
+		const candidate = text.slice( s, e ).trim();
+		if ( candidate && isNumeric( candidate ) ) {
+			return { start: s, end: e, selected: candidate };
+		}
+	} else {
+		while ( targetStart < targetEnd && /\s/.test( text[ targetStart ] ) ) {
+			targetStart++;
+		}
+		while (
+			targetEnd > targetStart &&
+			/\s/.test( text[ targetEnd - 1 ] )
+		) {
+			targetEnd--;
+		}
+	}
+
+	return {
+		start: targetStart,
+		end: targetEnd,
+		selected: text.slice( targetStart, targetEnd ),
+	};
+}
 
 /**
  * Edit component for the Counter format.
@@ -46,85 +102,47 @@ export function Edit( {
 	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 	const { createNotice } = useDispatch( 'core/notices' );
 
+	const notifyWarning = ( message ) =>
+		createNotice( 'warning', message, { type: 'snackbar' } );
+
 	const handleToggle = () => {
 		if ( isActive ) {
 			setIsPopoverOpen( ( prev ) => ! prev );
 			return;
 		}
 
-		const { start, end, text } = value;
-		let targetStart = start;
-		let targetEnd = end;
-		let selected = text.slice( targetStart, targetEnd );
-
-		if ( ! selected && targetStart === targetEnd ) {
-			let s = targetStart;
-			let e = targetEnd;
-			const isNumChar = ( ch ) => /[0-9,.]/.test( ch );
-
-			while ( s > 0 && isNumChar( text[ s - 1 ] ) ) {
-				s--;
-			}
-			while ( e < text.length && isNumChar( text[ e ] ) ) {
-				e++;
-			}
-
-			const candidate = text.slice( s, e ).trim();
-			if ( candidate && isNumeric( candidate ) ) {
-				targetStart = s;
-				targetEnd = e;
-				selected = candidate;
-			}
-		} else {
-			while (
-				targetStart < targetEnd &&
-				/\s/.test( text[ targetStart ] )
-			) {
-				targetStart++;
-			}
-			while (
-				targetEnd > targetStart &&
-				/\s/.test( text[ targetEnd - 1 ] )
-			) {
-				targetEnd--;
-			}
-			selected = text.slice( targetStart, targetEnd );
-		}
+		const {
+			start: targetStart,
+			end: targetEnd,
+			selected,
+		} = resolveNumericSelection( value );
 
 		if ( ! selected ) {
-			createNotice(
-				'warning',
-				__( 'Select a number to animate.', 'blablablocks-formats' ),
-				{ type: 'snackbar' }
+			notifyWarning(
+				__( 'Select a number to animate.', 'blablablocks-formats' )
 			);
 			return;
 		}
 
 		if ( ! isNumeric( selected ) ) {
-			createNotice(
-				'warning',
+			notifyWarning(
 				__(
 					'Selection must be a number (e.g. 1500, 1,000, or 12.5).',
 					'blablablocks-formats'
-				),
-				{ type: 'snackbar' }
+				)
 			);
 			return;
 		}
 
 		const valueToFormat =
-			targetStart !== start || targetEnd !== end
+			targetStart !== value.start || targetEnd !== value.end
 				? { ...value, start: targetStart, end: targetEnd }
 				: value;
 
 		onChange(
 			applyFormat( valueToFormat, {
 				type: FORMAT_NAME,
-				attributes: {
-					animation: 'odometer',
-					duration: '1200',
-					'on-scroll': 'true',
-				},
+				attributes: DEFAULT_ATTRIBUTES,
 			} )
 		);
 
@@ -148,7 +166,7 @@ export function Edit( {
 					onChange={ onChange }
 					onClose={ () => setIsPopoverOpen( false ) }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef?.current || contentRef }
+					contentRef={ contentRef }
 					isActive={ isActive }
 				/>
 			) }
