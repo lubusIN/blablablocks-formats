@@ -56,14 +56,13 @@ function InlineUI( {
 		activeAttributes,
 	} );
 
-	const currentAnim = activeAttributes?.[ 'data-anim' ] || 'odometer';
+	const currentAnim = activeAttributes?.animation || 'odometer';
 	const currentDuration = parseInt(
-		activeAttributes?.[ 'data-duration' ] || '1200',
+		activeAttributes?.duration || '1200',
 		10
 	);
 	const currentOnScroll =
-		( activeAttributes?.[ 'data-on-scroll' ] ?? 'true' ).toString() !==
-		'false';
+		( activeAttributes?.[ 'on-scroll' ] ?? 'true' ).toString() !== 'false';
 
 	const handleClear = () => {
 		onChange( removeFormat( value, FORMAT_NAME ) );
@@ -94,7 +93,7 @@ function InlineUI( {
 			<ToggleGroupControl
 				label={ __( 'Animation', 'blablablocks-formats' ) }
 				value={ currentAnim }
-				onChange={ ( anim ) => update( { 'data-anim': anim } ) }
+				onChange={ ( anim ) => update( { animation: anim } ) }
 				isBlock
 				__next40pxDefaultSize
 			>
@@ -120,7 +119,7 @@ function InlineUI( {
 				label={ __( 'Duration (ms)', 'blablablocks-formats' ) }
 				value={ currentDuration }
 				onChange={ ( duration ) =>
-					update( { 'data-duration': String( duration ) } )
+					update( { duration: String( duration ) } )
 				}
 				min={ 300 }
 				max={ 10000 }
@@ -136,7 +135,7 @@ function InlineUI( {
 				checked={ currentOnScroll }
 				onChange={ ( checked ) =>
 					update( {
-						'data-on-scroll': checked ? 'true' : 'false',
+						'on-scroll': checked ? 'true' : 'false',
 					} )
 				}
 				help={
