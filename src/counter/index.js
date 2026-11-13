@@ -20,13 +20,13 @@ export const FORMAT_CLASS_NAME = 'has-number-counter-format';
  */
 registerFormatType( FORMAT_NAME, {
 	title: FORMAT_TITLE,
-	tagName: 'span',
+	tagName: 'tatva-counter',
 	className: FORMAT_CLASS_NAME,
 	edit: Edit,
 	attributes: {
-		'data-anim': 'data-anim',
-		'data-duration': 'data-duration',
-		'data-count-to': 'data-count-to',
-		'data-on-scroll': 'data-on-scroll',
+		animation: 'animation',
+		duration: 'duration',
+		target: 'target',
+		'on-scroll': 'on-scroll',
 	},
 } );

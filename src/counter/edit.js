@@ -53,7 +53,43 @@ export function Edit( {
 		}
 
 		const { start, end, text } = value;
-		const selected = text.slice( start, end );
+		let targetStart = start;
+		let targetEnd = end;
+		let selected = text.slice( targetStart, targetEnd );
+
+		if ( ! selected && targetStart === targetEnd ) {
+			let s = targetStart;
+			let e = targetEnd;
+			const isNumChar = ( ch ) => /[0-9,.]/.test( ch );
+
+			while ( s > 0 && isNumChar( text[ s - 1 ] ) ) {
+				s--;
+			}
+			while ( e < text.length && isNumChar( text[ e ] ) ) {
+				e++;
+			}
+
+			const candidate = text.slice( s, e ).trim();
+			if ( candidate && isNumeric( candidate ) ) {
+				targetStart = s;
+				targetEnd = e;
+				selected = candidate;
+			}
+		} else {
+			while (
+				targetStart < targetEnd &&
+				/\s/.test( text[ targetStart ] )
+			) {
+				targetStart++;
+			}
+			while (
+				targetEnd > targetStart &&
+				/\s/.test( text[ targetEnd - 1 ] )
+			) {
+				targetEnd--;
+			}
+			selected = text.slice( targetStart, targetEnd );
+		}
 
 		if ( ! selected ) {
 			createNotice(
@@ -76,13 +112,18 @@ export function Edit( {
 			return;
 		}
 
+		const valueToFormat =
+			targetStart !== start || targetEnd !== end
+				? { ...value, start: targetStart, end: targetEnd }
+				: value;
+
 		onChange(
-			applyFormat( value, {
+			applyFormat( valueToFormat, {
 				type: FORMAT_NAME,
 				attributes: {
-					'data-anim': 'odometer',
-					'data-duration': '1200',
-					'data-on-scroll': 'true',
+					animation: 'odometer',
+					duration: '1200',
+					'on-scroll': 'true',
 				},
 			} )
 		);
@@ -107,7 +148,7 @@ export function Edit( {
 					onChange={ onChange }
 					onClose={ () => setIsPopoverOpen( false ) }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef }
+					contentRef={ contentRef?.current || contentRef }
 					isActive={ isActive }
 				/>
 			) }

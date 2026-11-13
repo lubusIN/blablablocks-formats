@@ -36,6 +36,9 @@ function blablablocks_formats_register_assets()
 	$infotip_file  = plugin_dir_path(__FILE__) . 'build/infotip.asset.php';
 	$infotip_asset = file_exists($infotip_file) ? include $infotip_file : ['dependencies' => [], 'version' => $version];
 
+	$counter_file  = plugin_dir_path(__FILE__) . 'build/counter.asset.php';
+	$counter_asset = file_exists($counter_file) ? include $counter_file : ['dependencies' => [], 'version' => $version];
+
 	// Register Marker format web component script
 	wp_register_script(
 		'blablablocks-marker-format-asset',
@@ -51,6 +54,15 @@ function blablablocks_formats_register_assets()
 		plugins_url('build/infotip.js', __FILE__),
 		$infotip_asset['dependencies'],
 		$infotip_asset['version'],
+		true
+	);
+
+	// Register counter format web component script
+	wp_register_script(
+		'blablablocks-counter-format-asset',
+		plugins_url('build/counter.js', __FILE__),
+		$counter_asset['dependencies'],
+		$counter_asset['version'],
 		true
 	);
 
@@ -75,15 +87,6 @@ function blablablocks_formats_register_assets()
 		plugins_url('build/style-index.css', __FILE__),
 		[],
 		$version
-	);
-
-	// Register counter animation script.
-	wp_register_script(
-		'blablablocks-counter-frontend',
-		plugins_url('assets/counter.js', __FILE__),
-		[],
-		$version,
-		true
 	);
 }
 add_action('init', 'blablablocks_formats_register_assets');
@@ -131,6 +134,7 @@ function blablablocks_formats_enqueue_assets()
 	if (is_admin()) {
 		wp_enqueue_script('blablablocks-marker-format-asset');
 		wp_enqueue_script('blablablocks-infotip-format-asset');
+		wp_enqueue_script('blablablocks-counter-format-asset');
 		wp_enqueue_script('blablablocks-formats');
 		wp_enqueue_style('blablablocks-formats-editor');
 		wp_enqueue_style('blablablocks-formats-styles');
@@ -158,7 +162,7 @@ function blablablocks_formats_enqueue_assets()
 	}
 
 	if ($needs_counter) {
-		wp_enqueue_script('blablablocks-counter-frontend');
+		wp_enqueue_script('blablablocks-counter-format-asset');
 	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
