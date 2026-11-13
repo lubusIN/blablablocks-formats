@@ -127,12 +127,13 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_style('blablablocks-formats-styles');
 	}
 
-	$needs_marker   = blablablocks_has_format('has-marker-format');
-	$needs_infotip  = blablablocks_has_format('has-infotip-format');
-	$needs_typography = blablablocks_has_format('has-typography-format');
+	$needs_marker        = blablablocks_has_format('has-marker-format');
+	$needs_infotip       = blablablocks_has_format('has-infotip-format');
+	$needs_typography    = blablablocks_has_format('has-typography-format');
+	$needs_gradient_text = blablablocks_has_format('has-gradient-text-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text) {
 		return;
 	}
 
