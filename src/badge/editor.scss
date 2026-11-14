@@ -5,6 +5,48 @@
 .block-editor-format-toolbar__blablablocks-badge-popover {
 
 	.components-popover__content {
-		min-width: 160px;
+		min-width: 22rem;
+	}
+
+	.components-tab-panel__tab-content {
+		padding: 1rem;
+	}
+
+	.blablablocks-badge-color-tab {
+		padding-top: 0.25rem;
+	}
+
+	.reset-button {
+		margin: 0 1rem 1rem auto;
+		display: block;
+	}
+}
+
+// Reset Gutenberg core format-boundary styles on focus.
+.rich-text:focus .has-badge[data-rich-text-format-boundary],
+.rich-text:focus *[data-rich-text-format-boundary].has-badge {
+	background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
+
+	&.is-style-solid {
+		background-color: var(--badge-color);
+		color: #fff;
+	}
+
+	&.is-style-outline {
+		background-color: transparent;
+		color: var(--badge-color);
+	}
+
+	&.is-radius-rounded,
+	&:not(.is-radius-pill):not(.is-radius-square) {
+		border-radius: 4px;
+	}
+
+	&.is-radius-pill {
+		border-radius: 9999px;
+	}
+
+	&.is-radius-square {
+		border-radius: 0;
 	}
 }

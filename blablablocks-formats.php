@@ -182,6 +182,7 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_script('blablablocks-formats');
 		wp_enqueue_style('blablablocks-formats-editor');
 		wp_enqueue_style('blablablocks-formats-styles');
+		return;
 	}
 
 	$needs_marker        = blablablocks_has_format('has-marker-format');
@@ -190,9 +191,10 @@ function blablablocks_formats_enqueue_assets()
 	$needs_gradient_text = blablablocks_has_format('has-gradient-text-format');
 	$needs_counter       = blablablocks_has_format('has-number-counter-format');
 	$needs_color_token   = blablablocks_has_format('has-color-token-format');
+	$needs_badge         = blablablocks_has_format('has-badge');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter && ! $needs_color_token) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter && ! $needs_color_token && ! $needs_badge) {
 		return;
 	}
 

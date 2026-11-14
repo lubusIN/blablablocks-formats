@@ -3,13 +3,15 @@
  */
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { useState } from '@wordpress/element';
+import { applyFormat } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
  */
 import BadgeIcon from './icon';
 import InlineUI from './inline-ui';
-import { FORMAT_TITLE } from './constants';
+import { FORMAT_NAME, FORMAT_TITLE } from './constants';
+import { getBadgeAttributes, getFormatRange } from './utils';
 
 /**
  * Edit component for the Badge format.
@@ -31,12 +33,39 @@ export function Edit( {
 } ) {
 	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 
+	const handleToggle = () => {
+		if ( ! isPopoverOpen && ! isActive ) {
+			const initialAttrs = getBadgeAttributes();
+			const { startIndex, endIndex } = getFormatRange(
+				value,
+				FORMAT_NAME
+			);
+			onChange(
+				applyFormat(
+					value,
+					{
+						type: FORMAT_NAME,
+						attributes: {
+							class: initialAttrs.class,
+							...( initialAttrs.style
+								? { style: initialAttrs.style }
+								: {} ),
+						},
+					},
+					startIndex,
+					endIndex
+				)
+			);
+		}
+		setIsPopoverOpen( ( prev ) => ! prev );
+	};
+
 	return (
 		<>
 			<RichTextToolbarButton
 				icon={ <BadgeIcon /> }
 				title={ FORMAT_TITLE }
-				onClick={ () => setIsPopoverOpen( ( prev ) => ! prev ) }
+				onClick={ handleToggle }
 				isActive={ isActive }
 				aria-haspopup="true"
 				aria-expanded={ isPopoverOpen }
