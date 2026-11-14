@@ -3,19 +3,15 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useRef } from '@wordpress/element';
-import { Popover, MenuItemsChoice } from '@wordpress/components';
-import {
-	slice,
-	applyFormat,
-	removeFormat,
-	useAnchor,
-	getTextContent,
-} from '@wordpress/rich-text';
+import { Button, Popover, TabPanel } from '@wordpress/components';
+import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
  */
-import { FORMAT_NAME, BADGE_PRESETS } from './constants';
+import { StyleTab, ColorTab } from './components';
+import { FORMAT_NAME } from './constants';
+import { getBadgeAttributes, getFormatRange } from './utils';
 
 /**
  * InlineUI component for handling Badge formatting options.
@@ -47,56 +43,51 @@ function InlineUI( {
 		anchorRef.current = liveAnchor;
 	}
 
-	const text = getTextContent( slice( value ) );
-	let displayText = null;
-	if ( text ) {
-		displayText = text.length > 20 ? `${ text.slice( 0, 20 ) }…` : text;
-	}
+	const { startIndex, endIndex } = getFormatRange( value, FORMAT_NAME );
 
-	const choices = [
-		{
-			value: 'none',
-			label: (
-				<span className="has-badge">
-					{ __( 'None', 'blablablocks-formats' ) }
-				</span>
-			),
-		},
-		...BADGE_PRESETS.map( ( preset ) => ( {
-			value: `has-badge-${ preset.name }`,
-			label: (
-				<span className={ `has-badge has-badge-${ preset.name }` }>
-					{ displayText || preset.label }
-				</span>
-			),
-		} ) ),
-	];
+	const activeFormat =
+		value?.formats?.[ startIndex ]?.find?.(
+			( f ) => f.type === FORMAT_NAME
+		) || {};
 
-	const handleSelect = ( presetClass ) => {
-		if (
-			! presetClass ||
-			'none' === presetClass ||
-			activeAttributes?.class === presetClass
-		) {
-			onChange( removeFormat( value, FORMAT_NAME ) );
-		} else {
-			onChange(
-				applyFormat( value, {
+	const currentAttributes = getBadgeAttributes( {
+		...( activeAttributes || {} ),
+		...( activeFormat.attributes || {} ),
+	} );
+
+	const handleUpdateAttributes = ( newAttrs ) => {
+		const nextAttributes = getBadgeAttributes( {
+			...currentAttributes,
+			...newAttrs,
+		} );
+
+		const formatAttributes = {
+			class: nextAttributes.class,
+			...( nextAttributes.style ? { style: nextAttributes.style } : {} ),
+		};
+
+		onChange(
+			applyFormat(
+				value,
+				{
 					type: FORMAT_NAME,
-					attributes: {
-						class: presetClass,
-					},
-				} )
-			);
-		}
+					attributes: formatAttributes,
+				},
+				startIndex,
+				endIndex
+			)
+		);
+	};
 
+	const handleClear = () => {
+		onChange( removeFormat( value, FORMAT_NAME, startIndex, endIndex ) );
 		onClose();
 	};
 
 	const handleFocusOutside = ( event ) => {
 		if (
 			! event?.relatedTarget?.closest?.(
-				'.components-popover, [role="dialog"], [role="menu"]'
+				'.components-popover, .components-color-palette, [role="dialog"], [role="menu"]'
 			)
 		) {
 			onClose();
@@ -114,11 +105,45 @@ function InlineUI( {
 			shift
 			flip
 		>
-			<MenuItemsChoice
-				choices={ choices }
-				value={ activeAttributes?.class || 'none' }
-				onSelect={ handleSelect }
-			/>
+			<TabPanel
+				className="block-editor-format-toolbar__blablablocks-badge-tab-panel"
+				initialTabName="color"
+				tabs={ [
+					{
+						name: 'color',
+						title: __( 'Color', 'blablablocks-formats' ),
+						content: (
+							<ColorTab
+								activeAttributes={ currentAttributes }
+								updateAttributes={ handleUpdateAttributes }
+							/>
+						),
+					},
+					{
+						name: 'style',
+						title: __( 'Style', 'blablablocks-formats' ),
+						content: (
+							<StyleTab
+								activeAttributes={ currentAttributes }
+								updateAttributes={ handleUpdateAttributes }
+							/>
+						),
+					},
+				] }
+			>
+				{ ( tab ) => tab.content }
+			</TabPanel>
+
+			<Button
+				accessibleWhenDisabled
+				className="reset-button"
+				onClick={ handleClear }
+				variant="tertiary"
+				isDestructive
+				__next40pxDefaultSize
+			>
+				{ __( 'Clear', 'blablablocks-formats' ) }
+			</Button>
 		</Popover>
 	);
 }

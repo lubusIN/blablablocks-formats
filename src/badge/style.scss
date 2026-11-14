@@ -4,46 +4,82 @@
  */
 
 .has-badge {
-	padding: 2px 10px;
-	border-radius: 4px;
+	--badge-color: #3b82f6;
 
-	&.has-badge-gray {
-		background-color: #f3f4f6;
-		color: #1f2a37;
+	display: inline-block;
+	text-align: center;
+	font-weight: 500;
+	line-height: 1.2;
+	white-space: nowrap;
+	text-decoration: none;
+	box-sizing: border-box;
+	border: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
+	background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
+	color: var(--badge-color);
+
+	// Variants
+	&.is-style-solid {
+		background-color: var(--badge-color);
+		color: #fff;
+		border-color: var(--badge-color);
 	}
 
-	&.has-badge-red {
-		background-color: #fde2e1;
-		color: #991b1c;
+	&.is-style-outline {
+		background-color: transparent;
+		color: var(--badge-color);
+		border-color: var(--badge-color);
 	}
 
-	&.has-badge-yellow {
-		background-color: #fef3c7;
-		color: #93410f;
+	// Shapes / Corner Radius
+	&.is-radius-rounded,
+	&:not(.is-radius-pill):not(.is-radius-square) {
+		border-radius: 4px;
 	}
 
-	&.has-badge-green {
-		background-color: #d1fae4;
-		color: #076046;
+	&.is-radius-pill {
+		border-radius: 9999px;
 	}
 
-	&.has-badge-blue {
-		background-color: #dbeafe;
-		color: #1e40af;
+	&.is-radius-square {
+		border-radius: 0;
 	}
 
-	&.has-badge-indigo {
-		background-color: #e0e8ff;
-		color: #3830a3;
+	// Sizes
+	&.is-size-small {
+		font-size: 0.7em;
+		padding: 0.15em 0.5em;
 	}
 
-	&.has-badge-purple {
-		background-color: #ece9fd;
-		color: #5b23b6;
+	&.is-size-medium,
+	&:not(.is-size-small):not(.is-size-large) {
+		font-size: 0.8em;
+		padding: 0.2em 0.65em;
 	}
 
-	&.has-badge-pink {
-		background-color: #fbe7f2;
-		color: #9e174d;
+	&.is-size-large {
+		font-size: 0.9em;
+		padding: 0.25em 0.8em;
+	}
+
+	// Alignment
+	&.is-aligned-inline,
+	&:not(.is-aligned-superscript):not(.is-aligned-subscript) {
+		vertical-align: baseline;
+	}
+
+	&.is-aligned-superscript {
+		vertical-align: super;
+		font-size: 0.65em;
+		line-height: 1;
+		margin-left: 0.25em;
+		margin-right: 0.1em;
+	}
+
+	&.is-aligned-subscript {
+		vertical-align: sub;
+		font-size: 0.65em;
+		line-height: 1;
+		margin-left: 0.25em;
+		margin-right: 0.1em;
 	}
 }
