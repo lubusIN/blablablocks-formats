@@ -89,13 +89,26 @@ add_action('init', 'blablablocks_formats_register_assets');
 function blablablocks_has_format($format_class, $post = null)
 {
 	if (!$post) {
-		$wp_post = get_post();
-		if ($wp_post instanceof WP_Post) {
-			$post = $wp_post->post_content;
+		$post_id = get_the_ID();
+		if ($post_id && is_preview()) {
+			$autosave = wp_get_post_autosave($post_id);
+			if ($autosave instanceof WP_Post) {
+				$post = $autosave->post_content;
+			}
+		}
+		if (!$post) {
+			$wp_post = get_post();
+			if ($wp_post instanceof WP_Post) {
+				$post = $wp_post->post_content;
+			}
 		}
 	}
 
-	if (trim($format_class) === '' || trim($post) === '') {
+	if (empty($format_class) || empty($post) || !is_string($post)) {
+		return false;
+	}
+
+	if (strpos($post, $format_class) === false) {
 		return false;
 	}
 
@@ -125,14 +138,16 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_script('blablablocks-formats');
 		wp_enqueue_style('blablablocks-formats-editor');
 		wp_enqueue_style('blablablocks-formats-styles');
+		return;
 	}
 
-	$needs_marker   = blablablocks_has_format('has-marker-format');
-	$needs_infotip  = blablablocks_has_format('has-infotip-format');
+	$needs_marker     = blablablocks_has_format('has-marker-format');
+	$needs_infotip    = blablablocks_has_format('has-infotip-format');
 	$needs_typography = blablablocks_has_format('has-typography-format');
+	$needs_badge      = blablablocks_has_format('has-badge');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_badge) {
 		return;
 	}
 
@@ -148,3 +163,38 @@ function blablablocks_formats_enqueue_assets()
 	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
+
+/**
+ * Ensure format styles and scripts are enqueued when rendered inside blocks.
+ *
+ * @param string $block_content
+ * @param array  $block
+ * @return string
+ */
+function blablablocks_formats_render_block($block_content, $block)
+{
+	if (empty($block_content) || !is_string($block_content)) {
+		return $block_content;
+	}
+
+	if (strpos($block_content, 'has-badge') !== false) {
+		wp_enqueue_style('blablablocks-formats-styles');
+	}
+
+	if (strpos($block_content, 'has-marker-format') !== false) {
+		wp_enqueue_style('blablablocks-formats-styles');
+		wp_enqueue_script('blablablocks-marker-format-asset');
+	}
+
+	if (strpos($block_content, 'has-infotip-format') !== false) {
+		wp_enqueue_style('blablablocks-formats-styles');
+		wp_enqueue_script('blablablocks-infotip-format-asset');
+	}
+
+	if (strpos($block_content, 'has-typography-format') !== false) {
+		wp_enqueue_style('blablablocks-formats-styles');
+	}
+
+	return $block_content;
+}
+add_filter('render_block', 'blablablocks_formats_render_block', 10, 2);
