@@ -1,0 +1,3 @@
+
+
+.has-rating-format{display:inline-block}.has-rating-format:before{color:#f69e0b;cursor:pointer;margin-right:5px;-moz-user-select:none;user-select:none;-webkit-user-select:none}.has-rating-format.has-1-star:before{content:"★☆☆☆☆"}.has-rating-format.has-2-star:before{content:"★★☆☆☆"}.has-rating-format.has-3-star:before{content:"★★★☆☆"}.has-rating-format.has-4-star:before{content:"★★★★☆"}.has-rating-format.has-5-star:before{content:"★★★★★"}
