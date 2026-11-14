@@ -1,0 +1,35 @@
+/**
+ * Styles applied both on the front of your site and in the editor.
+ */
+
+.has-rating-format {
+	display: inline-block;
+
+	&:before {
+		margin-right: 5px;
+		color: #f69e0b;
+		cursor: pointer;
+		user-select: none;
+		-webkit-user-select: none;
+	}
+
+	&.has-1-star:before {
+		content: "★☆☆☆☆";
+	}
+
+	&.has-2-star:before {
+		content: "★★☆☆☆";
+	}
+
+	&.has-3-star:before {
+		content: "★★★☆☆";
+	}
+
+	&.has-4-star:before {
+		content: "★★★★☆";
+	}
+
+	&.has-5-star:before {
+		content: "★★★★★";
+	}
+}
