@@ -146,3 +146,21 @@ export const MARKER_PRESETS = [
 		label: __( 'Strike', 'blablablocks-formats' ),
 	},
 ];
+
+/**
+ * Text animation types for the text animation format.
+ */
+export const TEXT_ANIMATION_TYPES = [
+	{
+		id: 'typing',
+		label: __( 'Typing', 'blablablocks-formats' ),
+	},
+	{
+		id: 'flyin',
+		label: __( 'Fly In', 'blablablocks-formats' ),
+	},
+	{
+		id: 'fade',
+		label: __( 'Fade', 'blablablocks-formats' ),
+	},
+];
