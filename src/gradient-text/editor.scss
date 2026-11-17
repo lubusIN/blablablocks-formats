@@ -9,3 +9,14 @@
 		padding: 0;
 	}
 }
+
+[contenteditable="true"]:focus,
+[contenteditable]:focus,
+.rich-text:focus {
+
+	.has-gradient-text-format[data-rich-text-format-boundary] {
+		border-radius: 2px;
+		box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.2);
+	}
+}
+
