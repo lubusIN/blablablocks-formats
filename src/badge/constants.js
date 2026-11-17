@@ -37,9 +37,26 @@ export const ALIGNMENT_OPTIONS = [
 ];
 
 export const SIZE_OPTIONS = [
-	{ value: 'small', label: __( 'Small', 'blablablocks-formats' ) },
-	{ value: 'medium', label: __( 'Medium', 'blablablocks-formats' ) },
-	{ value: 'large', label: __( 'Large', 'blablablocks-formats' ) },
+	{
+		value: 'extra-small',
+		label: __( 'XS', 'blablablocks-formats' ),
+		ariaLabel: __( 'Extra Small', 'blablablocks-formats' ),
+	},
+	{
+		value: 'small',
+		label: __( 'S', 'blablablocks-formats' ),
+		ariaLabel: __( 'Small', 'blablablocks-formats' ),
+	},
+	{
+		value: 'medium',
+		label: __( 'M', 'blablablocks-formats' ),
+		ariaLabel: __( 'Medium', 'blablablocks-formats' ),
+	},
+	{
+		value: 'large',
+		label: __( 'L', 'blablablocks-formats' ),
+		ariaLabel: __( 'Large', 'blablablocks-formats' ),
+	},
 ];
 
 export const COLOR_PRESETS = [

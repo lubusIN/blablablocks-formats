@@ -23,30 +23,31 @@
 }
 
 // Reset Gutenberg core format-boundary styles on focus.
-.rich-text:focus .has-badge[data-rich-text-format-boundary],
-.rich-text:focus *[data-rich-text-format-boundary].has-badge {
-	background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
+[contenteditable="true"]:focus,
+[contenteditable]:focus,
+.rich-text:focus {
 
-	&.is-style-solid {
-		background-color: var(--badge-color);
-		color: #fff;
-	}
-
-	&.is-style-outline {
-		background-color: transparent;
-		color: var(--badge-color);
-	}
-
-	&.is-radius-rounded,
-	&:not(.is-radius-pill):not(.is-radius-square) {
+	.has-badge[data-rich-text-format-boundary] {
+		background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
 		border-radius: 4px;
-	}
+		box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.2);
 
-	&.is-radius-pill {
-		border-radius: 9999px;
-	}
+		&.is-style-solid {
+			background-color: var(--badge-color);
+			color: #fff;
+		}
 
-	&.is-radius-square {
-		border-radius: 0;
+		&.is-style-outline {
+			background-color: transparent;
+			color: var(--badge-color);
+		}
+
+		&.is-radius-pill {
+			border-radius: 9999px;
+		}
+
+		&.is-radius-square {
+			border-radius: 0;
+		}
 	}
 }

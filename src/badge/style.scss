@@ -16,6 +16,10 @@
 	border: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
 	background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
 	color: var(--badge-color);
+	border-radius: 4px;
+	font-size: 0.8em;
+	padding: 0.2em 0.65em;
+	vertical-align: baseline;
 
 	// Variants
 	&.is-style-solid {
@@ -31,8 +35,7 @@
 	}
 
 	// Shapes / Corner Radius
-	&.is-radius-rounded,
-	&:not(.is-radius-pill):not(.is-radius-square) {
+	&.is-radius-rounded {
 		border-radius: 4px;
 	}
 
@@ -45,13 +48,17 @@
 	}
 
 	// Sizes
+	&.is-size-extra-small {
+		font-size: 0.65em;
+		padding: 0.1em 0.45em;
+	}
+
 	&.is-size-small {
 		font-size: 0.7em;
 		padding: 0.15em 0.5em;
 	}
 
-	&.is-size-medium,
-	&:not(.is-size-small):not(.is-size-large) {
+	&.is-size-medium {
 		font-size: 0.8em;
 		padding: 0.2em 0.65em;
 	}
@@ -62,8 +69,7 @@
 	}
 
 	// Alignment
-	&.is-aligned-inline,
-	&:not(.is-aligned-superscript):not(.is-aligned-subscript) {
+	&.is-aligned-inline {
 		vertical-align: baseline;
 	}
 

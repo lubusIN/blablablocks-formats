@@ -99,6 +99,7 @@ function StyleTab( { activeAttributes, updateAttributes } ) {
 						key={ opt.value }
 						value={ opt.value }
 						label={ opt.label }
+						aria-label={ opt.ariaLabel || opt.label }
 					/>
 				) ) }
 			</ToggleGroupControl>

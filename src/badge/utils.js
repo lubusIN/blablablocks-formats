@@ -45,7 +45,9 @@ export function parseBadgeClasses( classString = '' ) {
 		parsed.alignment = 'inline';
 	}
 
-	if ( classes.includes( 'is-size-small' ) ) {
+	if ( classes.includes( 'is-size-extra-small' ) ) {
+		parsed.size = 'extra-small';
+	} else if ( classes.includes( 'is-size-small' ) ) {
 		parsed.size = 'small';
 	} else if ( classes.includes( 'is-size-large' ) ) {
 		parsed.size = 'large';
