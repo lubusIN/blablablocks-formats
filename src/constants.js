@@ -146,3 +146,25 @@ export const MARKER_PRESETS = [
 		label: __( 'Strike', 'blablablocks-formats' ),
 	},
 ];
+
+/**
+ * Position options for the pulse format.
+ */
+export const PULSE_POSITIONS = [
+	{
+		id: 'left',
+		label: __( 'Left', 'blablablocks-formats' ),
+	},
+	{
+		id: 'right',
+		label: __( 'Right', 'blablablocks-formats' ),
+	},
+	{
+		id: 'superscript',
+		label: __( 'Superscript', 'blablablocks-formats' ),
+	},
+	{
+		id: 'background',
+		label: __( 'Background', 'blablablocks-formats' ),
+	},
+];
