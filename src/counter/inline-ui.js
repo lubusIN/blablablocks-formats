@@ -75,6 +75,7 @@ function InlineUI( {
 			flip
 		>
 			<ToggleGroupControl
+				__nextHasNoMarginBottom
 				label={ __( 'Animation', 'blablablocks-formats' ) }
 				value={ currentAnim }
 				onChange={ ( anim ) => update( { animation: anim } ) }
@@ -91,6 +92,7 @@ function InlineUI( {
 			</ToggleGroupControl>
 
 			<RangeControl
+				__nextHasNoMarginBottom
 				label={ __( 'Duration (ms)', 'blablablocks-formats' ) }
 				value={ currentDuration }
 				onChange={ ( duration ) =>
