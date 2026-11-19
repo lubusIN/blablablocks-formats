@@ -57,17 +57,24 @@ function SettingsTab( {
 				/>
 
 				{ /* row 2 - Repeat animation */ }
-				<span className="text-animation-tab-label">
+				<label
+					htmlFor="text-animation-repeat-toggle"
+					className="text-animation-tab-label"
+				>
 					{ __( 'Repeat', 'blablablocks-formats' ) }
-				</span>
+				</label>
 				<FormToggle
+					id="text-animation-repeat-toggle"
 					checked={ isRepeat }
 					onChange={ () =>
 						isRepeat
 							? removeAttributes( [ 'repeat' ] )
 							: updateAttributes( { repeat: 'true' } )
 					}
-					label={ __( 'Repeat animation', 'blablablocks-formats' ) }
+					aria-label={ __(
+						'Repeat animation',
+						'blablablocks-formats'
+					) }
 				/>
 			</Grid>
 			<Button

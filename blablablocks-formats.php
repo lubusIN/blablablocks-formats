@@ -244,6 +244,14 @@ function blablablocks_formats_allowed_html($allowed_tags, $context)
 		return $allowed_tags;
 	}
 
+	$allowed_tags['tatva-text-animation'] = [
+		'type'   => true,
+		'words'  => true,
+		'speed'  => true,
+		'repeat' => true,
+		'class'  => true,
+		'style'  => true,
+	];
 	$allowed_tags['tatva-counter'] = [
 		'animation' => true,
 		'duration'  => true,

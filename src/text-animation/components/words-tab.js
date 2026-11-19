@@ -2,11 +2,31 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
 import {
 	Button,
 	TextareaControl,
 	__experimentalVStack as VStack, // eslint-disable-line
 } from '@wordpress/components';
+
+/**
+ * Converts a words attribute value (JSON string or comma-separated) into comma-separated display text.
+ *
+ * @param {string|undefined} val - Attribute value.
+ * @return {string} Friendly display value.
+ */
+const getDisplayWords = ( val ) => {
+	if ( ! val ) {
+		return '';
+	}
+	try {
+		const parsed = JSON.parse( val );
+		if ( Array.isArray( parsed ) ) {
+			return parsed.join( ', ' );
+		}
+	} catch ( e ) {}
+	return val;
+};
 
 /**
  * WordsTab component for managing text animation words/phrases.
@@ -18,12 +38,50 @@ import {
  * @return {JSX.Element}                    - The rendered component.
  */
 function WordsTab( { activeAttributes, removeAttributes, updateAttributes } ) {
+	const [ wordsInput, setWordsInput ] = useState( () =>
+		getDisplayWords( activeAttributes.words )
+	);
+
+	useEffect( () => {
+		const currentDisplay = getDisplayWords( activeAttributes.words );
+		const currentParsed = wordsInput
+			.split( ',' )
+			.map( ( s ) => s.trim() )
+			.filter( Boolean );
+		const attrParsed = ( () => {
+			try {
+				const p = JSON.parse( activeAttributes.words );
+				return Array.isArray( p ) ? p : [];
+			} catch ( e ) {
+				return [];
+			}
+		} )();
+
+		if (
+			JSON.stringify( currentParsed ) !== JSON.stringify( attrParsed )
+		) {
+			setWordsInput( currentDisplay );
+		}
+	}, [ activeAttributes.words, wordsInput ] );
+
 	const handleWordsChange = ( newValue ) => {
+		setWordsInput( newValue );
 		if ( newValue && newValue.trim() ) {
-			updateAttributes( { words: newValue } );
+			const split = newValue
+				.split( ',' )
+				.map( ( s ) => s.trim() )
+				.filter( Boolean );
+			if ( split.length > 0 ) {
+				updateAttributes( { words: JSON.stringify( split ) } );
+			}
 		} else {
 			removeAttributes( [ 'words' ] );
 		}
+	};
+
+	const handleClear = () => {
+		setWordsInput( '' );
+		removeAttributes( [ 'words' ] );
 	};
 
 	return (
@@ -39,14 +97,14 @@ function WordsTab( { activeAttributes, removeAttributes, updateAttributes } ) {
 					'e.g. Design, Build, Launch',
 					'blablablocks-formats'
 				) }
-				value={ activeAttributes.words || '' }
+				value={ wordsInput }
 				__nextHasNoMarginBottom
 			/>
 			<Button
 				accessibleWhenDisabled
 				className="reset-button"
 				disabled={ ! activeAttributes.words }
-				onClick={ () => removeAttributes( [ 'words' ] ) }
+				onClick={ handleClear }
 				variant="tertiary"
 				__next40pxDefaultSize
 			>
