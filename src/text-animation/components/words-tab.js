@@ -73,6 +73,8 @@ function WordsTab( { activeAttributes, removeAttributes, updateAttributes } ) {
 				.filter( Boolean );
 			if ( split.length > 0 ) {
 				updateAttributes( { words: JSON.stringify( split ) } );
+			} else {
+				removeAttributes( [ 'words' ] );
 			}
 		} else {
 			removeAttributes( [ 'words' ] );
