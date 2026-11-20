@@ -35,4 +35,12 @@ module.exports = {
 		'*.config.js',
 		'*.webpack.js',
 	],
+	overrides: [
+		{
+			files: [ '**/*.test.js', '**/__tests__/**/*.js' ],
+			env: {
+				jest: true,
+			},
+		},
+	],
 };
