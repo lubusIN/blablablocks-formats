@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useRef } from '@wordpress/element';
+import { useRef, useEffect } from '@wordpress/element';
 import { useAnchor } from '@wordpress/rich-text';
 import {
 	Popover,
@@ -17,21 +17,46 @@ import { trash } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { useLinkAttributes } from './hooks';
+import {
+	useLinkAttributes,
+	isValidAttributeName,
+	getAttributeNameError,
+} from './hooks';
 
 /**
  * Single attribute key-value row.
  *
- * @param {Object}   props          - Component props.
- * @param {number}   props.index    - Row index.
- * @param {Object}   props.attr     - Attribute object ({ key, value }).
- * @param {Function} props.onChange - Attribute update callback.
- * @param {Function} props.onRemove - Attribute removal callback.
+ * @param {Object}   props           - Component props.
+ * @param {number}   props.index     - Row index.
+ * @param {Object}   props.attr      - Attribute object ({ id, key, value }).
+ * @param {Function} props.onChange  - Attribute update callback.
+ * @param {Function} props.onRemove  - Attribute removal callback.
+ * @param {boolean}  props.isInvalid - Whether row has been flagged as invalid by hook.
  * @return {JSX.Element} Row component.
  */
-function AttributeRow( { index, attr, onChange, onRemove } ) {
+export function AttributeRow( {
+	index,
+	attr,
+	onChange,
+	onRemove,
+	isInvalid: isInvalidFromHook,
+} ) {
+	const trimmedKey = attr.key.trim();
+	const nameError = trimmedKey ? getAttributeNameError( trimmedKey ) : null;
+	const missingNameError =
+		! trimmedKey && attr.value.trim() && isInvalidFromHook
+			? __( 'Attribute name is required.', 'blablablocks-formats' )
+			: null;
+
+	const errorMessage = nameError || missingNameError;
+	const isInvalid = Boolean( errorMessage || isInvalidFromHook );
+
 	return (
-		<Flex gap={ 2 } align="center">
+		<Flex
+			gap={ 2 }
+			align="flex-start"
+			className={ isInvalid ? 'has-invalid-attribute' : undefined }
+		>
 			<FlexBlock>
 				<TextControl
 					label={ __( 'Attribute name', 'blablablocks-formats' ) }
@@ -39,6 +64,8 @@ function AttributeRow( { index, attr, onChange, onRemove } ) {
 					placeholder={ __( 'Attribute', 'blablablocks-formats' ) }
 					value={ attr.key }
 					onChange={ ( val ) => onChange( index, 'key', val ) }
+					help={ isInvalid ? errorMessage : undefined }
+					__next40pxDefaultSize
 					__nextHasNoMarginBottom
 				/>
 			</FlexBlock>
@@ -49,6 +76,7 @@ function AttributeRow( { index, attr, onChange, onRemove } ) {
 					placeholder={ __( 'Value', 'blablablocks-formats' ) }
 					value={ attr.value }
 					onChange={ ( val ) => onChange( index, 'value', val ) }
+					__next40pxDefaultSize
 					__nextHasNoMarginBottom
 				/>
 			</FlexBlock>
@@ -80,13 +108,19 @@ export default function InlineUI( { value, onChange, onClose, contentRef } ) {
 		editableContentElement: contentRef?.current || contentRef,
 		settings: { isActive: true },
 	} );
-	const anchorRef = useRef();
-	if ( liveAnchor ) {
-		anchorRef.current = liveAnchor;
-	}
+	const fallbackAnchorRef = useRef( null );
+
+	useEffect( () => {
+		if ( liveAnchor ) {
+			fallbackAnchorRef.current = liveAnchor;
+		}
+	}, [ liveAnchor ] );
+
+	const anchor = liveAnchor || fallbackAnchorRef.current;
 
 	const {
 		attributes,
+		invalidRowIndices,
 		hasCustomAttributes,
 		addAttribute,
 		updateAttribute,
@@ -95,21 +129,29 @@ export default function InlineUI( { value, onChange, onClose, contentRef } ) {
 		clearAllAttributes,
 	} = useLinkAttributes( { value, onChange } );
 
+	const hasLiveInvalidKey = attributes.some(
+		( attr ) => attr.key.trim() && ! isValidAttributeName( attr.key.trim() )
+	);
+
 	const handleSubmit = ( event ) => {
 		event.preventDefault();
-		applyAttributes();
-		onClose();
+		const success = applyAttributes();
+		if ( success ) {
+			onClose();
+		}
 	};
 
 	const handleClear = () => {
-		clearAllAttributes();
-		onClose();
+		const success = clearAllAttributes();
+		if ( success ) {
+			onClose();
+		}
 	};
 
 	return (
 		<Popover
 			className="block-editor-format-toolbar__blablablocks-link-attributes-popover"
-			anchor={ liveAnchor || anchorRef.current }
+			anchor={ anchor }
 			onClose={ onClose }
 			placement="bottom"
 			shift
@@ -130,11 +172,14 @@ export default function InlineUI( { value, onChange, onClose, contentRef } ) {
 						<Flex direction="column" gap={ 2 }>
 							{ attributes.map( ( attr, index ) => (
 								<AttributeRow
-									key={ index }
+									key={ attr.id || index }
 									index={ index }
 									attr={ attr }
 									onChange={ updateAttribute }
 									onRemove={ removeAttribute }
+									isInvalid={ invalidRowIndices.includes(
+										index
+									) }
 								/>
 							) ) }
 						</Flex>
@@ -171,6 +216,10 @@ export default function InlineUI( { value, onChange, onClose, contentRef } ) {
 								variant="primary"
 								size="compact"
 								type="submit"
+								disabled={
+									hasLiveInvalidKey ||
+									invalidRowIndices.length > 0
+								}
 							>
 								{ __( 'Apply', 'blablablocks-formats' ) }
 							</Button>

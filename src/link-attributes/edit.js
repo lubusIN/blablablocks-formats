@@ -48,6 +48,7 @@ export function Edit( { value, onChange, onFocus, contentRef } ) {
 				title={ __( 'Link Attributes', 'blablablocks-formats' ) }
 				onClick={ handleButtonClick }
 				isActive={ hasCustomAttributes }
+				aria-expanded={ isPopoverOpen }
 			/>
 
 			{ isPopoverOpen && (
