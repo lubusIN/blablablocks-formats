@@ -36,6 +36,7 @@ A collection of rich text formats for the WordPress block editor.
 -   **Marker**: Add a hand-drawn style highlight to text.
 -   **InfoTip**: Add a tooltip to any inline text.
 -   **Typography**: Apply inline typography controls such as font family, font size, appearance, letter spacing, and letter case.
+-   **Text Animation**: Add animated text with typing, fly-in, and letter-fade effects.
 -   **Clear formatting**: Remove applied inline formats from selected text with a single toolbar action.
 
 > [!NOTE]

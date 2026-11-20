@@ -41,6 +41,9 @@ function blablablocks_formats_register_assets()
 	$counter_file  = plugin_dir_path(__FILE__) . 'build/counter.asset.php';
 	$counter_asset = file_exists($counter_file) ? include $counter_file : ['dependencies' => [], 'version' => $version];
 
+	$text_animation_file  = plugin_dir_path(__FILE__) . 'build/text-animation.asset.php';
+	$text_animation_asset = file_exists($text_animation_file) ? include $text_animation_file : ['dependencies' => [], 'version' => $version];
+
 	// Register Marker format web component script
 	wp_register_script(
 		'blablablocks-marker-format-asset',
@@ -65,6 +68,15 @@ function blablablocks_formats_register_assets()
 		plugins_url('build/counter.js', __FILE__),
 		$counter_asset['dependencies'],
 		$counter_asset['version'],
+		true
+	);
+
+	// Register text animation format web component script
+	wp_register_script(
+		'blablablocks-text-animation-format-asset',
+		plugins_url('build/text-animation.js', __FILE__),
+		$text_animation_asset['dependencies'],
+		$text_animation_asset['version'],
 		true
 	);
 
@@ -146,19 +158,39 @@ function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 
 			if (
 				isset($block['blockName']) &&
-				('core/block' === $block['blockName'] || 'block' === $block['blockName']) &&
-				!empty($block['attrs']['ref']) &&
-				is_numeric($block['attrs']['ref'])
+				('core/block' === $block['blockName'] || 'block' === $block['blockName'])
 			) {
-				$ref_id = (int) $block['attrs']['ref'];
-				if ($ref_id > 0) {
-					if (in_array($ref_id, $seen_posts, true)) {
-						continue;
-					}
-					$seen_posts[]   = $ref_id;
-					$reusable_block = get_post($ref_id);
-					if ($reusable_block instanceof WP_Post && blablablocks_has_format($format_class, $reusable_block->post_content, $seen_posts)) {
+				// Check pattern overrides stored in instance attrs.content before visited-reference guard.
+				if (!empty($block['attrs']['content'])) {
+					if (is_string($block['attrs']['content']) && blablablocks_has_format($format_class, $block['attrs']['content'], $seen_posts)) {
 						return true;
+					}
+
+					if (is_array($block['attrs']['content'])) {
+						$found = false;
+						array_walk_recursive($block['attrs']['content'], function ($value) use ($format_class, &$seen_posts, &$found) {
+							if (!$found && is_string($value) && blablablocks_has_format($format_class, $value, $seen_posts)) {
+								$found = true;
+							}
+						});
+
+						if ($found) {
+							return true;
+						}
+					}
+				}
+
+				if (!empty($block['attrs']['ref']) && is_numeric($block['attrs']['ref'])) {
+					$ref_id = (int) $block['attrs']['ref'];
+					if ($ref_id > 0) {
+						if (in_array($ref_id, $seen_posts, true)) {
+							continue;
+						}
+						$seen_posts[]   = $ref_id;
+						$reusable_block = get_post($ref_id);
+						if ($reusable_block instanceof WP_Post && blablablocks_has_format($format_class, $reusable_block->post_content, $seen_posts)) {
+							return true;
+						}
 					}
 				}
 			}
@@ -179,20 +211,22 @@ function blablablocks_formats_enqueue_assets()
 		wp_enqueue_script('blablablocks-marker-format-asset');
 		wp_enqueue_script('blablablocks-infotip-format-asset');
 		wp_enqueue_script('blablablocks-counter-format-asset');
+		wp_enqueue_script('blablablocks-text-animation-format-asset');
 		wp_enqueue_script('blablablocks-formats');
 		wp_enqueue_style('blablablocks-formats-editor');
 		wp_enqueue_style('blablablocks-formats-styles');
 	}
 
-	$needs_marker        = blablablocks_has_format('has-marker-format');
-	$needs_infotip       = blablablocks_has_format('has-infotip-format');
-	$needs_typography    = blablablocks_has_format('has-typography-format');
-	$needs_gradient_text = blablablocks_has_format('has-gradient-text-format');
-	$needs_counter       = blablablocks_has_format('has-number-counter-format');
-	$needs_color_token   = blablablocks_has_format('has-color-token-format');
+	$needs_marker         = blablablocks_has_format('has-marker-format');
+	$needs_infotip        = blablablocks_has_format('has-infotip-format');
+	$needs_typography     = blablablocks_has_format('has-typography-format');
+	$needs_gradient_text  = blablablocks_has_format('has-gradient-text-format');
+	$needs_counter        = blablablocks_has_format('has-number-counter-format');
+	$needs_color_token    = blablablocks_has_format('has-color-token-format');
+	$needs_text_animation = blablablocks_has_format('has-text-animation-format');
 
 	// If no format is present, do nothing.
-	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter && ! $needs_color_token) {
+	if (! $needs_marker && ! $needs_infotip && ! $needs_typography && ! $needs_gradient_text && ! $needs_counter && ! $needs_color_token && ! $needs_text_animation) {
 		return;
 	}
 
@@ -210,6 +244,10 @@ function blablablocks_formats_enqueue_assets()
 	if ($needs_counter) {
 		wp_enqueue_script('blablablocks-counter-format-asset');
 	}
+
+	if ($needs_text_animation) {
+		wp_enqueue_script('blablablocks-text-animation-format-asset');
+	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
 
@@ -226,6 +264,14 @@ function blablablocks_formats_allowed_html($allowed_tags, $context)
 		return $allowed_tags;
 	}
 
+	$allowed_tags['tatva-text-animation'] = [
+		'type'   => true,
+		'words'  => true,
+		'speed'  => true,
+		'repeat' => true,
+		'class'  => true,
+		'style'  => true,
+	];
 	$allowed_tags['tatva-counter'] = [
 		'animation' => true,
 		'duration'  => true,
