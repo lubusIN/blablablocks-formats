@@ -13,6 +13,7 @@ export const RESERVED_LINK_ATTRIBUTES = [
 	'url',
 	'type',
 	'id',
+	'_id',
 	'target',
 	'rel',
 	'class',
@@ -43,8 +44,11 @@ export function getAttributeNameError( name ) {
 		return null;
 	}
 
-	// Reject event handlers (e.g. onclick, onload, onmouseover)
-	if ( /^on/i.test( trimmed ) ) {
+	// Reject event handlers (e.g. onclick, onload, onmouseover, data-disable-rich-text-on*)
+	if (
+		/^on/i.test( trimmed ) ||
+		/^data-disable-rich-text-on/i.test( trimmed )
+	) {
 		return __(
 			'Event handler attributes (starting with "on") are not allowed.',
 			'blablablocks-formats'
@@ -173,7 +177,9 @@ function matchesLinkIdentity( formatA, formatB ) {
 	}
 	return (
 		JSON.stringify( formatA.attributes || {} ) ===
-		JSON.stringify( formatB.attributes || {} )
+			JSON.stringify( formatB.attributes || {} ) &&
+		JSON.stringify( formatA.unregisteredAttributes || {} ) ===
+			JSON.stringify( formatB.unregisteredAttributes || {} )
 	);
 }
 
@@ -348,14 +354,33 @@ export function useLinkAttributes( { value, onChange } ) {
 				i === index ? { ...attr, [ field ]: val } : attr
 			)
 		);
-		if ( field === 'key' ) {
-			const trimmed = val.trim();
-			if ( ! trimmed || isValidAttributeName( trimmed ) ) {
-				setInvalidRowIndices( ( prev ) =>
-					prev.filter( ( i ) => i !== index )
-				);
+
+		setInvalidRowIndices( ( prev ) => {
+			const current = attributes[ index ] || {};
+			const nextKey = (
+				field === 'key' ? val : current.key || ''
+			).trim();
+			const nextVal = (
+				field === 'value' ? val : current.value || ''
+			).trim();
+
+			// When both name and value are blank, remove from invalid-index state
+			if ( ! nextKey && ! nextVal ) {
+				return prev.filter( ( i ) => i !== index );
 			}
-		}
+
+			// When row still fails validation: missing name with value, or invalid name
+			const isInvalid =
+				( ! nextKey && nextVal ) ||
+				( nextKey && ! isValidAttributeName( nextKey ) );
+
+			if ( isInvalid ) {
+				return prev.includes( index ) ? prev : [ ...prev, index ];
+			}
+
+			// Valid name
+			return prev.filter( ( i ) => i !== index );
+		} );
 	};
 
 	const applyAttributes = () => {

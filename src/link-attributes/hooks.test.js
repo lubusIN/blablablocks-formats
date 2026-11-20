@@ -74,6 +74,23 @@ describe( 'link-attributes hooks and utilities', () => {
 			expect( isValidAttributeName( 'onerror' ) ).toBe( false );
 			expect( isValidAttributeName( 'onmouseover' ) ).toBe( false );
 			expect( isValidAttributeName( 'onblur' ) ).toBe( false );
+
+			// data-disable-rich-text- prefix followed by on* (case-insensitive)
+			expect(
+				isValidAttributeName( 'data-disable-rich-text-onclick' )
+			).toBe( false );
+			expect(
+				getAttributeNameError( 'data-disable-rich-text-onclick' )
+			).toContain( 'Event handler' );
+			expect(
+				isValidAttributeName( 'DATA-DISABLE-RICH-TEXT-ONCLICK' )
+			).toBe( false );
+			expect(
+				isValidAttributeName( 'data-disable-rich-text-onload' )
+			).toBe( false );
+			expect(
+				isValidAttributeName( 'data-disable-rich-text-custom' )
+			).toBe( true );
 		} );
 
 		it( 'rejects reserved core link attributes (case-insensitive)', () => {
@@ -172,6 +189,32 @@ describe( 'link-attributes hooks and utilities', () => {
 			} );
 			expect( core.href ).toBeUndefined();
 			expect( core.className ).toBeUndefined();
+		} );
+
+		it( 'preserves _id attribute from active link attributes and unregisteredAttributes', () => {
+			const activeLink = {
+				attributes: {
+					url: 'https://example.com',
+					_id: 'link-anchor',
+				},
+			};
+			expect( getCoreLinkAttributes( activeLink ) ).toEqual( {
+				url: 'https://example.com',
+				_id: 'link-anchor',
+			} );
+
+			const activeLinkUnregistered = {
+				attributes: {
+					url: 'https://example.com',
+				},
+				unregisteredAttributes: {
+					_id: 'unregistered-anchor',
+				},
+			};
+			expect( getCoreLinkAttributes( activeLinkUnregistered ) ).toEqual( {
+				url: 'https://example.com',
+				_id: 'unregistered-anchor',
+			} );
 		} );
 	} );
 
@@ -390,6 +433,40 @@ describe( 'link-attributes hooks and utilities', () => {
 				endIndex: 6,
 			} );
 		} );
+
+		it( 'does not expand into adjacent link with different unregisteredAttributes', () => {
+			const linkA = {
+				type: 'core/link',
+				attributes: { url: 'https://example.com' },
+				unregisteredAttributes: { 'data-track': 'one' },
+			};
+			const linkB = {
+				type: 'core/link',
+				attributes: { url: 'https://example.com' },
+				unregisteredAttributes: { 'data-track': 'two' },
+			};
+
+			const formats = [
+				[ linkA ],
+				[ linkA ],
+				[ linkA ],
+				[ linkB ],
+				[ linkB ],
+				[ linkB ],
+			];
+
+			const valueA = {
+				text: 'foobar',
+				formats,
+				start: 1,
+				end: 1,
+				activeFormats: [ linkA ],
+			};
+			expect( getLinkFormatRange( valueA ) ).toEqual( {
+				startIndex: 0,
+				endIndex: 3,
+			} );
+		} );
 	} );
 
 	describe( 'useLinkAttributes hook', () => {
@@ -510,6 +587,49 @@ describe( 'link-attributes hooks and utilities', () => {
 			} );
 			expect( currentHookState.attributes ).toHaveLength( 1 );
 			expect( currentHookState.attributes[ 0 ].key ).toBe( 'data-modal' );
+		} );
+
+		it( 'revalidates row after key or value changes and clears invalid status when both are blank', () => {
+			mockActiveLink = {
+				attributes: { url: 'https://example.com' },
+			};
+
+			const value = {
+				text: 'Click here',
+				formats: [],
+				start: 0,
+				end: 0,
+			};
+
+			act( () => {
+				root.render(
+					<TestHarness value={ value } onChange={ jest.fn() } />
+				);
+			} );
+
+			// Enter value without key -> invalid
+			act( () => {
+				currentHookState.updateAttribute( 0, 'value', 'some-value' );
+			} );
+			expect( currentHookState.invalidRowIndices ).toEqual( [ 0 ] );
+
+			// Clear value so both name and value are blank -> removed from invalid
+			act( () => {
+				currentHookState.updateAttribute( 0, 'value', '' );
+			} );
+			expect( currentHookState.invalidRowIndices ).toEqual( [] );
+
+			// Set key to invalid event handler -> invalid
+			act( () => {
+				currentHookState.updateAttribute( 0, 'key', 'onclick' );
+			} );
+			expect( currentHookState.invalidRowIndices ).toEqual( [ 0 ] );
+
+			// Update key to valid name -> removed from invalid
+			act( () => {
+				currentHookState.updateAttribute( 0, 'key', 'data-modal' );
+			} );
+			expect( currentHookState.invalidRowIndices ).toEqual( [] );
 		} );
 
 		it( 'rejects invalid attribute names before calling onChange and identifies invalid row', () => {
