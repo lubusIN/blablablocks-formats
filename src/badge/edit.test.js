@@ -176,4 +176,40 @@ describe( 'Badge Edit Component', () => {
 		expect( mockApplyFormat ).not.toHaveBeenCalled();
 		expect( container.querySelector( '#badge-inline-ui' ) ).not.toBeNull();
 	} );
+
+	it( 'preserves existing badge attributes when collapsed caret is on an existing badge', () => {
+		const existingBadge = {
+			type: FORMAT_NAME,
+			attributes: {
+				class: 'has-badge is-style-solid is-radius-pill is-size-large',
+				style: '--badge-color: #ef4444;',
+			},
+		};
+		const value = {
+			text: 'Badge text',
+			formats: [ [ existingBadge ], [ existingBadge ], [] ],
+			start: 0,
+			end: 0,
+		};
+
+		act( () => {
+			root.render(
+				<Edit
+					value={ value }
+					onChange={ onChange }
+					isActive={ false }
+					activeAttributes={ {} }
+					contentRef={ { current: null } }
+				/>
+			);
+		} );
+
+		expect( lastToolbarButtonProps ).not.toBeNull();
+		act( () => {
+			lastToolbarButtonProps.onClick();
+		} );
+
+		expect( mockApplyFormat ).not.toHaveBeenCalled();
+		expect( container.querySelector( '#badge-inline-ui' ) ).not.toBeNull();
+	} );
 } );

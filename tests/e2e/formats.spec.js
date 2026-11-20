@@ -44,7 +44,7 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		await paragraph.click();
 
 		// Highlight text
-		await page.keyboard.press( 'Meta+A' );
+		await page.keyboard.press( 'ControlOrMeta+A' );
 
 		// Open more rich text controls if collapsed in dropdown
 		const moreControlsButton = page.locator( 'role=button[name="More"i]' );
@@ -75,7 +75,7 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		await paragraph.click();
 
 		// Highlight text
-		await page.keyboard.press( 'Meta+A' );
+		await page.keyboard.press( 'ControlOrMeta+A' );
 
 		// Open more rich text controls if collapsed in dropdown
 		const moreControlsButton = page.locator( 'role=button[name="More"i]' );

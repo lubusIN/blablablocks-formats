@@ -35,27 +35,53 @@ export function Edit( {
 
 	const handleToggle = () => {
 		if ( ! isPopoverOpen && ! isActive ) {
-			const initialAttrs = getBadgeAttributes();
 			const isCollapsed = value?.start === value?.end;
-			const { startIndex, endIndex } = isCollapsed
-				? { startIndex: value.start, endIndex: value.end }
-				: getFormatRange( value, FORMAT_NAME );
-			onChange(
-				applyFormat(
+			if ( isCollapsed ) {
+				const existingBadge = value?.formats?.[ value.start ]?.find?.(
+					( f ) => f.type === FORMAT_NAME
+				);
+				if ( ! existingBadge ) {
+					const initialAttrs = getBadgeAttributes();
+					onChange(
+						applyFormat(
+							value,
+							{
+								type: FORMAT_NAME,
+								attributes: {
+									class: initialAttrs.class,
+									...( initialAttrs.style
+										? { style: initialAttrs.style }
+										: {} ),
+								},
+							},
+							value.start,
+							value.end
+						)
+					);
+				}
+			} else {
+				const initialAttrs = getBadgeAttributes();
+				const { startIndex, endIndex } = getFormatRange(
 					value,
-					{
-						type: FORMAT_NAME,
-						attributes: {
-							class: initialAttrs.class,
-							...( initialAttrs.style
-								? { style: initialAttrs.style }
-								: {} ),
+					FORMAT_NAME
+				);
+				onChange(
+					applyFormat(
+						value,
+						{
+							type: FORMAT_NAME,
+							attributes: {
+								class: initialAttrs.class,
+								...( initialAttrs.style
+									? { style: initialAttrs.style }
+									: {} ),
+							},
 						},
-					},
-					startIndex,
-					endIndex
-				)
-			);
+						startIndex,
+						endIndex
+					)
+				);
+			}
 		}
 		setIsPopoverOpen( ( prev ) => ! prev );
 	};
