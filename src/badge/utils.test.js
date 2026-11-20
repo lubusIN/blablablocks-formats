@@ -66,6 +66,37 @@ describe( 'badge utils', () => {
 			);
 			expect( attrs.style ).toBe( '--badge-color: #3b82f6;' );
 		} );
+
+		it( 'normalizes custom attributes correctly', () => {
+			const attrs = getBadgeAttributes( {
+				variant: 'solid',
+				color: '#10b981',
+				radius: 'square',
+				alignment: 'subscript',
+				size: 'large',
+			} );
+			expect( attrs.variant ).toBe( 'solid' );
+			expect( attrs.color ).toBe( '#10b981' );
+			expect( attrs.radius ).toBe( 'square' );
+			expect( attrs.alignment ).toBe( 'subscript' );
+			expect( attrs.size ).toBe( 'large' );
+			expect( attrs.class ).toBe(
+				'has-badge is-style-solid is-radius-square is-aligned-subscript is-size-large'
+			);
+			expect( attrs.style ).toBe( '--badge-color: #10b981;' );
+		} );
+
+		it( 'parses attributes from class and style when explicit fields omitted', () => {
+			const attrs = getBadgeAttributes( {
+				class: 'has-badge is-style-outline is-radius-pill is-aligned-superscript is-size-extra-small',
+				style: '--badge-color: #6366f1;',
+			} );
+			expect( attrs.variant ).toBe( 'outline' );
+			expect( attrs.color ).toBe( '#6366f1' );
+			expect( attrs.radius ).toBe( 'pill' );
+			expect( attrs.alignment ).toBe( 'superscript' );
+			expect( attrs.size ).toBe( 'extra-small' );
+		} );
 	} );
 
 	describe( 'getFormatRange', () => {
@@ -132,6 +163,36 @@ describe( 'badge utils', () => {
 
 			const range = getFormatRange( value );
 			expect( range ).toEqual( { startIndex: 0, endIndex: 5 } );
+		} );
+
+		it( 'targets active preceding badge when caret is at boundary between two adjacent badges', () => {
+			// "ABCD" where 0..2 is badge1 and 2..4 is badge2
+			const value = {
+				text: 'ABCD',
+				formats: [ [ badge1 ], [ badge1 ], [ badge2 ], [ badge2 ] ],
+				start: 2,
+				end: 2,
+				activeFormats: [ badge1 ],
+			};
+
+			const range = getFormatRange( value );
+			// Must target badge1 (0..2), not badge2 (2..4)
+			expect( range ).toEqual( { startIndex: 0, endIndex: 2 } );
+		} );
+
+		it( 'targets active following badge when caret is at boundary between two adjacent badges', () => {
+			// "ABCD" where 0..2 is badge1 and 2..4 is badge2
+			const value = {
+				text: 'ABCD',
+				formats: [ [ badge1 ], [ badge1 ], [ badge2 ], [ badge2 ] ],
+				start: 2,
+				end: 2,
+				activeFormats: [ badge2 ],
+			};
+
+			const range = getFormatRange( value );
+			// Must target badge2 (2..4), not badge1 (0..2)
+			expect( range ).toEqual( { startIndex: 2, endIndex: 4 } );
 		} );
 
 		it( 'expands to badge boundaries when caret is inside a badge', () => {
@@ -202,6 +263,48 @@ describe( 'badge utils', () => {
 
 			const range = getFormatRange( value );
 			expect( range ).toEqual( { startIndex: 1, endIndex: 6 } );
+		} );
+
+		it( 'stops expansion before an adjacent badge that differs only by variant or size', () => {
+			const badgeSameColorOutline = {
+				type: FORMAT_NAME,
+				attributes: {
+					class: 'has-badge is-style-outline is-radius-rounded is-aligned-inline is-size-medium',
+					style: '--badge-color: #ef4444;',
+				},
+			};
+
+			// Text: "AB" where index 0 is solid and index 1 is outline
+			const value = {
+				text: 'AB',
+				formats: [ [ badge1 ], [ badgeSameColorOutline ] ],
+				start: 0,
+				end: 1,
+			};
+
+			const range = getFormatRange( value );
+			expect( range ).toEqual( { startIndex: 0, endIndex: 1 } );
+		} );
+
+		it( 'expands across characters when classes are in different order but attributes match', () => {
+			const badge1Reordered = {
+				type: FORMAT_NAME,
+				attributes: {
+					class: 'is-size-medium is-aligned-inline is-radius-rounded is-style-solid has-badge',
+					style: '--badge-color: #ef4444;',
+				},
+			};
+
+			// Text: "AB" where index 0 has badge1 and index 1 has badge1Reordered
+			const value = {
+				text: 'AB',
+				formats: [ [ badge1 ], [ badge1Reordered ] ],
+				start: 0,
+				end: 1,
+			};
+
+			const range = getFormatRange( value );
+			expect( range ).toEqual( { startIndex: 0, endIndex: 2 } );
 		} );
 	} );
 } );

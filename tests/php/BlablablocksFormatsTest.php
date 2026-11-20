@@ -150,4 +150,61 @@ class BlablablocksFormatsTest extends TestCase
 		$this->assertTrue($result['tatva-marker']['type']);
 		$this->assertTrue($result['tatva-infotip']['placement']);
 	}
+
+	public function test_blablablocks_has_format_matches_badge_format(): void
+	{
+		$html = '<p>Text with <span class="has-badge is-style-solid">New</span> badge</p>';
+		$this->assertTrue(blablablocks_has_format('has-badge', $html));
+	}
+
+	public function test_blablablocks_has_format_matches_badge_in_synced_patterns(): void
+	{
+		$main_post_content = '<!-- wp:block {"ref":88} /-->';
+
+		$reusable_post = new \stdClass();
+		$reusable_post->ID = 88;
+		$reusable_post->post_content = '<p class="has-badge">Sale</p>';
+
+		Functions\expect('parse_blocks')
+			->once()
+			->with($main_post_content)
+			->andReturn([
+				[
+					'blockName'   => 'core/block',
+					'attrs'       => ['ref' => 88],
+					'innerBlocks' => [],
+				],
+			]);
+
+		Functions\expect('get_post')
+			->with(88)
+			->andReturn(new \WP_Post($reusable_post));
+
+		$this->assertTrue(blablablocks_has_format('has-badge', $main_post_content));
+	}
+
+	public function test_blablablocks_formats_enqueue_assets_enqueues_style_for_badge(): void
+	{
+		Functions\expect('is_admin')
+			->once()
+			->andReturn(false);
+
+		Functions\when('parse_blocks')->justReturn([]);
+
+		$mock_post = new \stdClass();
+		$mock_post->ID = 50;
+		$mock_post->post_content = '<p><span class="has-badge">Hot</span></p>';
+
+		Functions\expect('get_post')
+			->atLeast()
+			->once()
+			->andReturn(new \WP_Post($mock_post));
+
+		Functions\expect('wp_enqueue_style')
+			->once()
+			->with('blablablocks-formats-styles');
+
+		blablablocks_formats_enqueue_assets();
+		$this->assertTrue(true);
+	}
 }

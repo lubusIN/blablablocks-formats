@@ -204,19 +204,31 @@ export function getFormatRange( value, formatType = FORMAT_NAME ) {
 			}
 		}
 	} else {
-		const isFormatActive = activeFormats
-			? activeFormats.some( ( f ) => f.type === formatType )
+		const activeFormat = activeFormats
+			? activeFormats.find( ( f ) => f.type === formatType )
 			: undefined;
 
-		if ( isFormatActive === true ) {
-			if ( getFormatAtIndex( start ) ) {
+		if ( activeFormat ) {
+			const formatAtStart = getFormatAtIndex( start );
+			const formatBeforeStart =
+				start > 0 ? getFormatAtIndex( start - 1 ) : undefined;
+
+			if (
+				matchesFormatIdentity( formatAtStart, activeFormat, formatType )
+			) {
 				startSeedIndex = start;
 				endSeedIndex = start;
-			} else if ( start > 0 && getFormatAtIndex( start - 1 ) ) {
+			} else if (
+				matchesFormatIdentity(
+					formatBeforeStart,
+					activeFormat,
+					formatType
+				)
+			) {
 				startSeedIndex = start - 1;
 				endSeedIndex = start - 1;
 			}
-		} else if ( isFormatActive === undefined ) {
+		} else if ( activeFormats === undefined ) {
 			if ( getFormatAtIndex( start ) ) {
 				startSeedIndex = start;
 				endSeedIndex = start;
