@@ -92,22 +92,24 @@ function blablablocks_formats_register_assets()
 add_action('init', 'blablablocks_formats_register_assets');
 
 /**
- * check if post has the given format
+ * Check if post has the given format.
  *
- * @param string $format_class
- * @param string $post
+ * @param string      $format_class Format class to search for.
+ * @param string|null $post         Post content to check (or null for current post).
+ * @param array       $seen_posts   Track visited post IDs to prevent infinite recursion.
  * @return boolean
  */
-function blablablocks_has_format($format_class, $post = null)
+function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 {
 	if (!$post) {
 		$wp_post = get_post();
 		if ($wp_post instanceof WP_Post) {
+			$seen_posts[] = $wp_post->ID;
 			$post = $wp_post->post_content;
 		}
 	}
 
-	if (trim($format_class) === '' || trim($post) === '') {
+	if (trim($format_class) === '' || !is_string($post) || trim($post) === '') {
 		return false;
 	}
 
@@ -119,6 +121,44 @@ function blablablocks_has_format($format_class, $post = null)
 			$classes = preg_split('/\s+/', $classAttr);
 			if (in_array($format_class, $classes, true)) {
 				return true;
+			}
+		}
+	}
+
+	// Check inside referenced synced patterns (reusable blocks).
+	if (function_exists('parse_blocks')) {
+		$blocks = parse_blocks($post);
+		$queue  = $blocks;
+
+		while (!empty($queue)) {
+			$block = array_shift($queue);
+			if (!is_array($block)) {
+				continue;
+			}
+
+			if (!empty($block['innerBlocks']) && is_array($block['innerBlocks'])) {
+				foreach ($block['innerBlocks'] as $inner_block) {
+					$queue[] = $inner_block;
+				}
+			}
+
+			if (
+				isset($block['blockName']) &&
+				('core/block' === $block['blockName'] || 'block' === $block['blockName']) &&
+				!empty($block['attrs']['ref']) &&
+				is_numeric($block['attrs']['ref'])
+			) {
+				$ref_id = (int) $block['attrs']['ref'];
+				if ($ref_id > 0) {
+					if (in_array($ref_id, $seen_posts, true)) {
+						continue;
+					}
+					$seen_posts[]   = $ref_id;
+					$reusable_block = get_post($ref_id);
+					if ($reusable_block instanceof WP_Post && blablablocks_has_format($format_class, $reusable_block->post_content, $seen_posts)) {
+						return true;
+					}
+				}
 			}
 		}
 	}
@@ -168,3 +208,47 @@ function blablablocks_formats_enqueue_assets()
 	}
 }
 add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
+
+/**
+ * Allow custom elements and attributes in post content for users without unfiltered_html.
+ *
+ * @param array  $allowed_tags Allowed HTML elements.
+ * @param string $context      Context name (e.g. 'post').
+ * @return array Modified allowed HTML elements.
+ */
+function blablablocks_formats_allowed_html($allowed_tags, $context)
+{
+	if ($context !== 'post') {
+		return $allowed_tags;
+	}
+
+	$allowed_tags['tatva-counter'] = [
+		'animation' => true,
+		'duration'  => true,
+		'target'    => true,
+		'on-scroll' => true,
+		'editable'  => true,
+		'class'     => true,
+		'style'     => true,
+	];
+
+	$allowed_tags['tatva-marker'] = [
+		'type'               => true,
+		'color'              => true,
+		'animation'          => true,
+		'animation-duration' => true,
+		'class'              => true,
+		'style'              => true,
+	];
+
+	$allowed_tags['tatva-infotip'] = [
+		'content'   => true,
+		'placement' => true,
+		'underline' => true,
+		'class'     => true,
+		'style'     => true,
+	];
+
+	return $allowed_tags;
+}
+add_filter('wp_kses_allowed_html', 'blablablocks_formats_allowed_html', 10, 2);
