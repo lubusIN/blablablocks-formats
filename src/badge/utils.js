@@ -132,6 +132,41 @@ export function getBadgeAttributes( attrs = {} ) {
 }
 
 /**
+ * Checks whether candidate format matches the seed format's attributes or normalized identity.
+ *
+ * @param {Object} candidateFormat Format object to test.
+ * @param {Object} seedFormat      Seed format object to match against.
+ * @param {string} formatType      The format type identifier.
+ * @return {boolean} True if candidate format matches seed format.
+ */
+function matchesFormatIdentity( candidateFormat, seedFormat, formatType ) {
+	if ( ! candidateFormat || ! seedFormat ) {
+		return false;
+	}
+	if ( candidateFormat.type !== seedFormat.type ) {
+		return false;
+	}
+	if ( candidateFormat === seedFormat ) {
+		return true;
+	}
+	if ( formatType === FORMAT_NAME ) {
+		const cAttrs = getBadgeAttributes( candidateFormat.attributes );
+		const sAttrs = getBadgeAttributes( seedFormat.attributes );
+		return (
+			cAttrs.variant === sAttrs.variant &&
+			cAttrs.color === sAttrs.color &&
+			cAttrs.radius === sAttrs.radius &&
+			cAttrs.alignment === sAttrs.alignment &&
+			cAttrs.size === sAttrs.size
+		);
+	}
+	return (
+		JSON.stringify( candidateFormat.attributes || {} ) ===
+		JSON.stringify( seedFormat.attributes || {} )
+	);
+}
+
+/**
  * Computes the character range [startIndex, endIndex] of the format within the rich text value.
  * Expands to include the entire format instance when the selection is collapsed or partial.
  *
@@ -140,47 +175,89 @@ export function getBadgeAttributes( attrs = {} ) {
  * @return {{ startIndex: number, endIndex: number }} Format boundary indices.
  */
 export function getFormatRange( value, formatType = FORMAT_NAME ) {
-	const { formats, text, start, end } = value || {};
+	const { formats, text, start, end, activeFormats } = value || {};
 	if ( ! formats || ! text || text.length === 0 ) {
 		return { startIndex: start, endIndex: end };
 	}
 
-	const hasFormatAtIndex = ( index ) => {
+	const getFormatAtIndex = ( index ) => {
 		if ( index < 0 || index >= formats.length ) {
-			return false;
+			return undefined;
 		}
-		return Boolean(
-			formats[ index ]?.some?.( ( f ) => f.type === formatType )
-		);
+		return formats[ index ]?.find?.( ( f ) => f.type === formatType );
 	};
 
-	let seedIndex = -1;
+	let startSeedIndex = -1;
+	let endSeedIndex = -1;
 
 	if ( start !== end ) {
 		for ( let i = start; i < end; i++ ) {
-			if ( hasFormatAtIndex( i ) ) {
-				seedIndex = i;
+			if ( getFormatAtIndex( i ) ) {
+				startSeedIndex = i;
 				break;
 			}
 		}
-	} else if ( hasFormatAtIndex( start ) ) {
-		seedIndex = start;
-	} else if ( start > 0 && hasFormatAtIndex( start - 1 ) ) {
-		seedIndex = start - 1;
+		for ( let i = end - 1; i >= start; i-- ) {
+			if ( getFormatAtIndex( i ) ) {
+				endSeedIndex = i;
+				break;
+			}
+		}
+	} else {
+		const isFormatActive = activeFormats
+			? activeFormats.some( ( f ) => f.type === formatType )
+			: undefined;
+
+		if ( isFormatActive === true ) {
+			if ( getFormatAtIndex( start ) ) {
+				startSeedIndex = start;
+				endSeedIndex = start;
+			} else if ( start > 0 && getFormatAtIndex( start - 1 ) ) {
+				startSeedIndex = start - 1;
+				endSeedIndex = start - 1;
+			}
+		} else if ( isFormatActive === undefined ) {
+			if ( getFormatAtIndex( start ) ) {
+				startSeedIndex = start;
+				endSeedIndex = start;
+			}
+		}
 	}
 
-	if ( seedIndex === -1 ) {
+	if ( startSeedIndex === -1 && endSeedIndex === -1 ) {
 		return { startIndex: start, endIndex: end };
 	}
 
-	let expandedStart = seedIndex;
-	while ( expandedStart > 0 && hasFormatAtIndex( expandedStart - 1 ) ) {
-		expandedStart--;
+	let expandedStart = start;
+	if ( startSeedIndex !== -1 ) {
+		const seedStartFormat = getFormatAtIndex( startSeedIndex );
+		expandedStart = startSeedIndex;
+		while (
+			expandedStart > 0 &&
+			matchesFormatIdentity(
+				getFormatAtIndex( expandedStart - 1 ),
+				seedStartFormat,
+				formatType
+			)
+		) {
+			expandedStart--;
+		}
 	}
 
-	let expandedEnd = seedIndex + 1;
-	while ( expandedEnd < formats.length && hasFormatAtIndex( expandedEnd ) ) {
-		expandedEnd++;
+	let expandedEnd = end;
+	if ( endSeedIndex !== -1 ) {
+		const seedEndFormat = getFormatAtIndex( endSeedIndex );
+		expandedEnd = endSeedIndex + 1;
+		while (
+			expandedEnd < formats.length &&
+			matchesFormatIdentity(
+				getFormatAtIndex( expandedEnd ),
+				seedEndFormat,
+				formatType
+			)
+		) {
+			expandedEnd++;
+		}
 	}
 
 	return {

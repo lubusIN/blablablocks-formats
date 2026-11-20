@@ -36,10 +36,10 @@ export function Edit( {
 	const handleToggle = () => {
 		if ( ! isPopoverOpen && ! isActive ) {
 			const initialAttrs = getBadgeAttributes();
-			const { startIndex, endIndex } = getFormatRange(
-				value,
-				FORMAT_NAME
-			);
+			const isCollapsed = value?.start === value?.end;
+			const { startIndex, endIndex } = isCollapsed
+				? { startIndex: value.start, endIndex: value.end }
+				: getFormatRange( value, FORMAT_NAME );
 			onChange(
 				applyFormat(
 					value,

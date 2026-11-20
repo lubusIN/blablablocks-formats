@@ -48,7 +48,15 @@ function InlineUI( {
 	const activeFormat =
 		value?.formats?.[ startIndex ]?.find?.(
 			( f ) => f.type === FORMAT_NAME
-		) || {};
+		) ||
+		( startIndex !== undefined &&
+			value?.formats
+				?.slice?.( startIndex, endIndex )
+				?.find?.( ( fList ) =>
+					fList?.some?.( ( f ) => f.type === FORMAT_NAME )
+				)
+				?.find?.( ( f ) => f.type === FORMAT_NAME ) ) ||
+		{};
 
 	const currentAttributes = getBadgeAttributes( {
 		...( activeAttributes || {} ),

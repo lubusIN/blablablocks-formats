@@ -47,28 +47,8 @@
 		border-radius: 0;
 	}
 
-	// Sizes
-	&.is-size-extra-small {
-		font-size: 0.65em;
-		padding: 0.1em 0.45em;
-	}
-
-	&.is-size-small {
-		font-size: 0.7em;
-		padding: 0.15em 0.5em;
-	}
-
-	&.is-size-medium {
-		font-size: 0.8em;
-		padding: 0.2em 0.65em;
-	}
-
-	&.is-size-large {
-		font-size: 0.9em;
-		padding: 0.25em 0.8em;
-	}
-
 	// Alignment
+	// Size classes (.is-size-*) take precedence over alignment font size.
 	&.is-aligned-inline {
 		vertical-align: baseline;
 	}
@@ -87,5 +67,26 @@
 		line-height: 1;
 		margin-left: 0.25em;
 		margin-right: 0.1em;
+	}
+
+	// Sizes (precedence over alignment font size)
+	&.is-size-extra-small {
+		font-size: 0.65em;
+		padding: 0.1em 0.45em;
+	}
+
+	&.is-size-small {
+		font-size: 0.7em;
+		padding: 0.15em 0.5em;
+	}
+
+	&.is-size-medium {
+		font-size: 0.8em;
+		padding: 0.2em 0.65em;
+	}
+
+	&.is-size-large {
+		font-size: 0.9em;
+		padding: 0.25em 0.8em;
 	}
 }
