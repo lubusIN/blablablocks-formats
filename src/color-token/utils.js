@@ -49,7 +49,46 @@ export function getColorTokenAttributes( colorInput ) {
 }
 
 /**
- * Finds an explicit color code candidate immediately preceding the caret.
+ * Checks if a string is a valid color (explicit hex/rgb/hsl code or valid CSS named color).
+ * English words that tinycolor permissively parses as bare hex (e.g. "face", "bed", "123")
+ * are rejected unless they are prefixed with "#" or are standard CSS named colors.
+ *
+ * @param {string} str - Candidate string.
+ * @return {boolean} True if the string is a valid color.
+ */
+export function isValidColor( str ) {
+	if ( ! str ) {
+		return false;
+	}
+
+	const trimmed = str.trim();
+	const colorObj = tinycolor( trimmed );
+	if ( ! colorObj.isValid() ) {
+		return false;
+	}
+
+	const format = colorObj.getFormat();
+	if ( format === 'name' ) {
+		return true;
+	}
+	if ( format === 'rgb' || format === 'prgb' || format === 'hsl' ) {
+		return true;
+	}
+	if (
+		format === 'hex' ||
+		format === 'hex8' ||
+		format === 'hex3' ||
+		format === 'hex4' ||
+		format === 'hex6'
+	) {
+		return trimmed.startsWith( '#' );
+	}
+
+	return false;
+}
+
+/**
+ * Finds a valid color candidate immediately preceding the caret.
  *
  * @param {string} textBefore - Text up to the current caret position.
  * @return {Object|null} Candidate details or null if no match.
@@ -60,9 +99,9 @@ export function findColorCandidateBeforeCaret( textBefore ) {
 	}
 
 	const match = textBefore.match(
-		/(?:^|[\s(])(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\))$/i
+		/(?:^|[\s(])(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|[a-zA-Z]+)$/i
 	);
-	if ( ! match || ! isExplicitColorCode( match[ 1 ] ) ) {
+	if ( ! match || ! isValidColor( match[ 1 ] ) ) {
 		return null;
 	}
 

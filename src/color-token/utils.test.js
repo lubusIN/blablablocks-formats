@@ -1,5 +1,6 @@
 import {
 	isExplicitColorCode,
+	isValidColor,
 	getColorTokenAttributes,
 	findColorCandidateBeforeCaret,
 } from './utils';
@@ -43,6 +44,38 @@ describe( 'color-token utils', () => {
 			expect( isExplicitColorCode( '#12345' ) ).toBe( false );
 			expect( isExplicitColorCode( 'not-a-color' ) ).toBe( false );
 			expect( isExplicitColorCode( 'rgb(not, a, color)' ) ).toBe( false );
+		} );
+	} );
+
+	describe( 'isValidColor', () => {
+		it( 'returns true for explicit color codes', () => {
+			expect( isValidColor( '#fff' ) ).toBe( true );
+			expect( isValidColor( '#3498db' ) ).toBe( true );
+			expect( isValidColor( 'rgb(255, 0, 0)' ) ).toBe( true );
+			expect( isValidColor( 'rgba(255, 0, 0, 0.5)' ) ).toBe( true );
+			expect( isValidColor( 'hsl(120, 100%, 50%)' ) ).toBe( true );
+		} );
+
+		it( 'returns true for valid named colors', () => {
+			expect( isValidColor( 'red' ) ).toBe( true );
+			expect( isValidColor( 'blue' ) ).toBe( true );
+			expect( isValidColor( 'green' ) ).toBe( true );
+			expect( isValidColor( 'tomato' ) ).toBe( true );
+			expect( isValidColor( 'rebeccapurple' ) ).toBe( true );
+			expect( isValidColor( 'transparent' ) ).toBe( true );
+			expect( isValidColor( 'RED' ) ).toBe( true );
+		} );
+
+		it( 'returns false for words that are not valid colors', () => {
+			expect( isValidColor( 'face' ) ).toBe( false );
+			expect( isValidColor( 'bad' ) ).toBe( false );
+			expect( isValidColor( 'bed' ) ).toBe( false );
+			expect( isValidColor( '123' ) ).toBe( false );
+			expect( isValidColor( 'hello' ) ).toBe( false );
+			expect( isValidColor( 'apple' ) ).toBe( false );
+			expect( isValidColor( '' ) ).toBe( false );
+			expect( isValidColor( null ) ).toBe( false );
+			expect( isValidColor( undefined ) ).toBe( false );
 		} );
 	} );
 
@@ -99,8 +132,29 @@ describe( 'color-token utils', () => {
 			} );
 		} );
 
+		it( 'detects named colors before caret', () => {
+			const text = 'The color is red';
+			const result = findColorCandidateBeforeCaret( text );
+			expect( result ).toEqual( {
+				candidate: 'red',
+				startIndex: text.length - 3,
+				endIndex: text.length,
+			} );
+
+			const textInParen = 'Select: (blue';
+			const resultInParen = findColorCandidateBeforeCaret( textInParen );
+			expect( resultInParen ).toEqual( {
+				candidate: 'blue',
+				startIndex: textInParen.length - 4,
+				endIndex: textInParen.length,
+			} );
+		} );
+
 		it( 'returns null if no color code is at the caret', () => {
 			expect( findColorCandidateBeforeCaret( 'Hello world' ) ).toBeNull();
+			expect( findColorCandidateBeforeCaret( 'apple' ) ).toBeNull();
+			expect( findColorCandidateBeforeCaret( 'face' ) ).toBeNull();
+			expect( findColorCandidateBeforeCaret( 'bad' ) ).toBeNull();
 			expect( findColorCandidateBeforeCaret( '#12345' ) ).toBeNull();
 			expect( findColorCandidateBeforeCaret( '' ) ).toBeNull();
 			expect( findColorCandidateBeforeCaret( null ) ).toBeNull();

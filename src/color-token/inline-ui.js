@@ -10,7 +10,7 @@ import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
 /**
  * Internal dependencies
  */
-import { FORMAT_NAME } from './index';
+import { FORMAT_NAME, FORMAT_CLASS_NAME } from './index';
 import { getColorTokenAttributes } from './utils';
 
 /**
@@ -33,9 +33,17 @@ function InlineUI( {
 	contentRef,
 	isActive,
 } ) {
+	const editableContentElement =
+		contentRef && 'current' in contentRef ? contentRef.current : contentRef;
+
 	const liveAnchor = useAnchor( {
-		editableContentElement: contentRef,
-		settings: { isActive },
+		editableContentElement,
+		settings: {
+			name: FORMAT_NAME,
+			tagName: 'span',
+			className: FORMAT_CLASS_NAME,
+			isActive,
+		},
 	} );
 	const fallbackAnchorRef = useRef( null );
 
@@ -48,7 +56,7 @@ function InlineUI( {
 	const anchor = liveAnchor || fallbackAnchorRef.current;
 
 	const themeColors = useSelect(
-		( select ) => select( 'core/block-editor' ).getSettings().colors,
+		( select ) => select( 'core/block-editor' )?.getSettings()?.colors,
 		[]
 	);
 

@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import tinycolor from 'tinycolor2';
-
-/**
  * WordPress dependencies
  */
 import { brush } from '@wordpress/icons';
@@ -17,7 +12,7 @@ import { applyFormat, getTextContent, slice } from '@wordpress/rich-text';
 import InlineUI from './inline-ui';
 import { useAutoColorFormat } from './hooks';
 import { FORMAT_NAME, FORMAT_TITLE } from './index';
-import { getColorTokenAttributes } from './utils';
+import { getColorTokenAttributes, isValidColor } from './utils';
 
 /**
  * Edit component for the Color Token format in the block editor.
@@ -49,9 +44,8 @@ export function Edit( {
 
 	const onToggle = () => {
 		const colorInput = getTextContent( slice( value ) );
-		const colorObj = tinycolor( colorInput );
 
-		if ( colorObj.isValid() ) {
+		if ( isValidColor( colorInput ) ) {
 			const colorAttrs = getColorTokenAttributes( colorInput );
 
 			onChange(
@@ -60,19 +54,19 @@ export function Edit( {
 					attributes: colorAttrs,
 				} )
 			);
+			if ( typeof onFocus === 'function' ) {
+				onFocus();
+			}
 		} else {
 			openSettings();
 		}
 	};
 
 	const handleButtonClick = () => {
-		if ( activeAttributes?.color ) {
+		if ( isActive || activeAttributes?.color ) {
 			openSettings();
 		} else {
 			onToggle();
-		}
-		if ( typeof onFocus === 'function' ) {
-			onFocus();
 		}
 	};
 
@@ -91,7 +85,7 @@ export function Edit( {
 					onChange={ onChange }
 					onClose={ closeSettings }
 					activeAttributes={ activeAttributes }
-					contentRef={ contentRef }
+					contentRef={ contentRef?.current || contentRef }
 					isActive={ isActive }
 				/>
 			) }

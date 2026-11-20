@@ -11,7 +11,7 @@ import { FORMAT_NAME } from './index';
 import {
 	findColorCandidateBeforeCaret,
 	getColorTokenAttributes,
-	isExplicitColorCode,
+	isValidColor,
 } from './utils';
 
 const TRIGGER_KEYS = [ ' ', ',', ';', ')', 'Enter' ];
@@ -31,7 +31,8 @@ export function useAutoColorFormat( { value, onChange, contentRef } ) {
 	const onChangeRef = useRef( onChange );
 	onChangeRef.current = onChange;
 
-	const element = contentRef?.current || contentRef;
+	const element =
+		contentRef && 'current' in contentRef ? contentRef.current : contentRef;
 
 	useEffect( () => {
 		if ( ! element ) {
@@ -40,7 +41,7 @@ export function useAutoColorFormat( { value, onChange, contentRef } ) {
 
 		const handlePaste = ( event ) => {
 			const text = event.clipboardData?.getData( 'text/plain' )?.trim();
-			if ( ! isExplicitColorCode( text ) ) {
+			if ( ! isValidColor( text ) ) {
 				return;
 			}
 
