@@ -4,7 +4,7 @@ Tags:              rich text format, gutenberg, highlight, tooltip, text effects
 Requires at least: 6.6
 Tested up to:      7.1
 Requires PHP:      7.4
-Stable tag:        1.2.0
+Stable tag:        1.3.0
 License:           MIT
 License URI:       https://www.gnu.org/licenses/MIT
 
@@ -130,6 +130,12 @@ Yes, the formats are fully compatible with block themes and the Site Editor.
 Yes! BlaBlaBlocks Formats is MIT-licensed and open for contributions.
 
 == Changelog ==
+
+= 1.3.0 =
+* Add Gradient Text format with linear and radial gradient support.
+* Add Number Counter format with animations.
+* Add Color Token format with auto-formatting on paste and typing.
+* Support synced patterns in format checks and custom elements in KSES.
 
 = 1.2.0 =
 * Migrate web components and vendor dependencies to external @lubusin/tatva package.
