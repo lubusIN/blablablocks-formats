@@ -4,19 +4,6 @@
 <!-- You may use this file to transfer that content from one site to another. -->
 <!-- This file is not intended to serve as a complete backup of your site. -->
 
-<!-- To import this information into a WordPress site follow these steps: -->
-<!-- 1. Log in to that site as an administrator. -->
-<!-- 2. Go to Tools: Import in the WordPress admin panel. -->
-<!-- 3. Install the "WordPress" importer from the list. -->
-<!-- 4. Activate & Run Importer. -->
-<!-- 5. Upload this file using the form provided on that page. -->
-<!-- 6. You will first be asked to map the authors in this export file to users -->
-<!--    on the site. For each author, you may choose to map to an -->
-<!--    existing user on the site or to create a new user. -->
-<!-- 7. WordPress will then import each of the posts, pages, comments, categories, etc. -->
-<!--    contained in this file into your site. -->
-
-	<!-- generator="WordPress/7.1-alpha-62282" created="2026-04-29 01:16" -->
 <rss version="2.0"
 	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -26,60 +13,162 @@
 >
 
 <channel>
-	<title>My WordPress Website</title>
-	<link>https://playground.wordpress.net/scope:loyal-peaceful-city</link>
-	<description></description>
-	<pubDate>Wed, 29 Apr 2026 01:16:00 +0000</pubDate>
+	<title>BlaBlaBlocks Formats Demo</title>
+	<link>https://playground.wordpress.net/</link>
+	<description>Showcasing rich text formats for the WordPress Block Editor</description>
+	<pubDate>Fri, 20 Nov 2026 12:00:00 +0000</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
-	<wp:base_site_url>https://playground.wordpress.net/scope:loyal-peaceful-city</wp:base_site_url>
-	<wp:base_blog_url>https://playground.wordpress.net/scope:loyal-peaceful-city</wp:base_blog_url>
+	<wp:base_site_url>https://playground.wordpress.net/</wp:base_site_url>
+	<wp:base_blog_url>https://playground.wordpress.net/</wp:base_blog_url>
 
-		<wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[admin]]></wp:author_login><wp:author_email><![CDATA[admin@localhost.com]]></wp:author_email><wp:author_display_name><![CDATA[admin]]></wp:author_display_name><wp:author_first_name><![CDATA[]]></wp:author_first_name><wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
+	<wp:author>
+		<wp:author_id>1</wp:author_id>
+		<wp:author_login><![CDATA[admin]]></wp:author_login>
+		<wp:author_email><![CDATA[admin@localhost.com]]></wp:author_email>
+		<wp:author_display_name><![CDATA[Admin]]></wp:author_display_name>
+		<wp:author_first_name><![CDATA[]]></wp:author_first_name>
+		<wp:author_last_name><![CDATA[]]></wp:author_last_name>
+	</wp:author>
 
-				
-	<generator>https://wordpress.org/?v=7.1-alpha-62282</generator>
+	<generator>https://wordpress.org/?v=6.7</generator>
 
-		<item>
-		<title><![CDATA[BlaBlaBlocks Formats]]></title>
-		<link>https://playground.wordpress.net/scope:loyal-peaceful-city/blablablocks-formats/</link>
-		<pubDate>Wed, 29 Apr 2026 01:14:58 +0000</pubDate>
+	<item>
+		<title><![CDATA[BlaBlaBlocks Formats Showcase]]></title>
+		<link>https://playground.wordpress.net/blablablocks-formats/</link>
+		<pubDate>Fri, 20 Nov 2026 12:00:00 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://playground.wordpress.net/scope:loyal-peaceful-city/?page_id=4</guid>
+		<guid isPermaLink="false">https://playground.wordpress.net/?page_id=4</guid>
 		<description></description>
-		<content:encoded><![CDATA[<!-- wp:paragraph -->
-<p><tatva-infotip content="A set of custom formats that add interactivity and visual emphasis to your content." icon-enabled="true" icon-type="info" overlay-placement="left-start" overlay-text-color="#FFEE58" overlay-background-color="#503AA8" class="has-infotip-format"><span class="has-typography-format has-x-large-font-size" style="font-style: normal; font-weight: 500; text-transform: capitalize">BlaBlaBlocks formats</span></tatva-infotip> bring a collection of rich text tools to the WordPress block editor—starting with interactive elements like <strong><tatva-marker type="double" class="has-marker-format">InfoTip</tatva-marker></strong> tooltips and <strong><tatva-marker type="double" class="has-marker-format">Marker</tatva-marker></strong> highlights. And there's more to come!</p>
+		<content:encoded><![CDATA[<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading"><span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);">BlaBlaBlocks Formats</span> Showcase</h1>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"fontSize":"medium"} -->
+<p class="has-medium-font-size">Enhance your WordPress block editor content with a complete suite of rich text formats. Hover over <tatva-infotip content="Hover or tap to reveal rich context, definitions, or helpful tooltips anywhere inline!" icon-enabled="true" icon-type="info" icon-color="#3b82f6" overlay-placement="top" overlay-text-color="#ffffff" overlay-background-color="#0f172a" class="has-infotip-format">interactive tooltips</tatva-infotip>, highlight key phrases with hand-drawn <tatva-marker type="highlight" color="#fef08a" class="has-marker-format">animated markers</tatva-marker>, tokenize live <span class="has-color-token-format" style="--lubus-color: #3b82f6; --lubus-border-color: #1d4ed8;" data-color="#3b82f6" data-border="#1d4ed8" data-theme="minimal">#3b82f6</span> swatches, and animate numbers on scroll!</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">🎨 Color Tokens</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Effortlessly display design system tokens and color swatches inline. Format explicit hex codes like <span class="has-color-token-format" style="--lubus-color: #6366f1; --lubus-border-color: #4338ca;" data-color="#6366f1" data-border="#4338ca" data-theme="minimal">#6366f1</span> (Indigo) and <span class="has-color-token-format" style="--lubus-color: #10b981; --lubus-border-color: #047857;" data-color="#10b981" data-border="#047857" data-theme="minimal">#10b981</span> (Emerald), rgb notations such as <span class="has-color-token-format" style="--lubus-color: rgb(239, 68, 68); --lubus-border-color: rgb(185, 28, 28);" data-color="rgb(239, 68, 68)" data-border="rgb(185, 28, 28)" data-theme="minimal">rgb(239, 68, 68)</span>, and standard named colors like <span class="has-color-token-format" style="--lubus-color: red; --lubus-border-color: #990000;" data-color="red" data-border="#990000" data-theme="minimal">red</span>, <span class="has-color-token-format" style="--lubus-color: blue; --lubus-border-color: #000099;" data-color="blue" data-border="#000099" data-theme="minimal">blue</span>, <span class="has-color-token-format" style="--lubus-color: tomato; --lubus-border-color: #b5270c;" data-color="tomato" data-border="#b5270c" data-theme="minimal">tomato</span>, or <span class="has-color-token-format" style="--lubus-color: rebeccapurple; --lubus-border-color: #3f1965;" data-color="rebeccapurple" data-border="#3f1965" data-theme="minimal">rebeccapurple</span>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>With <strong><tatva-marker type="circle" class="has-marker-format">Circle</tatva-marker></strong>, you can wrap important words and make them pop.</p>
+<p>You can also apply tokens to custom text labels using the color picker popover, such as <span class="has-color-token-format" style="--lubus-color: #f59e0b; --lubus-border-color: #b45309;" data-color="#f59e0b" data-border="#b45309" data-theme="minimal">Warning Yellow</span> and <span class="has-color-token-format" style="--lubus-color: #06b6d4; --lubus-border-color: #0e7490;" data-color="#06b6d4" data-border="#0e7490" data-theme="minimal">Cyan Accent</span>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><strong><tatva-marker type="double-underline" class="has-marker-format">Double Underline</tatva-marker></strong> is perfect for drawing extra focus on key phrases.</p>
+<p><em>💡 <strong>Try it yourself:</strong> Type any color code (like <code>#8b5cf6</code> or <code>green</code>) followed by a space, or highlight any text and click the <strong>Color Token</strong> icon in the toolbar!</em></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">✏️ Hand-Drawn Markers</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Bring attention and an organic, sketched feel to your content with various marker shapes and animation styles:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Use <strong><tatva-marker type="circle" color="#3b82f6" class="has-marker-format">Circle</tatva-marker></strong> to draw a ring around focal words and make them pop.</li>
+<li>A classic <strong><tatva-marker type="highlight" color="#fef08a" class="has-marker-format">fluorescent highlight</tatva-marker></strong> makes key takeaways instantly scannable.</li>
+<li>Draw extra emphasis on key phrases using <strong><tatva-marker type="double-underline" color="#ec4899" class="has-marker-format">Double Underline</tatva-marker></strong>.</li>
+<li>Add playful energy with a creative <strong><tatva-marker type="underline-zigzag" color="#8b5cf6" animation-function="steps(5, end)" class="has-marker-format">Zigzag underline</tatva-marker></strong>.</li>
+<li>Give points a stylish touch using <strong><tatva-marker type="curly" color="#10b981" animation-function="ease" animation-duration="3" class="has-marker-format">Curly Underline</tatva-marker></strong>.</li>
+<li>Show edits and corrections clearly with <strong><tatva-marker type="strikethrough" color="#ef4444" animation="false" class="has-marker-format">Strikethrough</tatva-marker></strong> or <strong><tatva-marker type="cross" color="#ef4444" animation="false" class="has-marker-format">Cross</tatva-marker></strong>.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">🔢 Animated Number Counters</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Turn numbers and statistics into dynamic animations that trigger smoothly when scrolled into view:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li><strong>Odometer animation:</strong> Over <strong><tatva-counter animation="odometer" duration="1500" on-scroll="true" class="has-number-counter-format">10,000</tatva-counter>+</strong> active websites powered.</li>
+<li><strong>Linear animation:</strong> <strong><tatva-counter animation="linear" duration="2000" on-scroll="true" class="has-number-counter-format">99.9%</tatva-counter></strong> uptime reliability achieved.</li>
+<li><strong>Scramble animation:</strong> <strong><tatva-counter animation="scramble" duration="1800" on-scroll="true" class="has-number-counter-format">150</tatva-counter>+</strong> component presets crafted.</li>
+<li><strong>Steps animation:</strong> Rated <strong><tatva-counter animation="steps" duration="1200" on-scroll="true" class="has-number-counter-format">4.9</tatva-counter> / 5</strong> stars by community users.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">💡 Inline InfoTips (Tooltips)</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Deliver definitions, acronyms, and supplemental information directly inside sentences without distracting from the main narrative:</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><strong><tatva-marker type="underline-zigzag" color="#2000ff" animation-function="steps(5, end)" class="has-marker-format">Zigzag</tatva-marker></strong> gives a creative and fun underline style for special points.</p>
+<p>The <tatva-infotip content="Application Programming Interface — standard protocols for application communication." icon-enabled="true" icon-type="info" icon-color="#3b82f6" overlay-placement="top" overlay-text-color="#ffffff" overlay-background-color="#1e293b" underline="true" class="has-infotip-format">REST API</tatva-infotip> provides structured data access. For security, every mutation requires a <tatva-infotip content="A one-time cryptographic token generated by WordPress to protect against CSRF attacks." icon-enabled="true" icon-type="help" icon-color="#10b981" overlay-placement="bottom" overlay-text-color="#10b981" overlay-background-color="#022c22" underline="true" class="has-infotip-format">valid nonce</tatva-infotip>. Need deeper setup details? Check our <tatva-infotip content="Browse our documentation wiki for architectural guides and setup instructions." icon-enabled="true" icon-position="end" icon-type="info" overlay-placement="right" overlay-text-color="#fde047" overlay-background-color="#422006" class="has-infotip-format">Developer Guide</tatva-infotip>.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
-<p>Want to show edits? Use <strong><tatva-marker type="strikethrough" animation="false" class="has-marker-format">Strikethrough</tatva-marker></strong> or <strong><tatva-marker type="cross" animation="false" class="has-marker-format">Cross</tatva-marker></strong> to mark changes.</p>
-<!-- /wp:paragraph -->
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">🌈 Gradient Text</h2>
+<!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Add some personality with <strong><tatva-marker type="curly" animation-function="ease" animation-duration="5" class="has-marker-format">Curly Underline</tatva-marker></strong> for a stylish touch.</p>
+<p>Apply beautiful multi-stop color gradients directly to text selections. Blend <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">cool cyan &amp; ocean blues</span>, create warm <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #f97316 0%, #ec4899 100%);">sunset oranges &amp; magentas</span>, or add a luxurious <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);">golden highlight</span>.</p>
 <!-- /wp:paragraph -->
 
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">🔤 Inline Typography</h2>
+<!-- /wp:heading -->
+
 <!-- wp:paragraph -->
-<p>These tools make blogs, tutorials, and product pages look sharp and easy to follow.</p>
+<p>Style specific words or phrases without modifying the whole block: combine <span class="has-typography-format has-large-font-size" style="font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">bold uppercase tracking</span>, elegant <span class="has-typography-format" style="font-style: italic; font-weight: 300;">light italic styling</span>, or <span class="has-typography-format" style="letter-spacing: 0.15em; font-weight: 600;">spaced accents</span>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator -->
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">🧹 Clear Formatting</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Experiment freely! Whenever you want to reset or remove applied formats from any text selection, simply select the text and click the <strong>Clear formatting</strong> icon in the toolbar.</p>
 <!-- /wp:paragraph -->]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>4</wp:post_id>
-		<wp:post_date><![CDATA[2026-04-29 01:14:58]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-04-29 01:14:58]]></wp:post_date_gmt>
-		<wp:post_modified><![CDATA[2026-04-29 01:14:58]]></wp:post_modified>
-		<wp:post_modified_gmt><![CDATA[2026-04-29 01:14:58]]></wp:post_modified_gmt>
+		<wp:post_date><![CDATA[2026-11-20 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-20 12:00:00]]></wp:post_date_gmt>
+		<wp:post_modified><![CDATA[2026-11-20 12:00:00]]></wp:post_modified>
+		<wp:post_modified_gmt><![CDATA[2026-11-20 12:00:00]]></wp:post_modified_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[blablablocks-formats]]></wp:post_name>
@@ -89,7 +178,6 @@
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<wp:post_password><![CDATA[]]></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-														</item>
-				</channel>
+	</item>
+</channel>
 </rss>
-	
