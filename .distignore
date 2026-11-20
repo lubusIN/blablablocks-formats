@@ -34,5 +34,7 @@ package-lock.json
 webpack.config.js
 phpcs.xml.dist
 phpunit.xml.dist
+phpstan.neon.dist
+playwright.config.js
 tests/
 bin/
