@@ -158,19 +158,39 @@ function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 
 			if (
 				isset($block['blockName']) &&
-				('core/block' === $block['blockName'] || 'block' === $block['blockName']) &&
-				!empty($block['attrs']['ref']) &&
-				is_numeric($block['attrs']['ref'])
+				('core/block' === $block['blockName'] || 'block' === $block['blockName'])
 			) {
-				$ref_id = (int) $block['attrs']['ref'];
-				if ($ref_id > 0) {
-					if (in_array($ref_id, $seen_posts, true)) {
-						continue;
-					}
-					$seen_posts[]   = $ref_id;
-					$reusable_block = get_post($ref_id);
-					if ($reusable_block instanceof WP_Post && blablablocks_has_format($format_class, $reusable_block->post_content, $seen_posts)) {
+				// Check pattern overrides stored in instance attrs.content before visited-reference guard.
+				if (!empty($block['attrs']['content'])) {
+					if (is_string($block['attrs']['content']) && blablablocks_has_format($format_class, $block['attrs']['content'], $seen_posts)) {
 						return true;
+					}
+
+					if (is_array($block['attrs']['content'])) {
+						$found = false;
+						array_walk_recursive($block['attrs']['content'], function ($value) use ($format_class, &$seen_posts, &$found) {
+							if (!$found && is_string($value) && blablablocks_has_format($format_class, $value, $seen_posts)) {
+								$found = true;
+							}
+						});
+
+						if ($found) {
+							return true;
+						}
+					}
+				}
+
+				if (!empty($block['attrs']['ref']) && is_numeric($block['attrs']['ref'])) {
+					$ref_id = (int) $block['attrs']['ref'];
+					if ($ref_id > 0) {
+						if (in_array($ref_id, $seen_posts, true)) {
+							continue;
+						}
+						$seen_posts[]   = $ref_id;
+						$reusable_block = get_post($ref_id);
+						if ($reusable_block instanceof WP_Post && blablablocks_has_format($format_class, $reusable_block->post_content, $seen_posts)) {
+							return true;
+						}
 					}
 				}
 			}

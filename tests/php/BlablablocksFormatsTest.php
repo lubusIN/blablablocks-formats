@@ -129,6 +129,69 @@ class BlablablocksFormatsTest extends TestCase
 		$this->assertContains(101, $seen_posts);
 	}
 
+	public function test_blablablocks_has_format_inspects_synced_pattern_overrides(): void
+	{
+		$main_post_content = '<!-- wp:block {"ref":99,"content":{"heading":{"content":"<p class=\"has-text-animation-format\">Animated</p>"}}} /-->';
+
+		Functions\expect('parse_blocks')
+			->once()
+			->with($main_post_content)
+			->andReturn([
+				[
+					'blockName'   => 'core/block',
+					'attrs'       => [
+						'ref'     => 99,
+						'content' => [
+							'heading' => [
+								'content' => '<p class="has-text-animation-format">Animated</p>',
+							],
+						],
+					],
+					'innerBlocks' => [],
+				],
+			]);
+
+		$this->assertTrue(blablablocks_has_format('has-text-animation-format', $main_post_content));
+	}
+
+	public function test_blablablocks_has_format_inspects_synced_pattern_overrides_when_already_seen(): void
+	{
+		$main_post_content = '<!-- wp:block {"ref":99} /--><!-- wp:block {"ref":99,"content":{"heading":{"content":"<p class=\"has-text-animation-format\">Animated</p>"}}} /-->';
+
+		$reusable_post = new \stdClass();
+		$reusable_post->ID = 99;
+		$reusable_post->post_content = '<p class="has-marker-format">Default</p>';
+
+		Functions\expect('parse_blocks')
+			->once()
+			->with($main_post_content)
+			->andReturn([
+				[
+					'blockName'   => 'core/block',
+					'attrs'       => ['ref' => 99],
+					'innerBlocks' => [],
+				],
+				[
+					'blockName'   => 'core/block',
+					'attrs'       => [
+						'ref'     => 99,
+						'content' => [
+							'heading' => [
+								'content' => '<p class="has-text-animation-format">Animated</p>',
+							],
+						],
+					],
+					'innerBlocks' => [],
+				],
+			]);
+
+		Functions\expect('get_post')
+			->with(99)
+			->andReturn(new \WP_Post($reusable_post));
+
+		$this->assertTrue(blablablocks_has_format('has-text-animation-format', $main_post_content));
+	}
+
 	public function test_blablablocks_formats_allowed_html_ignores_non_post_context(): void
 	{
 		$allowed = ['a' => ['href' => true]];
@@ -141,10 +204,15 @@ class BlablablocksFormatsTest extends TestCase
 		$allowed = ['p' => []];
 		$result = blablablocks_formats_allowed_html($allowed, 'post');
 
+		$this->assertArrayHasKey('tatva-text-animation', $result);
 		$this->assertArrayHasKey('tatva-counter', $result);
 		$this->assertArrayHasKey('tatva-marker', $result);
 		$this->assertArrayHasKey('tatva-infotip', $result);
 
+		$this->assertTrue($result['tatva-text-animation']['type']);
+		$this->assertTrue($result['tatva-text-animation']['words']);
+		$this->assertTrue($result['tatva-text-animation']['speed']);
+		$this->assertTrue($result['tatva-text-animation']['repeat']);
 		$this->assertTrue($result['tatva-counter']['animation']);
 		$this->assertTrue($result['tatva-counter']['target']);
 		$this->assertTrue($result['tatva-marker']['type']);
