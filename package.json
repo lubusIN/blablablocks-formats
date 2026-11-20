@@ -16,6 +16,7 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"test:unit": "wp-scripts test-unit-js",
+		"test:e2e": "wp-scripts test-playwright",
 		"test:php": "composer test:php",
 		"phpstan": "composer phpstan",
 		"packages-update": "wp-scripts packages-update",

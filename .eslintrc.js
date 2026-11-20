@@ -42,5 +42,11 @@ module.exports = {
 				jest: true,
 			},
 		},
+		{
+			files: [ 'tests/e2e/**/*.js', '**/*.spec.js' ],
+			env: {
+				node: true,
+			},
+		},
 	],
 };
