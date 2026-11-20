@@ -33,10 +33,23 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true
+        },
+        "platform": {
+            "php": "8.2.0"
         }
+    },
+    "scripts": {
+        "phpstan": "phpstan analyse --debug --memory-limit=512M",
+        "test:php": "phpunit"
     },
     "require": {
         "php": ">=7.4",
         "composer/installers": "^2.3"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.3",
+        "szepeviktor/phpstan-wordpress": "^2.0",
+        "phpunit/phpunit": "^11.5",
+        "brain/monkey": "^2.7"
     }
 }

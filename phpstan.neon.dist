@@ -1,0 +1,13 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 6
+    parallel:
+        maximumNumberOfProcesses: 1
+    paths:
+        - blablablocks-formats.php
+    excludePaths:
+        - node_modules/*
+        - vendor/*
+        - build/*

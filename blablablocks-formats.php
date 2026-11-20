@@ -22,6 +22,8 @@ if (! defined('ABSPATH')) {
 
 /**
  * Register BlaBlaBlocks formats scripts and styles.
+ *
+ * @return void
  */
 function blablablocks_formats_register_assets()
 {
@@ -96,12 +98,12 @@ add_action('init', 'blablablocks_formats_register_assets');
  *
  * @param string      $format_class Format class to search for.
  * @param string|null $post         Post content to check (or null for current post).
- * @param array       $seen_posts   Track visited post IDs to prevent infinite recursion.
+ * @param array<int>  $seen_posts   Track visited post IDs to prevent infinite recursion.
  * @return boolean
  */
 function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 {
-	if (!$post) {
+	if ($post === null) {
 		$wp_post = get_post();
 		if ($wp_post instanceof WP_Post) {
 			$seen_posts[] = $wp_post->ID;
@@ -119,7 +121,7 @@ function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 	if (preg_match_all($pattern, $post, $matches)) {
 		foreach ($matches[2] as $classAttr) {
 			$classes = preg_split('/\s+/', $classAttr);
-			if (in_array($format_class, $classes, true)) {
+			if (is_array($classes) && in_array($format_class, $classes, true)) {
 				return true;
 			}
 		}
@@ -168,6 +170,8 @@ function blablablocks_has_format($format_class, $post = null, &$seen_posts = [])
 
 /**
  * Enqueue scripts and styles for BlaBlaBlocks formats.
+ *
+ * @return void
  */
 function blablablocks_formats_enqueue_assets()
 {
@@ -212,9 +216,9 @@ add_action('enqueue_block_assets', 'blablablocks_formats_enqueue_assets');
 /**
  * Allow custom elements and attributes in post content for users without unfiltered_html.
  *
- * @param array  $allowed_tags Allowed HTML elements.
- * @param string $context      Context name (e.g. 'post').
- * @return array Modified allowed HTML elements.
+ * @param array<string, array<string, bool>> $allowed_tags Allowed HTML elements.
+ * @param string                             $context      Context name (e.g. 'post').
+ * @return array<string, array<string, bool>> Modified allowed HTML elements.
  */
 function blablablocks_formats_allowed_html($allowed_tags, $context)
 {
