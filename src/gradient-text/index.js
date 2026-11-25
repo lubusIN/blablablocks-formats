@@ -25,5 +25,9 @@ registerFormatType( FORMAT_NAME, {
 	edit: Edit,
 	attributes: {
 		style: 'style',
+		animation: 'data-animation',
+		'animation-duration': 'data-animation-duration',
+		'animation-type': 'data-animation-type',
+		animated: 'data-animated',
 	},
 } );

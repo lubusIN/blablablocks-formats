@@ -41,7 +41,7 @@
 		<guid isPermaLink="false">https://playground.wordpress.net/?page_id=4</guid>
 		<description></description>
 		<content:encoded><![CDATA[<!-- wp:heading {"level":1} -->
-<h1 class="wp-block-heading"><span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);">BlaBlaBlocks Formats</span> Showcase</h1>
+<h1 class="wp-block-heading"><span class="has-gradient-text-format" data-animation="true" data-animated="true" style="background-image: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);">BlaBlaBlocks Formats</span> Showcase</h1>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"fontSize":"medium"} -->
@@ -137,7 +137,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Apply beautiful multi-stop color gradients directly to text selections. Blend <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">cool cyan &amp; ocean blues</span>, create warm <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #f97316 0%, #ec4899 100%);">sunset oranges &amp; magentas</span>, or add a luxurious <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);">golden highlight</span>.</p>
+<p>Apply beautiful multi-stop color gradients directly to text selections with optional smooth animation. Blend <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">cool cyan &amp; ocean blues</span>, create warm <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #f97316 0%, #ec4899 100%);">sunset oranges &amp; magentas</span>, add a luxurious <span class="has-gradient-text-format" style="background-image: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);">golden highlight</span>, or bring your text to life with an <span class="has-gradient-text-format" data-animation="true" data-animated="true" data-animation-type="rainbow" style="background-image: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);">animated rainbow flow</span>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:separator -->

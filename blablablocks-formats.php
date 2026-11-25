@@ -253,6 +253,16 @@ function blablablocks_formats_allowed_html($allowed_tags, $context)
 		'style'     => true,
 	];
 
+	$allowed_tags['span'] = array_merge($allowed_tags['span'] ?? [], [
+		'data-animated'           => true,
+		'data-animation'          => true,
+		'data-animation-duration' => true,
+		'data-animation-type'     => true,
+		'data-color'              => true,
+		'data-border'             => true,
+		'data-theme'              => true,
+	]);
+
 	return $allowed_tags;
 }
 add_filter('wp_kses_allowed_html', 'blablablocks_formats_allowed_html', 10, 2);
