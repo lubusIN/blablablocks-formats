@@ -3,4 +3,251 @@
 	background-clip: text;
 	-webkit-text-fill-color: transparent;
 	caret-color: currentcolor;
+
+	&[data-animation="true"],
+	&[data-animated="true"],
+	&.has-gradient-text-animated,
+	&.is-animated {
+		background-size: 200% 200%;
+		animation-name: blablablocks-gradient-flow;
+		animation-duration: var(--blablablocks-gradient-duration, 4s);
+		animation-timing-function: ease;
+		animation-iteration-count: infinite;
+
+		&[data-animation-type="sweep"] {
+			animation-name: blablablocks-gradient-sweep;
+			animation-timing-function: linear;
+		}
+
+		&[data-animation-type="pulse"],
+		&[data-animation-type="breathe"] {
+			animation-name: blablablocks-gradient-pulse;
+		}
+
+		&[data-animation-type="rainbow"] {
+			animation-name: blablablocks-gradient-rainbow;
+			animation-timing-function: linear;
+		}
+
+		&[data-animation-type="shimmer"] {
+			animation-name: blablablocks-gradient-shimmer;
+		}
+
+		&[data-animation-type="orbit"] {
+			animation-name: blablablocks-gradient-orbit;
+		}
+
+		&[data-animation-type="neon"] {
+			animation-name: blablablocks-gradient-neon;
+		}
+
+		&[data-animation-type="glitch"] {
+			animation-name: blablablocks-gradient-glitch;
+			animation-timing-function: steps(1);
+		}
+
+		&[data-animation-type="flow"],
+		&[data-animation-type="shift"] {
+			animation-name: blablablocks-gradient-flow;
+		}
+
+		@for $i from 2 through 20 {
+			$duration: $i * 0.5;
+
+			&[data-animation-duration="#{$duration}"],
+			&[data-animation-duration="#{$duration}s"] {
+				animation-duration: #{$duration}s;
+			}
+		}
+	}
+}
+
+@keyframes blablablocks-gradient-flow {
+
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes blablablocks-gradient-shift {
+
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes blablablocks-gradient-sweep {
+
+	0% {
+		background-position: 0% 50%;
+	}
+
+	100% {
+		background-position: 200% 50%;
+	}
+}
+
+@keyframes blablablocks-gradient-pulse {
+
+	0% {
+		background-position: 50% 50%;
+		background-size: 150% 150%;
+		filter: brightness(1) saturate(1);
+	}
+
+	50% {
+		background-position: 50% 50%;
+		background-size: 280% 280%;
+		filter: brightness(1.25) saturate(1.3);
+	}
+
+	100% {
+		background-position: 50% 50%;
+		background-size: 150% 150%;
+		filter: brightness(1) saturate(1);
+	}
+}
+
+@keyframes blablablocks-gradient-rainbow {
+
+	0% {
+		background-position: 0% 50%;
+		filter: hue-rotate(0deg);
+	}
+
+	50% {
+		background-position: 100% 50%;
+		filter: hue-rotate(180deg);
+	}
+
+	100% {
+		background-position: 0% 50%;
+		filter: hue-rotate(360deg);
+	}
+}
+
+@keyframes blablablocks-gradient-shimmer {
+
+	0% {
+		background-position: -200% 50%;
+		filter: brightness(0.95);
+	}
+
+	50% {
+		background-position: 0% 50%;
+		filter: brightness(1.3) contrast(1.15);
+	}
+
+	100% {
+		background-position: 200% 50%;
+		filter: brightness(0.95);
+	}
+}
+
+@keyframes blablablocks-gradient-orbit {
+
+	0% {
+		background-position: 0% 0%;
+	}
+
+	25% {
+		background-position: 100% 0%;
+	}
+
+	50% {
+		background-position: 100% 100%;
+	}
+
+	75% {
+		background-position: 0% 100%;
+	}
+
+	100% {
+		background-position: 0% 0%;
+	}
+}
+
+@keyframes blablablocks-gradient-neon {
+
+	0%,
+	100% {
+		background-position: 0% 50%;
+		filter: brightness(1) saturate(1.2);
+	}
+
+	20% {
+		background-position: 25% 50%;
+		filter: brightness(1.4) saturate(1.8);
+	}
+
+	40% {
+		background-position: 50% 50%;
+		filter: brightness(0.9) saturate(1.1);
+	}
+
+	60% {
+		background-position: 75% 50%;
+		filter: brightness(1.5) saturate(2);
+	}
+
+	80% {
+		background-position: 100% 50%;
+		filter: brightness(1.2) saturate(1.4);
+	}
+}
+
+@keyframes blablablocks-gradient-glitch {
+
+	0%,
+	100% {
+		background-position: 0% 50%;
+		filter: none;
+	}
+
+	20% {
+		background-position: 100% 50%;
+		filter: hue-rotate(90deg);
+	}
+
+	40% {
+		background-position: 30% 50%;
+		filter: contrast(1.4);
+	}
+
+	60% {
+		background-position: 80% 50%;
+		filter: hue-rotate(-90deg);
+	}
+
+	80% {
+		background-position: 10% 50%;
+		filter: brightness(1.3);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.has-gradient-text-format[data-animation="true"],
+	.has-gradient-text-format[data-animated="true"],
+	.has-gradient-text-format.has-gradient-text-animated,
+	.has-gradient-text-format.is-animated {
+		animation: none !important;
+		background-size: auto;
+	}
 }

@@ -35,7 +35,10 @@ A collection of rich text formats for the WordPress block editor.
 
 -   **Marker**: Add a hand-drawn style highlight to text.
 -   **InfoTip**: Add a tooltip to any inline text.
+-   **Gradient Text**: Apply linear or radial multi-stop color gradients with optional smooth animation to selected text.
 -   **Typography**: Apply inline typography controls such as font family, font size, appearance, letter spacing, and letter case.
+-   **Color Token**: Format color codes (hex, RGB, HSL, named colors) as live inline color tokens.
+-   **Counter**: Animate numbers on scroll with customizable durations and styles.
 -   **Clear formatting**: Remove applied inline formats from selected text with a single toolbar action.
 
 > [!NOTE]

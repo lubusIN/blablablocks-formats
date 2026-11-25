@@ -1,12 +1,28 @@
 .block-editor-format-toolbar__blablablocks-gradient-text-popover {
 
 	.components-popover__content {
-		padding: 16px;
-		width: 260px;
+		min-width: 20.625rem;
+	}
+
+	.components-tab-panel__tab-content {
+		padding: 1rem;
 	}
 
 	.components-custom-gradient-picker__gradient-bar .components-custom-gradient-picker__control-point-button {
 		padding: 0;
+	}
+
+	.animation-tab-label {
+		color: #1e1e1e;
+		font-size: 0.6875rem;
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+
+	.reset-button {
+		display: block;
+		margin-left: auto;
+		margin-top: 1rem;
 	}
 }
 
@@ -19,4 +35,3 @@
 		box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, 0.2);
 	}
 }
-

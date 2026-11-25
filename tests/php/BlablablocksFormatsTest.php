@@ -149,5 +149,12 @@ class BlablablocksFormatsTest extends TestCase
 		$this->assertTrue($result['tatva-counter']['target']);
 		$this->assertTrue($result['tatva-marker']['type']);
 		$this->assertTrue($result['tatva-infotip']['placement']);
+		$this->assertTrue($result['span']['data-animated']);
+		$this->assertTrue($result['span']['data-animation']);
+		$this->assertTrue($result['span']['data-animation-duration']);
+		$this->assertTrue($result['span']['data-animation-type']);
+		$this->assertTrue($result['span']['data-color']);
+		$this->assertTrue($result['span']['data-border']);
+		$this->assertTrue($result['span']['data-theme']);
 	}
 }

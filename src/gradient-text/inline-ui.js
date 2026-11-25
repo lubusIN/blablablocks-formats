@@ -2,147 +2,17 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useSelect } from '@wordpress/data';
-import { useMemo, useRef } from '@wordpress/element';
-import { applyFormat, removeFormat, useAnchor } from '@wordpress/rich-text';
-import { GradientPicker, Popover } from '@wordpress/components';
+import { useEffect, useRef } from '@wordpress/element';
+import { useAnchor } from '@wordpress/rich-text';
+import { Popover, TabPanel } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { FORMAT_NAME } from './index';
-
-/**
- * Extract gradient string from inline style value.
- *
- * @param {string} style The style attribute string.
- * @return {string} The extracted gradient value.
- */
-const getGradient = ( style ) =>
-	style?.match( /background(?:-image)?:\s*([^;]+)/i )?.[ 1 ]?.trim() ||
-	style ||
-	'';
-
-/**
- * Parse gradient string into type and top-level parts.
- *
- * @param {string} gradientString The gradient CSS string.
- * @return {Object|null} Object containing gradient type and array of comma-separated parts.
- */
-const getGradientParts = ( gradientString ) => {
-	if ( ! gradientString || typeof gradientString !== 'string' ) {
-		return null;
-	}
-
-	const match = gradientString.match(
-		/^(linear|radial)-gradient\s*\((.*)\)$/is
-	);
-	if ( ! match ) {
-		return null;
-	}
-
-	const type = match[ 1 ];
-	const body = match[ 2 ];
-
-	const parts = [];
-	let current = '';
-	let depth = 0;
-
-	for ( let i = 0; i < body.length; i++ ) {
-		const char = body[ i ];
-		if ( char === '(' ) {
-			depth++;
-			current += char;
-		} else if ( char === ')' ) {
-			depth--;
-			current += char;
-		} else if ( char === ',' && depth === 0 ) {
-			parts.push( current.trim() );
-			current = '';
-		} else {
-			current += char;
-		}
-	}
-
-	if ( current.trim() ) {
-		parts.push( current.trim() );
-	}
-
-	return { type, parts };
-};
-
-/**
- * Convert a gradient CSS string to radial gradient.
- *
- * @param {string} gradientString The gradient CSS string.
- * @return {string} The radial gradient string.
- */
-const toRadialGradient = ( gradientString ) => {
-	const parsed = getGradientParts( gradientString );
-	if ( ! parsed ) {
-		return gradientString;
-	}
-
-	if ( parsed.type === 'radial' ) {
-		return gradientString;
-	}
-
-	const firstPart = parsed.parts[ 0 ]?.trim();
-	const hasOrientation =
-		/(?:deg|grad|rad|turn)$/i.test( firstPart ) ||
-		/^to\s+/i.test( firstPart );
-
-	const colorStops = hasOrientation ? parsed.parts.slice( 1 ) : parsed.parts;
-	return `radial-gradient(${ colorStops.join( ',' ) })`;
-};
-
-/**
- * Normalize a gradient string for comparison by removing whitespace and lowercasing.
- *
- * @param {string} str The gradient string.
- * @return {string} The normalized gradient string.
- */
-const normalizeGradient = ( str ) =>
-	str
-		? str
-				.trim()
-				.toLowerCase()
-				.replace( /\s+/g, ' ' )
-				.replace( /\s*([(),])\s*/g, '$1' )
-		: '';
-
-/**
- * Convert a gradient list to radial gradients.
- *
- * @param {Array} gradientList The gradients array (single or multiple origins).
- * @return {Array} The converted gradients array.
- */
-const convertGradientsToRadial = ( gradientList ) => {
-	if ( ! Array.isArray( gradientList ) ) {
-		return gradientList;
-	}
-
-	return gradientList.map( ( item ) => {
-		if ( Array.isArray( item?.gradients ) ) {
-			return {
-				...item,
-				gradients: item.gradients.map( ( g ) => ( {
-					...g,
-					gradient: toRadialGradient( g?.gradient ),
-				} ) ),
-			};
-		}
-
-		if ( item?.gradient ) {
-			return {
-				...item,
-				gradient: toRadialGradient( item.gradient ),
-			};
-		}
-
-		return item;
-	} );
-};
+import { GradientTab, AnimationTab } from './components';
+import { getGradient } from './components/gradient-tab';
+import { createFormatHelpers } from '../utils';
 
 /**
  * InlineUI component for handling Gradient text formatting options.
@@ -164,68 +34,29 @@ function InlineUI( {
 	contentRef,
 	isActive,
 } ) {
-	const anchorRef = useRef( null );
+	const fallbackAnchorRef = useRef( null );
+	const { update, remove } = createFormatHelpers( {
+		value,
+		onChange,
+		formatType: FORMAT_NAME,
+		activeAttributes,
+	} );
+
 	const liveAnchor = useAnchor( {
 		editableContentElement: contentRef?.current || contentRef,
 		settings: { isActive },
 	} );
 
-	if ( liveAnchor ) {
-		anchorRef.current = liveAnchor;
-	}
+	useEffect( () => {
+		if ( liveAnchor ) {
+			fallbackAnchorRef.current = liveAnchor;
+		}
+	}, [ liveAnchor ] );
 
-	const gradients = useSelect(
-		( select ) => select( 'core/block-editor' )?.getSettings()?.gradients,
-		[]
-	);
+	const anchor = liveAnchor || fallbackAnchorRef.current;
 
 	const currentGradient = getGradient( activeAttributes?.style );
-	const isRadial = currentGradient.startsWith( 'radial-gradient' );
-
-	const pickerGradients = useMemo( () => {
-		if ( ! isRadial ) {
-			return gradients;
-		}
-
-		return convertGradientsToRadial( gradients );
-	}, [ gradients, isRadial ] );
-
-	const handleClear = () => {
-		onChange( removeFormat( value, FORMAT_NAME ) );
-		onClose();
-	};
-
-	const handleGradientChange = ( newGradient ) => {
-		if ( ! newGradient ) {
-			handleClear();
-			return;
-		}
-
-		let finalGradient = newGradient;
-
-		// If currently in radial mode and a different linear gradient was selected,
-		// convert it to radial so clicking other gradients doesn't revert back to linear.
-		// If the user explicitly switched the Type dropdown to Linear, the color stops
-		// remain identical to currentGradient, which we respect.
-		if ( isRadial && newGradient.startsWith( 'linear-gradient' ) ) {
-			const convertedRadial = toRadialGradient( newGradient );
-			if (
-				normalizeGradient( convertedRadial ) !==
-				normalizeGradient( currentGradient )
-			) {
-				finalGradient = convertedRadial;
-			}
-		}
-
-		onChange(
-			applyFormat( value, {
-				type: FORMAT_NAME,
-				attributes: {
-					style: `background-image: ${ finalGradient };`,
-				},
-			} )
-		);
-	};
+	const hasGradient = Boolean( currentGradient );
 
 	const handleFocusOutside = ( event ) => {
 		if (
@@ -239,7 +70,7 @@ function InlineUI( {
 
 	return (
 		<Popover
-			anchor={ liveAnchor || anchorRef.current }
+			anchor={ anchor }
 			className="block-editor-format-toolbar__blablablocks-gradient-text-popover"
 			onClose={ onClose }
 			onFocusOutside={ handleFocusOutside }
@@ -248,16 +79,37 @@ function InlineUI( {
 			shift
 			flip
 		>
-			<GradientPicker
-				value={ currentGradient || undefined }
-				gradients={ pickerGradients }
-				onChange={ handleGradientChange }
-				clearable={ Boolean( currentGradient ) }
-				aria-label={ __(
-					'Gradient text selection',
-					'blablablocks-formats'
-				) }
-			/>
+			<TabPanel
+				tabs={ [
+					{
+						name: 'gradient',
+						title: __( 'Gradient', 'blablablocks-formats' ),
+						content: (
+							<GradientTab
+								activeAttributes={ activeAttributes }
+								value={ value }
+								onChange={ onChange }
+								onClose={ onClose }
+								updateAttributes={ update }
+							/>
+						),
+					},
+					{
+						name: 'animation',
+						title: __( 'Animation', 'blablablocks-formats' ),
+						content: (
+							<AnimationTab
+								activeAttributes={ activeAttributes }
+								updateAttributes={ update }
+								removeAttributes={ remove }
+							/>
+						),
+						disabled: ! hasGradient,
+					},
+				] }
+			>
+				{ ( tab ) => tab.content }
+			</TabPanel>
 		</Popover>
 	);
 }

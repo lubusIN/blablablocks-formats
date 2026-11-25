@@ -57,4 +57,40 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		);
 		await expect( markerOption ).toBeVisible();
 	} );
+
+	test( 'disables animated gradient text when prefers-reduced-motion is enabled and preserves normal motion', async ( {
+		page,
+	} ) => {
+		// Attach an animated gradient text element covering flow type and 4s duration
+		await page.evaluate( () => {
+			const span = document.createElement( 'span' );
+			span.id = 'e2e-animated-gradient-motion-test';
+			span.className = 'has-gradient-text-format';
+			span.setAttribute( 'data-animation', 'true' );
+			span.setAttribute( 'data-animation-type', 'flow' );
+			span.setAttribute( 'data-animation-duration', '4' );
+			span.textContent = 'Reduced Motion Flow Test';
+			document.body.appendChild( span );
+		} );
+
+		// Normal motion: animation remains available and set to flow
+		await page.emulateMedia( { reducedMotion: 'no-preference' } );
+		const normalAnimation = await page.evaluate( () => {
+			const el = document.getElementById(
+				'e2e-animated-gradient-motion-test'
+			);
+			return window.getComputedStyle( el ).animationName;
+		} );
+		expect( normalAnimation ).toBe( 'blablablocks-gradient-flow' );
+
+		// Reduced motion: animation reset overrides animation type and duration
+		await page.emulateMedia( { reducedMotion: 'reduce' } );
+		const reducedAnimation = await page.evaluate( () => {
+			const el = document.getElementById(
+				'e2e-animated-gradient-motion-test'
+			);
+			return window.getComputedStyle( el ).animationName;
+		} );
+		expect( reducedAnimation ).toBe( 'none' );
+	} );
 } );
