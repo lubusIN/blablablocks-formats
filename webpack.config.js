@@ -8,5 +8,9 @@ module.exports = {
 		marker: path.resolve( process.cwd(), 'src/marker/web-component.js' ),
 		infotip: path.resolve( process.cwd(), 'src/infotip/web-component.js' ),
 		counter: path.resolve( process.cwd(), 'src/counter/web-component.js' ),
+		'text-animation': path.resolve(
+			process.cwd(),
+			'src/text-animation/web-component.js'
+		),
 	},
 };

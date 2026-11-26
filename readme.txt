@@ -19,7 +19,7 @@ With BlaBlaBlocks Formats, you can add animated markers, interactive tooltips, i
 
 ### Key Features
 
-* **Interactive text formats** - Add **InfoTips**, **markers**, **typography controls**, and **clear formatting** directly from the block toolbar.
+* **Interactive text formats** - Add **InfoTips**, **markers**, **text animation**, **typography controls**, and **clear formatting** directly from the block toolbar.
 * **Live customization** - Change color, animation, and behavior in real time.
 * **Lightweight & optimized** - Assets load only when formats are used.
 * **Native Gutenberg integration** - Seamlessly fits the WordPress Block Editor.
@@ -60,7 +60,10 @@ Attach informative tooltips to any text selection perfect for definitions, links
 #### 3. Typography
 Apply inline typography styles such as font family, font size, appearance, letter spacing, and letter case.
 
-#### 4. Clear formatting
+#### 4. Text Animation
+Apply animated text effects such as typing, fly-in, and letter-fade with customizable speed, looping, and word cycles.
+
+#### 5. Clear formatting
 Remove applied inline formatting from selected text with a single toolbar action.
 
 ### Customization Options
