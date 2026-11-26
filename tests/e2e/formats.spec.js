@@ -24,6 +24,7 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		expect( registeredFormats ).toContain( 'blablablocks/color-token' );
 		expect( registeredFormats ).toContain( 'blablablocks/typography' );
 		expect( registeredFormats ).toContain( 'blablablocks/gradient-text' );
+		expect( registeredFormats ).toContain( 'blablablocks/badge' );
 		expect( registeredFormats ).toContain( 'blablablocks/clear-formats' );
 	} );
 
@@ -43,7 +44,7 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		await paragraph.click();
 
 		// Highlight text
-		await page.keyboard.press( 'Meta+A' );
+		await page.keyboard.press( 'ControlOrMeta+A' );
 
 		// Open more rich text controls if collapsed in dropdown
 		const moreControlsButton = page.locator( 'role=button[name="More"i]' );
@@ -56,5 +57,45 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 			'role=menuitemcheckbox[name="Marker"i]'
 		);
 		await expect( markerOption ).toBeVisible();
+	} );
+
+	test( 'can apply badge format to text in paragraph block', async ( {
+		editor,
+		page,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'core/paragraph',
+			attributes: { content: 'Testing Badge Format' },
+		} );
+
+		const paragraph = editor.canvas.locator(
+			'role=document[name="Paragraph block"i]'
+		);
+		await expect( paragraph ).toBeVisible();
+		await paragraph.click();
+
+		// Highlight text
+		await page.keyboard.press( 'ControlOrMeta+A' );
+
+		// Open more rich text controls if collapsed in dropdown
+		const moreControlsButton = page.locator( 'role=button[name="More"i]' );
+		if ( await moreControlsButton.isVisible() ) {
+			await moreControlsButton.click();
+		}
+
+		// Click Badge option in format controls
+		const badgeOption = page.locator(
+			'role=menuitemcheckbox[name="Badge"i]'
+		);
+		if ( await badgeOption.isVisible() ) {
+			await badgeOption.click();
+		} else {
+			const badgeButton = page.locator( 'role=button[name="Badge"i]' );
+			await badgeButton.click();
+		}
+
+		// Verify that a badge element was applied inside the paragraph
+		const badgeElement = paragraph.locator( '.has-badge' );
+		await expect( badgeElement ).toBeVisible();
 	} );
 } );
