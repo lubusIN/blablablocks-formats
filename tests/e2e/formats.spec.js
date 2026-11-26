@@ -25,6 +25,7 @@ test.describe( 'BlaBlaBlocks Formats E2E', () => {
 		expect( registeredFormats ).toContain( 'blablablocks/typography' );
 		expect( registeredFormats ).toContain( 'blablablocks/gradient-text' );
 		expect( registeredFormats ).toContain( 'blablablocks/clear-formats' );
+		expect( registeredFormats ).toContain( 'blablablocks/link-attributes' );
 	} );
 
 	test( 'can insert paragraph block and access format toolbar controls', async ( {
